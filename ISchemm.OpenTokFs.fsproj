@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <Compile Include="IOpenTokCredentials.fs" />
-    <Compile Include="JsonWebToken.fs" />
+    <Compile Include="OpenTokAuthentication.fs" />
     <Compile Include="Requests\Broadcast.fs" />
   </ItemGroup>
 
