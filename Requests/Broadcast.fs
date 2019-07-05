@@ -2,7 +2,9 @@
 
 open System
 open System.IO
+open Newtonsoft.Json
 open ISchemm.OpenTokFs
+open ISchemm.OpenTokFs.Types
 
 module Broadcast =
     type ListParameters() =
@@ -24,15 +26,17 @@ module Broadcast =
 
         let req = OpenTokAuthentication.BuildRequest credentials "broadcast" query
         use! resp = req.AsyncGetResponse()
+
         use s = resp.GetResponseStream()
         use sr = new StreamReader(s)
+        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
 
-        return! sr.ReadToEndAsync() |> Async.AwaitTask
+        return JsonConvert.DeserializeObject<OpenTokList<OpenTokBroadcast>> json
     }
 
     /// <summary>
     /// Use this method to get details on broadcasts that are in progress and started. Completed broadcasts are not included in the listing.
     /// </summary>
-    let ListAsync (credentials: IOpenTokCredentials) (parameters: ListParameters) =
+    let ListAsync credentials parameters =
         AsyncList credentials parameters
         |> Async.StartAsTask

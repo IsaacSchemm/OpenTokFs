@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Include="IOpenTokCredentials.fs" />
     <Compile Include="OpenTokAuthentication.fs" />
+    <Compile Include="Types\OpenTokList.fs" />
+    <Compile Include="Types\OpenTokBroadcast.fs" />
     <Compile Include="Requests\Broadcast.fs" />
   </ItemGroup>
 
