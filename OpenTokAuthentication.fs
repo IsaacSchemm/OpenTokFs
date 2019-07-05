@@ -4,6 +4,7 @@ open System
 open JWT
 open JWT.Algorithms
 open JWT.Serializers
+open System.Net
 
 module OpenTokAuthentication =
     type TokenBody = {
@@ -27,3 +28,11 @@ module OpenTokAuthentication =
         let urlEncoder = new JwtBase64UrlEncoder()
         let encoder = new JwtEncoder(algorithm, serialzier, urlEncoder)
         encoder.Encode(payload, credentials.ApiSecret)
+
+    let BuildRequest (credentials: IOpenTokCredentials) (path: string) (query: seq<string>) =
+        let req =
+            String.concat "&" query
+            |> sprintf "https://api.opentok.com/v2/project/%d/%s?%s" credentials.ApiKey path
+            |> WebRequest.CreateHttp
+        req.Headers.Add("X-OPENTOK-AUTH", CreateToken credentials)
+        req

@@ -1,31 +1,30 @@
 ﻿namespace ISchemm.OpenTokFs.Requests
 
-open ISchemm.OpenTokFs
-open System.Net
 open System
 open System.IO
-open JWT.Algorithms
-open JWT.Serializers
-open JWT
+open ISchemm.OpenTokFs
 
 module Broadcast =
-    type Body = {
-        iss: string
-        ist: string
-        iat: int64
-        exp: int64
-        jti: string
-    }
+    [<AllowNullLiteral>]
+    type ListParameters() =
+        member val Offset = 0 with get, set
+        member val Count = Nullable<int>() with get, set
+        member val SessionId: string = null with get, set
 
     /// <summary>
     /// Use this method to get details on broadcasts that are in progress and started. Completed broadcasts are not included in the listing.
     /// </summary>
-    let AsyncList (credentials: IOpenTokCredentials) = async {
-        let uri = sprintf "https://api.opentok.com/v2/project/%d/broadcast" credentials.ApiKey
-        let req = WebRequest.CreateHttp uri
+    let AsyncList (credentials: IOpenTokCredentials) (parameters: ListParameters) = async {
+        let query = seq {
+            if not (isNull parameters) then
+                yield parameters.Offset |> sprintf "offset=%d"
+                if parameters.Count.HasValue then
+                    yield parameters.Count.Value |> sprintf "count=%d"
+                if not (String.IsNullOrEmpty parameters.SessionId) then
+                    yield parameters.SessionId |> Uri.EscapeDataString |> sprintf "sessionId=%s"
+        }
 
-        req.Headers.Add("X-OPENTOK-AUTH", OpenTokAuthentication.CreateToken credentials)
-
+        let req = OpenTokAuthentication.BuildRequest credentials "broadcast" query
         use! resp = req.AsyncGetResponse()
         use s = resp.GetResponseStream()
         use sr = new StreamReader(s)
@@ -36,6 +35,6 @@ module Broadcast =
     /// <summary>
     /// Use this method to get details on broadcasts that are in progress and started. Completed broadcasts are not included in the listing.
     /// </summary>
-    let ListAsync (credentials: IOpenTokCredentials) =
-        AsyncList credentials
+    let ListAsync (credentials: IOpenTokCredentials) (parameters: ListParameters) =
+        AsyncList credentials parameters
         |> Async.StartAsTask
