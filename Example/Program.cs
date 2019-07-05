@@ -24,7 +24,7 @@ namespace Example
             Console.Write("Enter your API secret: ");
             credentials.ApiSecret = Console.ReadLine();
 
-            var broadcasts = await Requests.Broadcast.ListAsync(credentials, null);
+            var broadcasts = await Requests.Broadcast.ListAsync(credentials, new Requests.Broadcast.ListParameters());
             Console.WriteLine(broadcasts);
         }
     }

@@ -5,7 +5,6 @@ open System.IO
 open ISchemm.OpenTokFs
 
 module Broadcast =
-    [<AllowNullLiteral>]
     type ListParameters() =
         member val Offset = 0 with get, set
         member val Count = Nullable<int>() with get, set
@@ -16,12 +15,11 @@ module Broadcast =
     /// </summary>
     let AsyncList (credentials: IOpenTokCredentials) (parameters: ListParameters) = async {
         let query = seq {
-            if not (isNull parameters) then
-                yield parameters.Offset |> sprintf "offset=%d"
-                if parameters.Count.HasValue then
-                    yield parameters.Count.Value |> sprintf "count=%d"
-                if not (String.IsNullOrEmpty parameters.SessionId) then
-                    yield parameters.SessionId |> Uri.EscapeDataString |> sprintf "sessionId=%s"
+            yield parameters.Offset |> sprintf "offset=%d"
+            if parameters.Count.HasValue then
+                yield parameters.Count.Value |> sprintf "count=%d"
+            if not (String.IsNullOrEmpty parameters.SessionId) then
+                yield parameters.SessionId |> Uri.EscapeDataString |> sprintf "sessionId=%s"
         }
 
         let req = OpenTokAuthentication.BuildRequest credentials "broadcast" query
