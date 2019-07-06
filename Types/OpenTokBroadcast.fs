@@ -3,6 +3,7 @@
 open System.Collections.Generic
 
 type OpenTokRtmpStream = {
+    id: string
     serverUrl: string
     streamName: string
     status: string
@@ -10,7 +11,7 @@ type OpenTokRtmpStream = {
 
 type OpenTokBroadcastStreams = {
     hls: string
-    rtmp: Dictionary<string, OpenTokRtmpStream>
+    rtmp: seq<OpenTokRtmpStream>
 }
 
 type OpenTokBroadcast = {
