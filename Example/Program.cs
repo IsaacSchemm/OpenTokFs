@@ -24,9 +24,8 @@ namespace Example
             Console.Write("Enter your API secret: ");
             credentials.ApiSecret = Console.ReadLine();
 
-            var archives = await Requests.Archive.ListAsync(credentials, new OpenTokPagingParameters());
-            Console.WriteLine(archives.count);
-            foreach (var a in archives.items)
+            var archives = await Requests.Archive.ListAllAsync(credentials, 8);
+            foreach (var a in archives)
             {
                 Console.WriteLine(a.id);
                 Console.WriteLine(DateTimeOffset.FromUnixTimeMilliseconds(a.createdAt));

@@ -6,6 +6,7 @@ open System.Runtime.InteropServices
 open Newtonsoft.Json
 open ISchemm.OpenTokFs
 open ISchemm.OpenTokFs.Types
+open FSharp.Control
 
 module Archive =
     /// <summary>
@@ -32,10 +33,37 @@ module Archive =
     }
 
     /// <summary>
+    /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
+    /// </summary>
+    let AsyncListAll credentials sessionId = asyncSeq {
+        let paging = new OpenTokPagingParameters()
+        let mutable finished = false
+        while not finished do
+            let! list = AsyncList credentials paging sessionId
+            if Seq.isEmpty list.items then
+                finished <- true
+            else
+                for item in list.items do
+                    yield item
+                paging.Offset <- paging.Offset + Seq.length list.items
+    }
+
+    /// <summary>
     /// Get details on both completed and in-progress archives.
     /// </summary>
     let ListAsync credentials paging ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
         sessionId
         |> Option.ofObj
         |> AsyncList credentials paging
+        |> Async.StartAsTask
+
+    /// <summary>
+    /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
+    /// </summary>
+    let ListAllAsync credentials max ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
+        sessionId
+        |> Option.ofObj
+        |> AsyncListAll credentials
+        |> AsyncSeq.take max
+        |> AsyncSeq.toArrayAsync
         |> Async.StartAsTask
