@@ -7,9 +7,9 @@ open Newtonsoft.Json
 open ISchemm.OpenTokFs
 open ISchemm.OpenTokFs.Types
 
-module Broadcast =
+module Archive =
     /// <summary>
-    /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
+    /// Get details on both completed and in-progress archives.
     /// </summary>
     let AsyncList (credentials: IOpenTokCredentials) (paging: OpenTokPagingParameters) (sessionId: string option) = async {
         let query = seq {
@@ -21,18 +21,18 @@ module Broadcast =
             | None -> ()
         }
 
-        let req = OpenTokAuthentication.BuildRequest credentials "broadcast" query
+        let req = OpenTokAuthentication.BuildRequest credentials "archive" query
         use! resp = req.AsyncGetResponse()
 
         use s = resp.GetResponseStream()
         use sr = new StreamReader(s)
         let! json = sr.ReadToEndAsync() |> Async.AwaitTask
 
-        return JsonConvert.DeserializeObject<OpenTokList<OpenTokBroadcast>> json
+        return JsonConvert.DeserializeObject<OpenTokList<OpenTokArchive>> json
     }
 
     /// <summary>
-    /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
+    /// Get details on both completed and in-progress archives.
     /// </summary>
     let ListAsync credentials paging ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
         sessionId
