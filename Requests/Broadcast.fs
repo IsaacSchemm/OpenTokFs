@@ -43,15 +43,11 @@ module Broadcast =
         |> Async.StartAsTask
 
     /// <summary>
-    /// Start a broadcast. A WebException will be thrown if there is an error in the request or if a broadcast is already running for the given session.
+    /// Start a broadcast.
+    /// A WebException might be thrown if there is an error in the request or if a broadcast is already running for the given session.
+    /// (Even if an error is thrown, a broadcast may have been started; use one of the List functions to check.)
     /// </summary>
     let AsyncStart (credentials: IOpenTokCredentials) (body: IBroadcastStartRequest) = async {
-        match (body.LayoutType, String.IsNullOrEmpty body.LayoutStylesheet) with
-        | ("custom", false) -> ()
-        | ("custom", true) -> failwithf "The 'custom' layout type requires a stylesheet."
-        | (_, false) -> failwithf "Stylesheets can only be used with the 'custom' layout type."
-        | (_, true) -> ()
-
         let rtmp = seq {
             for r in body.Rtmp do
                 let x = new Dictionary<string, obj>()
@@ -100,7 +96,7 @@ module Broadcast =
 
     /// <summary>
     /// Start a broadcast.
-    /// A WebException will be thrown if there is an error in the request or if a broadcast is already running for the given session.
+    /// A WebException might be thrown if there is an error in the request or if a broadcast is already running for the given session.
     /// (Even if an error is thrown, a broadcast may have been started; use one of the List functions to check.)
     /// </summary>
     let StartAsync credentials body =
@@ -109,7 +105,7 @@ module Broadcast =
 
     /// <summary>
     /// Stop a broadcast.
-    /// A WebException will be thrown if there is an error in the request or if additonal broadcasts are also running for the session.
+    /// A WebException might be thrown if there is an error in the request or if additonal broadcasts are also running for the session.
     /// (Even if an error is thrown, the broadcast may have been stopped; use one of the List functions to check.)
     /// </summary>
     let AsyncStop (credentials: IOpenTokCredentials) (broadcastId: string) = async {
@@ -128,7 +124,7 @@ module Broadcast =
 
     /// <summary>
     /// Stop a broadcast.
-    /// A WebException will be thrown if there is an error in the request or if additonal broadcasts are also running for the session.
+    /// A WebException might be thrown if there is an error in the request or if additonal broadcasts are also running for the session.
     /// (Even if an error is thrown, the broadcast may have been stopped; use one of the List functions to check.)
     /// </summary>
     let StopAsync credentials broadcastId =

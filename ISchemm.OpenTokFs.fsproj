@@ -8,6 +8,7 @@
     <Compile Include="IOpenTokCredentials.fs" />
     <Compile Include="OpenTokPagingParameters.fs" />
     <Compile Include="OpenTokAuthentication.fs" />
+    <Compile Include="RequestTypes\ArchiveStartRequest.fs" />
     <Compile Include="Types\OpenTokList.fs" />
     <Compile Include="Types\OpenTokArchive.fs" />
     <Compile Include="Types\OpenTokBroadcast.fs" />

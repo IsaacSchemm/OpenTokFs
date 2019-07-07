@@ -1,4 +1,5 @@
 ﻿using ISchemm.OpenTokFs;
+using ISchemm.OpenTokFs.RequestTypes;
 using System;
 using System.Threading.Tasks;
 
@@ -24,12 +25,11 @@ namespace Example
             Console.Write("Enter your API secret: ");
             credentials.ApiSecret = Console.ReadLine();
 
-            var archives = await Requests.Archive.ListAsync(credentials, new OpenTokPagingParameters());
+            var archives = await Requests.Archive.ListAsync(credentials, new OpenTokPagingParameters(), "2_MX40NTk3MzI3Mn5-MTUyMzU1NDQwOTA5MX5LcHN2ditxaVNTZWlRenpVVElodUFuQ09-fg");
             Console.WriteLine(archives.count);
-            foreach (var a in archives.items)
+            foreach (var i in archives.items)
             {
-                Console.WriteLine(a.id);
-                Console.WriteLine(DateTimeOffset.FromUnixTimeMilliseconds(a.createdAt));
+                Console.WriteLine(i.status);
             }
         }
     }
