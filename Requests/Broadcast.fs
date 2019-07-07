@@ -1,51 +1,15 @@
 ﻿namespace ISchemm.OpenTokFs.Requests
 
 open System
+open System.Collections.Generic
 open System.IO
 open System.Runtime.InteropServices
 open Newtonsoft.Json
 open ISchemm.OpenTokFs
 open ISchemm.OpenTokFs.Types
-open System.Collections.Generic
+open ISchemm.OpenTokFs.RequestTypes
 
 module Broadcast =
-    type IRtmpDestination =
-        abstract member Id: string
-        abstract member ServerUrl: string
-        abstract member StreamName: string
-
-    type RtmpDestination(serverUrl: string, streamName: string) =
-        member val Id: string = null with get, set
-        interface IRtmpDestination with
-            member this.Id = this.Id
-            member __.ServerUrl = serverUrl
-            member __.StreamName = streamName
-
-    type IBroadcastStartRequest =
-        abstract member SessionId: string
-        abstract member LayoutType: string
-        abstract member LayoutStylesheet: string
-        abstract member Duration: TimeSpan
-        abstract member Hls: bool
-        abstract member Rtmp: seq<IRtmpDestination>
-        abstract member Resolution: string
-
-    type BroadcastStartRequest(sessionId: string) =
-        member val LayoutType = "bestFit" with get, set
-        member val LayoutStylesheet: string = null with get, set
-        member val Duration = TimeSpan.FromHours 2.0 with get, set
-        member val Hls = false with get, set
-        member val Rtmp = new ResizeArray<RtmpDestination>() with get, set
-        member val Resolution = "640x480" with get, set
-        interface IBroadcastStartRequest with
-            member __.SessionId = sessionId
-            member this.LayoutType = this.LayoutType
-            member this.LayoutStylesheet = this.LayoutStylesheet
-            member this.Duration = this.Duration
-            member this.Hls = this.Hls
-            member this.Rtmp = seq { for x in this.Rtmp do yield x }
-            member this.Resolution = this.Resolution
-
     /// <summary>
     /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
     /// </summary>
@@ -78,6 +42,9 @@ module Broadcast =
         |> AsyncList credentials paging
         |> Async.StartAsTask
 
+    /// <summary>
+    /// Start a broadcast. A WebException will be thrown if there is an error in the request or if a broadcast is already running for the given session.
+    /// </summary>
     let AsyncStart (credentials: IOpenTokCredentials) (body: IBroadcastStartRequest) = async {
         match (body.LayoutType, String.IsNullOrEmpty body.LayoutStylesheet) with
         | ("custom", false) -> ()
@@ -131,10 +98,20 @@ module Broadcast =
         return JsonConvert.DeserializeObject<OpenTokBroadcast> json
     }
 
+    /// <summary>
+    /// Start a broadcast.
+    /// A WebException will be thrown if there is an error in the request or if a broadcast is already running for the given session.
+    /// (Even if an error is thrown, a broadcast may have been started; use one of the List functions to check.)
+    /// </summary>
     let StartAsync credentials body =
         AsyncStart credentials body
         |> Async.StartAsTask
 
+    /// <summary>
+    /// Stop a broadcast.
+    /// A WebException will be thrown if there is an error in the request or if additonal broadcasts are also running for the session.
+    /// (Even if an error is thrown, the broadcast may have been stopped; use one of the List functions to check.)
+    /// </summary>
     let AsyncStop (credentials: IOpenTokCredentials) (broadcastId: string) = async {
         let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s/stop"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
@@ -149,6 +126,11 @@ module Broadcast =
         return JsonConvert.DeserializeObject<OpenTokBroadcast> json
     }
 
+    /// <summary>
+    /// Stop a broadcast.
+    /// A WebException will be thrown if there is an error in the request or if additonal broadcasts are also running for the session.
+    /// (Even if an error is thrown, the broadcast may have been stopped; use one of the List functions to check.)
+    /// </summary>
     let StopAsync credentials broadcastId =
         AsyncStop credentials broadcastId
         |> Async.StartAsTask
