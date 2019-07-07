@@ -11,7 +11,6 @@
     <Compile Include="Types\OpenTokList.fs" />
     <Compile Include="Types\OpenTokArchive.fs" />
     <Compile Include="Types\OpenTokBroadcast.fs" />
-    <Compile Include="RequestTypes\BroadcastStartRequest.fs" />
     <Compile Include="Requests\Archive.fs" />
     <Compile Include="Requests\Broadcast.fs" />
   </ItemGroup>
@@ -19,6 +18,10 @@
   <ItemGroup>
     <PackageReference Include="JWT" Version="5.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ISchemm.OpenTokFs.RequestTypes\ISchemm.OpenTokFs.RequestTypes.csproj" />
   </ItemGroup>
 
 </Project>
