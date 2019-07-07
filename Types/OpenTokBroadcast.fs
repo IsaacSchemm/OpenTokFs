@@ -1,7 +1,5 @@
 ﻿namespace ISchemm.OpenTokFs.Types
 
-open System.Collections.Generic
-
 type OpenTokRtmpStream = {
     id: string
     serverUrl: string
@@ -19,8 +17,9 @@ type OpenTokBroadcast = {
     sessionId: string
     projectId: int
     createdAt: int64
-    updatedAt: int64
-    resolution: string
     broadcastUrls: OpenTokBroadcastStreams
+    updatedAt: int64
     status: string
+    maxDuration: int
+    resolution: string
 }

@@ -6,6 +6,7 @@ open System.Runtime.InteropServices
 open Newtonsoft.Json
 open ISchemm.OpenTokFs
 open ISchemm.OpenTokFs.Types
+open System.Collections.Generic
 
 module Broadcast =
     type IRtmpDestination =
@@ -84,26 +85,32 @@ module Broadcast =
         | (_, false) -> failwithf "Stylesheets can only be used with the 'custom' layout type."
         | (_, true) -> ()
 
-        let requestObject = {
-            sessionId = body.SessionId
-            layout = {
-                ``type`` = body.LayoutType
-                stylesheet = body.LayoutStylesheet
-            }
-            maxDuration = body.Duration.TotalSeconds |> int
-            outputs = {
-                hls = if body.Hls then (new obj()) else null
-                rtmp = seq {
-                    for r in body.Rtmp do
-                        yield {
-                            id = r.Id
-                            serverUrl = r.ServerUrl
-                            streamName = r.StreamName
-                        }
-                }
-            }
-            resolution = body.Resolution
+        let rtmp = seq {
+            for r in body.Rtmp do
+                let x = new Dictionary<string, obj>()
+                if not (String.IsNullOrEmpty r.Id) then
+                    x.Add("id", r.Id)
+                x.Add("serverUrl", r.ServerUrl)
+                x.Add("streamName", r.StreamName)
+                yield x
         }
+
+        let layout = new Dictionary<string, obj>()
+        layout.Add("type", body.LayoutType)
+        if body.LayoutType = "custom" then
+            layout.Add("stylesheet", body.LayoutStylesheet)
+
+        let outputs = new Dictionary<string, obj>()
+        if body.Hls then
+            outputs.Add("hls", new obj())
+        outputs.Add("rtmp", rtmp :> obj)
+
+        let requestObject = new Dictionary<string, obj>()
+        requestObject.Add("sessionId", body.SessionId)
+        requestObject.Add("layout", layout)
+        requestObject.Add("maxDuration", body.Duration.TotalSeconds |> int)
+        requestObject.Add("outputs", outputs)
+        requestObject.Add("resolution", body.Resolution)
 
         let req = OpenTokAuthentication.BuildRequest credentials "broadcast" Seq.empty
         req.Method <- "POST"
@@ -121,7 +128,7 @@ module Broadcast =
         use sr = new StreamReader(s)
         let! json = sr.ReadToEndAsync() |> Async.AwaitTask
 
-        return json
+        return JsonConvert.DeserializeObject<OpenTokBroadcast> json
     }
 
     let StartAsync credentials body =
@@ -139,7 +146,7 @@ module Broadcast =
         use sr = new StreamReader(s)
         let! json = sr.ReadToEndAsync() |> Async.AwaitTask
 
-        return json
+        return JsonConvert.DeserializeObject<OpenTokBroadcast> json
     }
 
     let StopAsync credentials broadcastId =
