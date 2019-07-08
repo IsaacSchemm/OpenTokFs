@@ -1,4 +1,4 @@
-﻿namespace ISchemm.OpenTokFs.RequestTypes
+﻿namespace OpenTokFs.RequestTypes
 
 /// <summary>
 /// Any object that provides parameters for starting an OpenTok archive.

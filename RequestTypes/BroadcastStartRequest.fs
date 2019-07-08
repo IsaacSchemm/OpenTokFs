@@ -1,4 +1,4 @@
-﻿namespace ISchemm.OpenTokFs.RequestTypes
+﻿namespace OpenTokFs.RequestTypes
 
 open System
 

@@ -1,4 +1,4 @@
-namespace ISchemm.OpenTokFs
+namespace OpenTokFs
 
 open System
 open JWT

@@ -1,9 +1,9 @@
-﻿using ISchemm.OpenTokFs;
-using ISchemm.OpenTokFs.RequestTypes;
+﻿using OpenTokFs;
+using OpenTokFs.RequestTypes;
 using System;
 using System.Threading.Tasks;
 
-using Requests = ISchemm.OpenTokFs.Requests;
+using Requests = OpenTokFs.Requests;
 
 namespace Example
 {

@@ -1,13 +1,13 @@
-﻿namespace ISchemm.OpenTokFs.Requests
+﻿namespace OpenTokFs.Requests
 
 open System
 open System.Collections.Generic
 open System.IO
 open System.Runtime.InteropServices
 open Newtonsoft.Json
-open ISchemm.OpenTokFs
-open ISchemm.OpenTokFs.Types
-open ISchemm.OpenTokFs.RequestTypes
+open OpenTokFs
+open OpenTokFs.Types
+open OpenTokFs.RequestTypes
 open FSharp.Control
 
 module Archive =

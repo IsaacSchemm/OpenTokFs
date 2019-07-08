@@ -1,4 +1,4 @@
-﻿namespace ISchemm.OpenTokFs
+﻿namespace OpenTokFs
 
 /// <summary>
 /// Any object that provides an API key and secret for the OpenTok REST API.

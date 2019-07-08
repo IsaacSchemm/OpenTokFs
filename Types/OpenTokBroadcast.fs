@@ -1,4 +1,4 @@
-﻿namespace ISchemm.OpenTokFs.Types
+﻿namespace OpenTokFs.Types
 
 open System
 

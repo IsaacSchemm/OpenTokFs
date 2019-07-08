@@ -1,4 +1,4 @@
-﻿namespace ISchemm.OpenTokFs.Types
+﻿namespace OpenTokFs.Types
 
 /// <summary>
 /// A partial list of results from the OpenTok REST API.
