@@ -2,11 +2,17 @@
 
 open System
 
+/// <summary>
+/// Any object that provides information about an RTMP destination for an OpenTok broadcast.
+/// </summary>
 type IRtmpDestination =
     abstract member Id: string
     abstract member ServerUrl: string
     abstract member StreamName: string
 
+/// <summary>
+/// An object that provides information about an RTMP destination for an OpenTok broadcast.
+/// </summary>
 type RtmpDestination(serverUrl: string, streamName: string) =
     member val Id: string = null with get, set
     interface IRtmpDestination with
@@ -14,6 +20,9 @@ type RtmpDestination(serverUrl: string, streamName: string) =
         member __.ServerUrl = serverUrl
         member __.StreamName = streamName
 
+/// <summary>
+/// Any object that provides parameters for starting an OpenTok broadcast.
+/// </summary>
 type IBroadcastStartRequest =
     abstract member SessionId: string
     abstract member LayoutType: string
@@ -23,6 +32,10 @@ type IBroadcastStartRequest =
     abstract member Rtmp: seq<IRtmpDestination>
     abstract member Resolution: string
 
+/// <summary>
+/// An object that provides parameters for starting an OpenTok broadcast, using reasonable defaults.
+/// Note that neither HLS nor RTMP is enabled by default; you will have to turn one or both of them on.
+/// </summary>
 type BroadcastStartRequest(sessionId: string) =
     member val LayoutType = "bestFit" with get, set
     member val LayoutStylesheet: string = null with get, set

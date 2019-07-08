@@ -16,9 +16,9 @@ module Archive =
     /// </summary>
     let AsyncList (credentials: IOpenTokCredentials) (paging: OpenTokPagingParameters) (sessionId: string option) = async {
         let query = seq {
-            yield paging.Offset |> sprintf "offset=%d"
-            if paging.Count.HasValue then
-                yield paging.Count.Value |> sprintf "count=%d"
+            yield paging.offset |> sprintf "offset=%d"
+            if paging.count.HasValue then
+                yield paging.count.Value |> sprintf "count=%d"
             match sessionId with
             | Some s -> yield s |> Uri.EscapeDataString |> sprintf "sessionId=%s"
             | None -> ()
@@ -38,7 +38,7 @@ module Archive =
     /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
     /// </summary>
     let AsyncListAll credentials sessionId = asyncSeq {
-        let paging = new OpenTokPagingParameters()
+        let mutable paging = { offset = 0; count = Nullable() }
         let mutable finished = false
         while not finished do
             let! list = AsyncList credentials paging sessionId
@@ -47,7 +47,7 @@ module Archive =
             else
                 for item in list.items do
                     yield item
-                paging.Offset <- paging.Offset + Seq.length list.items
+                paging <- { offset = paging.offset + Seq.length list.items; count = paging.count }
     }
 
     /// <summary>

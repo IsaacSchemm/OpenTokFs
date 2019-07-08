@@ -1,5 +1,8 @@
 ﻿namespace ISchemm.OpenTokFs.RequestTypes
 
+/// <summary>
+/// Any object that provides parameters for starting an OpenTok archive.
+/// </summary>
 type IArchiveStartRequest =
     abstract member SessionId: string
     abstract member HasAudio: bool
@@ -10,6 +13,9 @@ type IArchiveStartRequest =
     abstract member OutputMode: string
     abstract member Resolution: string
 
+/// <summary>
+/// An object that provides parameters for starting an OpenTok archive, using reasonable defaults.
+/// </summary>
 type ArchiveStartRequest(sessionId: string) =
     member val LayoutType = "bestFit" with get, set
     member val HasAudio = true with get, set

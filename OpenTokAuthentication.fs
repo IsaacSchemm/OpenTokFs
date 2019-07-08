@@ -6,6 +6,9 @@ open JWT.Algorithms
 open JWT.Serializers
 open System.Net
 
+/// <summary>
+/// Internal functions for authenticating with OpenTok.
+/// </summary>
 module OpenTokAuthentication =
     type TokenBody = {
         iss: string
