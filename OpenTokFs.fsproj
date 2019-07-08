@@ -2,10 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.0</Version>
+    <Version>0.1.0</Version>
+    <Authors>Isaac Schemm</Authors>
+    <Description>An unofficial .NET wrapper for the OpenTok REST API (written in F#)</Description>
+    <Copyright>(C) 2019 Isaac Schemm</Copyright>
+    <PackageLicenseExpression>ISC OR MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/IsaacSchemm/OpenTokFs</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/IsaacSchemm/OpenTokFs</RepositoryUrl>
+    <PackageTags>opentok webrtc fsharp</PackageTags>
+    <PackageReleaseNotes>First release. Only includes a subset of the Archive and Broadcast endpoints.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="LICENSE.txt" />
+    <None Include="README.md" />
     <Compile Include="IOpenTokCredentials.fs" />
     <Compile Include="OpenTokPagingParameters.fs" />
     <Compile Include="OpenTokAuthentication.fs" />
@@ -18,6 +28,8 @@
     <Compile Include="Requests\Archive.fs" />
     <Compile Include="Requests\Broadcast.fs" />
   </ItemGroup>
+
+  <ItemGroup />
 
   <ItemGroup>
     <PackageReference Include="FSharp.Control.AsyncSeq" Version="2.0.21" />
