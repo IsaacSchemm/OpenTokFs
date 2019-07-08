@@ -62,7 +62,7 @@ module Archive =
     /// <summary>
     /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
     /// </summary>
-    let ListAllAsync credentials max ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
+    let ListAllAsync credentials ([<Optional;DefaultParameterValue(Int32.MaxValue)>] max) ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
         sessionId
         |> Option.ofObj
         |> AsyncListAll credentials
