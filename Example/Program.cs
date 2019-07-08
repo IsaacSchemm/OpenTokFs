@@ -7,28 +7,27 @@ using Requests = OpenTokFs.Requests;
 
 namespace Example
 {
-    class OpenTokCredentials : IOpenTokCredentials
-    {
-        public int ApiKey { get; set; }
-        public string ApiSecret { get; set; }
-    }
-
     class Program
     {
         static async Task Main(string[] args)
         {
-            var credentials = new OpenTokCredentials();
-
             Console.Write("Enter your API key: ");
-            credentials.ApiKey = int.Parse(Console.ReadLine());
+            int apiKey = int.Parse(Console.ReadLine());
 
             Console.Write("Enter your API secret: ");
-            credentials.ApiSecret = Console.ReadLine();
+            string apiSecret = Console.ReadLine();
 
-            var archives = await Requests.Archive.ListAllAsync(credentials, 2);
+            var credentials = new OpenTokCredentials(apiKey, apiSecret);
+
+            var archives = await Requests.Archive.ListAllAsync(credentials, 10);
+            Console.WriteLine(archives.Length);
+
             foreach (var a in archives)
             {
-                Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(a));
+                Console.WriteLine(a.id);
+                Console.WriteLine(a.name);
+                Console.WriteLine(a.GetCreationTime() + " " + a.GetDuration());
+                Console.WriteLine();
             }
         }
     }
