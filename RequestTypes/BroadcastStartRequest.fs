@@ -3,24 +3,6 @@
 open System
 
 /// <summary>
-/// Any object that provides information about an RTMP destination for an OpenTok broadcast.
-/// </summary>
-type IRtmpDestination =
-    abstract member Id: string
-    abstract member ServerUrl: string
-    abstract member StreamName: string
-
-/// <summary>
-/// An object that provides information about an RTMP destination for an OpenTok broadcast.
-/// </summary>
-type RtmpDestination(serverUrl: string, streamName: string) =
-    member val Id: string = null with get, set
-    interface IRtmpDestination with
-        member this.Id = this.Id
-        member __.ServerUrl = serverUrl
-        member __.StreamName = streamName
-
-/// <summary>
 /// Any object that provides parameters for starting an OpenTok broadcast.
 /// </summary>
 type IBroadcastStartRequest =
@@ -29,7 +11,7 @@ type IBroadcastStartRequest =
     abstract member LayoutStylesheet: string
     abstract member Duration: TimeSpan
     abstract member Hls: bool
-    abstract member Rtmp: seq<IRtmpDestination>
+    abstract member Rtmp: seq<RtmpDestination>
     abstract member Resolution: string
 
 /// <summary>
@@ -49,5 +31,5 @@ type BroadcastStartRequest(sessionId: string) =
         member this.LayoutStylesheet = this.LayoutStylesheet
         member this.Duration = this.Duration
         member this.Hls = this.Hls
-        member this.Rtmp = seq { for x in this.Rtmp do yield x }
+        member this.Rtmp = this.Rtmp
         member this.Resolution = this.Resolution

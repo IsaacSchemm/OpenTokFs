@@ -25,10 +25,10 @@ namespace Example
             Console.Write("Enter your API secret: ");
             credentials.ApiSecret = Console.ReadLine();
 
-            var archives = await Requests.Archive.ListAllAsync(credentials, 8);
+            var archives = await Requests.Archive.ListAllAsync(credentials, 2);
             foreach (var a in archives)
             {
-                Console.WriteLine(a.status);
+                Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(a));
             }
         }
     }
