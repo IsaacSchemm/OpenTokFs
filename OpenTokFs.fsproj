@@ -11,6 +11,7 @@
     <RepositoryUrl>https://github.com/IsaacSchemm/OpenTokFs</RepositoryUrl>
     <PackageTags>opentok webrtc fsharp</PackageTags>
     <PackageReleaseNotes>First release. Only includes a subset of the Archive and Broadcast endpoints.</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
