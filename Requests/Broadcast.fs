@@ -8,6 +8,7 @@ open Newtonsoft.Json
 open ISchemm.OpenTokFs
 open ISchemm.OpenTokFs.Types
 open ISchemm.OpenTokFs.RequestTypes
+open FSharp.Control
 
 module Broadcast =
     /// <summary>
@@ -34,12 +35,39 @@ module Broadcast =
     }
 
     /// <summary>
+    /// Get details on broadcasts that are currently in progress, making as many requests to the server as necessary.
+    /// </summary>
+    let AsyncListAll credentials sessionId = asyncSeq {
+        let paging = new OpenTokPagingParameters()
+        let mutable finished = false
+        while not finished do
+            let! list = AsyncList credentials paging sessionId
+            if Seq.isEmpty list.items then
+                finished <- true
+            else
+                for item in list.items do
+                    yield item
+                paging.Offset <- paging.Offset + Seq.length list.items
+    }
+
+    /// <summary>
     /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
     /// </summary>
     let ListAsync credentials paging ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
         sessionId
         |> Option.ofObj
         |> AsyncList credentials paging
+        |> Async.StartAsTask
+
+    /// <summary>
+    /// Get details on broadcasts that are currently in progress, making as many requests to the server as necessary.
+    /// </summary>
+    let ListAllAsync credentials max ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
+        sessionId
+        |> Option.ofObj
+        |> AsyncListAll credentials
+        |> AsyncSeq.take max
+        |> AsyncSeq.toArrayAsync
         |> Async.StartAsTask
 
     /// <summary>
