@@ -74,7 +74,7 @@ module Archive =
     /// Start an archive.
     /// A WebException might be thrown if there is an error in the request or if an archive is already running for the given session.
     /// </summary>
-    let AsyncStart (credentials: IOpenTokCredentials) (body: IArchiveStartRequest) = async {
+    let AsyncStart (credentials: IOpenTokCredentials) (body: ArchiveStartRequest) = async {
         let layout = body.Layout.ToSerializableObject()
 
         let requestObject = new Dictionary<string, obj>()

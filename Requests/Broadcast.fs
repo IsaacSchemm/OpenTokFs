@@ -75,7 +75,7 @@ module Broadcast =
     /// A WebException might be thrown if there is an error in the request or if a broadcast is already running for the given session.
     /// (Even if an error is thrown, a broadcast may have been started; use one of the List functions to check.)
     /// </summary>
-    let AsyncStart (credentials: IOpenTokCredentials) (body: IBroadcastStartRequest) = async {
+    let AsyncStart (credentials: IOpenTokCredentials) (body: BroadcastStartRequest) = async {
         let rtmp = seq {
             for r in body.Rtmp do
                 let x = new Dictionary<string, obj>()
