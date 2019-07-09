@@ -10,7 +10,7 @@ type IBroadcastStartRequest =
     abstract member Layout: VideoLayout
     abstract member Duration: TimeSpan
     abstract member Hls: bool
-    abstract member Rtmp: seq<RtmpDestination>
+    abstract member Rtmp: seq<IRtmpDestination>
     abstract member Resolution: string
 
 /// <summary>
@@ -21,7 +21,7 @@ type BroadcastStartRequest(sessionId: string) =
     member val Layout = VideoLayout.BestFit with get, set
     member val Duration = TimeSpan.FromHours 2.0 with get, set
     member val Hls = false with get, set
-    member val Rtmp = Seq.empty<RtmpDestination> with get, set
+    member val Rtmp = Seq.empty<IRtmpDestination> with get, set
     member val Resolution = "640x480" with get, set
     interface IBroadcastStartRequest with
         member __.SessionId = sessionId
