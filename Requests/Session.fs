@@ -132,3 +132,85 @@ module Session =
         AsyncSetLayoutClasses credentials sessionId layouts
         |> Async.StartAsTask
         :> Task
+
+    /// <summary>
+    /// Send a signal to one participant in a session.
+    /// </summary>
+    let AsyncSendSignal (credentials: IOpenTokCredentials) (sessionId: string) (connectionId: string) (signal: Signal) = async {
+        let path = sprintf "session/%s/connection/%s/signal" (Uri.EscapeDataString sessionId) (Uri.EscapeDataString connectionId)
+        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        req.Method <- "POST"
+        req.ContentType <- "application/json"
+
+        do! async {
+            use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
+            use sw = new StreamWriter(rs)
+            let o = dict (seq {
+                yield ("type", signal.``type``)
+                yield ("data", signal.data)
+            })
+            do! o |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+        }
+
+        use! resp = req.AsyncGetResponse()
+        ignore resp
+    }
+
+    /// <summary>
+    /// Send a signal to one participant in a session.
+    /// </summary>
+    let SendSignalAsync credentials sessionId connectionId signal =
+        AsyncSendSignal credentials sessionId connectionId signal
+        |> Async.StartAsTask
+        :> Task
+
+    /// <summary>
+    /// Send a signal to all participants in a session.
+    /// </summary>
+    let AsyncSendSignalToAll (credentials: IOpenTokCredentials) (sessionId: string) (signal: Signal) = async {
+        let path = sessionId |> Uri.EscapeDataString |> sprintf "session/%s/signal"
+        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        req.Method <- "POST"
+        req.ContentType <- "application/json"
+
+        do! async {
+            use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
+            use sw = new StreamWriter(rs)
+            let o = dict (seq {
+                yield ("type", signal.``type``)
+                yield ("data", signal.data)
+            })
+            do! o |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+        }
+
+        use! resp = req.AsyncGetResponse()
+        ignore resp
+    }
+
+    /// <summary>
+    /// Send a signal to all participants in a session.
+    /// </summary>
+    let SendSignalToAllAsync credentials sessionId signal =
+        AsyncSendSignalToAll credentials sessionId signal
+        |> Async.StartAsTask
+        :> Task
+
+    /// <summary>
+    /// Force a single participant to disconnect from an OpenTok session.
+    /// </summary>
+    let AsyncForceDisconnect (credentials: IOpenTokCredentials) (sessionId: string) (connectionId: string) = async {
+        let path = sprintf "session/%s/connection/%s" (Uri.EscapeDataString sessionId) (Uri.EscapeDataString connectionId)
+        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        req.Method <- "DELETE"
+
+        use! resp = req.AsyncGetResponse()
+        ignore resp
+    }
+
+    /// <summary>
+    /// Force a single participant to disconnect from an OpenTok session.
+    /// </summary>
+    let ForceDisconnectAsync credentials sessionId connectionId =
+        AsyncForceDisconnect credentials sessionId connectionId
+        |> Async.StartAsTask
+        :> Task
