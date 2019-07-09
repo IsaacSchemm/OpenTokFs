@@ -75,10 +75,7 @@ module Archive =
     /// A WebException might be thrown if there is an error in the request or if an archive is already running for the given session.
     /// </summary>
     let AsyncStart (credentials: IOpenTokCredentials) (body: IArchiveStartRequest) = async {
-        let layout = new Dictionary<string, obj>()
-        layout.Add("type", body.Layout.Type)
-        if body.Layout.Type = "custom" then
-            layout.Add("stylesheet", body.Layout.Stylesheet)
+        let layout = body.Layout.ToSerializableObject()
 
         let requestObject = new Dictionary<string, obj>()
         requestObject.Add("sessionId", body.SessionId)
@@ -173,10 +170,7 @@ module Archive =
         req.ContentType <- "application/json"
 
         do! async {
-            let o = new Dictionary<string, obj>()
-            o.Add("type", layout.Type)
-            if layout.Type = "custom" then
-                o.Add("stylesheet", layout.Stylesheet)
+            let o = layout.ToSerializableObject()
 
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
