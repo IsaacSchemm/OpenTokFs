@@ -35,6 +35,15 @@ module Archive =
     }
 
     /// <summary>
+    /// Get details on both completed and in-progress archives.
+    /// </summary>
+    let ListAsync credentials paging ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
+        sessionId
+        |> Option.ofObj
+        |> AsyncList credentials paging
+        |> Async.StartAsTask
+
+    /// <summary>
     /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
     /// </summary>
     let AsyncListAll credentials sessionId = asyncSeq {
@@ -49,15 +58,6 @@ module Archive =
                     yield item
                 paging <- { offset = paging.offset + Seq.length list.items; count = paging.count }
     }
-
-    /// <summary>
-    /// Get details on both completed and in-progress archives.
-    /// </summary>
-    let ListAsync credentials paging ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
-        sessionId
-        |> Option.ofObj
-        |> AsyncList credentials paging
-        |> Async.StartAsTask
 
     /// <summary>
     /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
@@ -138,4 +138,21 @@ module Archive =
     /// </summary>
     let StopAsync credentials archiveId =
         AsyncStop credentials archiveId
+        |> Async.StartAsTask
+
+    let AsyncGet (credentials: IOpenTokCredentials) (archiveId: string) = async {
+        let path = archiveId |> Uri.EscapeDataString |> sprintf "archive/%s"
+        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+
+        use! resp = req.AsyncGetResponse()
+
+        use s = resp.GetResponseStream()
+        use sr = new StreamReader(s)
+        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
+
+        return JsonConvert.DeserializeObject<OpenTokArchive> json
+    }
+
+    let GetAsync credentials archiveId =
+        AsyncGet credentials archiveId
         |> Async.StartAsTask

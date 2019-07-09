@@ -35,6 +35,15 @@ module Broadcast =
     }
 
     /// <summary>
+    /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
+    /// </summary>
+    let ListAsync credentials paging ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
+        sessionId
+        |> Option.ofObj
+        |> AsyncList credentials paging
+        |> Async.StartAsTask
+
+    /// <summary>
     /// Get details on broadcasts that are currently in progress, making as many requests to the server as necessary.
     /// </summary>
     let AsyncListAll credentials sessionId = asyncSeq {
@@ -49,15 +58,6 @@ module Broadcast =
                     yield item
                 paging <- { offset = paging.offset + Seq.length list.items; count = paging.count }
     }
-
-    /// <summary>
-    /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
-    /// </summary>
-    let ListAsync credentials paging ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
-        sessionId
-        |> Option.ofObj
-        |> AsyncList credentials paging
-        |> Async.StartAsTask
 
     /// <summary>
     /// Get details on broadcasts that are currently in progress, making as many requests to the server as necessary.
@@ -157,4 +157,21 @@ module Broadcast =
     /// </summary>
     let StopAsync credentials broadcastId =
         AsyncStop credentials broadcastId
+        |> Async.StartAsTask
+
+    let AsyncGet (credentials: IOpenTokCredentials) (archiveId: string) = async {
+        let path = archiveId |> Uri.EscapeDataString |> sprintf "broadcast/%s"
+        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+
+        use! resp = req.AsyncGetResponse()
+
+        use s = resp.GetResponseStream()
+        use sr = new StreamReader(s)
+        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
+
+        return JsonConvert.DeserializeObject<OpenTokBroadcast> json
+    }
+
+    let GetAsync credentials archiveId =
+        AsyncGet credentials archiveId
         |> Async.StartAsTask
