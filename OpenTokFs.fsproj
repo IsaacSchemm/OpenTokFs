@@ -27,6 +27,7 @@
     <Compile Include="Types\OpenTokArchive.fs" />
     <Compile Include="Types\OpenTokBroadcast.fs" />
     <Compile Include="Types\OpenTokSession.fs" />
+    <Compile Include="Types\OpenTokStream.fs" />
     <Compile Include="RequestTypes\BroadcastStartRequest.fs" />
     <Compile Include="RequestTypes\SessionCreateRequest.fs" />
     <Compile Include="Requests\Archive.fs" />

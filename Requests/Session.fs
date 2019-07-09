@@ -19,7 +19,6 @@ module Session =
         req.Headers.Add("X-OPENTOK-AUTH", OpenTokAuthentication.CreateToken credentials)
         req.Method <- "POST"
         req.ContentType <- "application/x-www-form-urlencoded"
-        req.Accept <- "application/json"
 
         do! async {
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
@@ -48,6 +47,53 @@ module Session =
     /// </summary>
     let CreateAsync credentials session =
         AsyncCreate credentials session
+        |> Async.StartAsTask
+
+    /// <summary>
+    /// Get information about one stream in a session. A WebException will be thrown if the stream no longer exists.
+    /// </summary>
+    let AsyncGetStream (credentials: IOpenTokCredentials) (sessionId: string) (streamId: string) = async {
+        let path = sprintf "session/%s/stream/%s" (Uri.EscapeDataString sessionId) (Uri.EscapeDataString streamId)
+        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+
+        use! resp = req.AsyncGetResponse()
+
+        use s = resp.GetResponseStream()
+        use sr = new StreamReader(s)
+        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
+
+        return JsonConvert.DeserializeObject<OpenTokStream> json
+    }
+
+    /// <summary>
+    /// Get information about one stream in a session. A WebException will be thrown if the stream no longer exists.
+    /// </summary>
+    let GetStreamAsync credentials sessionId streamId =
+        AsyncGetStream credentials sessionId streamId
+        |> Async.StartAsTask
+
+    /// <summary>
+    /// Get information about all streams in a session.
+    /// </summary>
+    let AsyncGetStreams (credentials: IOpenTokCredentials) (sessionId: string) = async {
+        let path = sessionId |> Uri.EscapeDataString |> sprintf "session/%s/stream"
+        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+
+        use! resp = req.AsyncGetResponse()
+
+        use s = resp.GetResponseStream()
+        use sr = new StreamReader(s)
+        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
+
+        let list = JsonConvert.DeserializeObject<OpenTokList<OpenTokStream>> json
+        return list.items
+    }
+
+    /// <summary>
+    /// Get information about all streams in a session.
+    /// </summary>
+    let GetStreamsAsync credentials sessionId =
+        AsyncGetStreams credentials sessionId
         |> Async.StartAsTask
 
     /// <summary>

@@ -17,7 +17,7 @@ type OpenTokRtmpStream = {
 /// </summary>
 type OpenTokBroadcastStreams = {
     hls: string
-    rtmp: seq<OpenTokRtmpStream>
+    rtmp: OpenTokRtmpStream[]
 }
 
 /// <summary>
