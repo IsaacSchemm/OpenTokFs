@@ -4,6 +4,7 @@ open System
 open System.Collections.Generic
 open System.IO
 open System.Runtime.InteropServices
+open System.Threading.Tasks
 open Newtonsoft.Json
 open OpenTokFs
 open OpenTokFs.Types
@@ -159,6 +160,26 @@ module Archive =
     let GetAsync credentials archiveId =
         AsyncGet credentials archiveId
         |> Async.StartAsTask
+
+    /// <summary>
+    /// Delete an archive.
+    /// </summary>
+    let AsyncDelete (credentials: IOpenTokCredentials) (archiveId: string) = async {
+        let path = archiveId |> Uri.EscapeDataString |> sprintf "archive/%s"
+        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        req.Method <- "DELETE"
+
+        use! resp = req.AsyncGetResponse()
+        ignore resp
+    }
+
+    /// <summary>
+    /// Delete an archive.
+    /// </summary>
+    let DeleteAsync credentials archiveId =
+        AsyncDelete credentials archiveId
+        |> Async.StartAsTask
+        :> Task
 
     /// <summary>
     /// Change the layout type of an archive while it is being recorded.
