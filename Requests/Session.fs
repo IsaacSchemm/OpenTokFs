@@ -146,8 +146,8 @@ module Session =
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
             let o = dict (seq {
-                yield ("type", signal.``type``)
-                yield ("data", signal.data)
+                yield ("type", signal.Type)
+                yield ("data", signal.Data)
             })
             do! o |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
@@ -177,8 +177,8 @@ module Session =
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
             let o = dict (seq {
-                yield ("type", signal.``type``)
-                yield ("data", signal.data)
+                yield ("type", signal.Type)
+                yield ("data", signal.Data)
             })
             do! o |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }

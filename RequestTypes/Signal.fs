@@ -4,6 +4,6 @@
 /// A signal to be sent to one or all connected participants.
 /// </summary>
 type Signal = {
-    ``type``: string
-    data: string
+    Type: string
+    Data: string
 }
