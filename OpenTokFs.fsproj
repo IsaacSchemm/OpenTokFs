@@ -21,6 +21,7 @@
     <Compile Include="OpenTokPagingParameters.fs" />
     <Compile Include="OpenTokAuthentication.fs" />
     <Compile Include="RequestTypes\RtmpDestination.fs" />
+    <Compile Include="RequestTypes\VideoLayout.fs" />
     <Compile Include="RequestTypes\ArchiveStartRequest.fs" />
     <Compile Include="Types\OpenTokList.fs" />
     <Compile Include="Types\OpenTokArchive.fs" />
@@ -28,9 +29,8 @@
     <Compile Include="RequestTypes\BroadcastStartRequest.fs" />
     <Compile Include="Requests\Archive.fs" />
     <Compile Include="Requests\Broadcast.fs" />
+    <Compile Include="Requests\Session.fs" />
   </ItemGroup>
-
-  <ItemGroup />
 
   <ItemGroup>
     <PackageReference Include="FSharp.Control.AsyncSeq" Version="2.0.21" />

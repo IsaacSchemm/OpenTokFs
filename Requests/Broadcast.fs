@@ -87,9 +87,9 @@ module Broadcast =
         }
 
         let layout = new Dictionary<string, obj>()
-        layout.Add("type", body.LayoutType)
-        if body.LayoutType = "custom" then
-            layout.Add("stylesheet", body.LayoutStylesheet)
+        layout.Add("type", body.Layout.Type)
+        if body.Layout.Type = "custom" then
+            layout.Add("stylesheet", body.Layout.Stylesheet)
 
         let outputs = new Dictionary<string, obj>()
         if body.Hls then
@@ -159,8 +159,11 @@ module Broadcast =
         AsyncStop credentials broadcastId
         |> Async.StartAsTask
 
-    let AsyncGet (credentials: IOpenTokCredentials) (archiveId: string) = async {
-        let path = archiveId |> Uri.EscapeDataString |> sprintf "broadcast/%s"
+    /// <summary>
+    /// Get information about a broadcast by its ID.
+    /// </summary>
+    let AsyncGet (credentials: IOpenTokCredentials) (broadcastId: string) = async {
+        let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
 
         use! resp = req.AsyncGetResponse()
@@ -172,6 +175,45 @@ module Broadcast =
         return JsonConvert.DeserializeObject<OpenTokBroadcast> json
     }
 
+    /// <summary>
+    /// Get information about a broadcast by its ID.
+    /// </summary>
     let GetAsync credentials archiveId =
         AsyncGet credentials archiveId
+        |> Async.StartAsTask
+
+    /// <summary>
+    /// Change the layout type of an active broadcast.
+    /// </summary>
+    let AsyncSetLayout (credentials: IOpenTokCredentials) (broadcastId: string) (layout: VideoLayout) = async {
+        let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s/layout"
+        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        req.Method <- "PUT"
+        req.ContentType <- "application/json"
+        
+        do! async {
+            let o = new Dictionary<string, obj>()
+            o.Add("type", layout.Type)
+            if layout.Type = "custom" then
+                o.Add("stylesheet", layout.Stylesheet)
+        
+            use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
+            use sw = new StreamWriter(rs)
+            do! o |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+        }
+        
+        use! resp = req.AsyncGetResponse()
+        
+        use s = resp.GetResponseStream()
+        use sr = new StreamReader(s)
+        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
+        
+        return JsonConvert.DeserializeObject<OpenTokArchive> json
+    }
+        
+    /// <summary>
+    /// Change the layout type of an active broadcast.
+    /// </summary>
+    let SetLayoutAsync credentials archiveId layout =
+        AsyncSetLayout credentials archiveId layout
         |> Async.StartAsTask

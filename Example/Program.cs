@@ -1,6 +1,7 @@
 ﻿using OpenTokFs;
 using OpenTokFs.RequestTypes;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Requests = OpenTokFs.Requests;
@@ -19,16 +20,10 @@ namespace Example
 
             var credentials = new OpenTokCredentials(apiKey, apiSecret);
 
-            var archives = await Requests.Archive.ListAllAsync(credentials, 10);
-            Console.WriteLine(archives.Length);
-
-            foreach (var a in archives)
+            await Requests.Session.SetLayoutClassesAsync(credentials, "sessionIdGoesHere", new Dictionary<string, IEnumerable<string>>
             {
-                Console.WriteLine(a.id);
-                Console.WriteLine(a.name);
-                Console.WriteLine(a.GetCreationTime() + " " + a.GetDuration());
-                Console.WriteLine();
-            }
+                ["streamIdGoesHere"] = new[] { "full" }
+            });
         }
     }
 }
