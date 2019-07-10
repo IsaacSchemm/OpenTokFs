@@ -48,7 +48,7 @@ module Archive =
     /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
     /// </summary>
     let AsyncListAll credentials sessionId = asyncSeq {
-        let mutable paging = { offset = 0; count = Nullable() }
+        let mutable paging = { offset = 0; count = Nullable 1000 }
         let mutable finished = false
         while not finished do
             let! list = AsyncList credentials paging sessionId
