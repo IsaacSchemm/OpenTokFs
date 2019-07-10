@@ -62,7 +62,7 @@ module Broadcast =
     /// <summary>
     /// Get details on broadcasts that are currently in progress, making as many requests to the server as necessary.
     /// </summary>
-    let ListAllAsync credentials ([<Optional;DefaultParameterValue(Int32.MaxValue)>] max) ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
+    let ListAllAsync credentials max ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
         sessionId
         |> Option.ofObj
         |> AsyncListAll credentials

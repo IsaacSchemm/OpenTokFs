@@ -21,7 +21,7 @@ Public Class Archives
         Try
             ListBox1.Items.Clear()
 
-            Dim list = Await Requests.Archive.ListAllAsync(Me, max:=100)
+            Dim list = Await Requests.Archive.ListAllAsync(Me, 100)
             If list.Length >= 100 Then
                 MsgBox("There are 100 or more items in the list. Only showing the top 100 items.")
             End If
