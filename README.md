@@ -4,7 +4,9 @@ This is an unofficial .NET wrapper for the OpenTok REST API.
 
 Although this library is written in F#, it was written primarily to be used
 from a C# or VB.NET application. As such, it does not use option types;
-strings can be null, and Nullable<T> is used for value types.
+strings can be null, and Nullable<T> is used for value types. However, it does
+provide F#-friendly methods that return Async<T> and AsyncSeq<T> in addition
+to .NET-style methods that return Task<T>.
 
 Namespaces:
 
