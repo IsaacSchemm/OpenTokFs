@@ -82,10 +82,11 @@ module Archive =
         requestObject.Add("sessionId", body.SessionId)
         requestObject.Add("hasAudio", body.HasAudio)
         requestObject.Add("hasVideo", body.HasVideo)
-        requestObject.Add("layout", layout)
         requestObject.Add("name", body.Name)
         requestObject.Add("outputMode", body.OutputMode)
-        requestObject.Add("resolution", body.Resolution)
+        if body.OutputMode <> "individual" then
+            requestObject.Add("layout", layout)
+            requestObject.Add("resolution", body.Resolution)
 
         let req = OpenTokAuthentication.BuildRequest credentials "archive" Seq.empty
         req.Method <- "POST"
