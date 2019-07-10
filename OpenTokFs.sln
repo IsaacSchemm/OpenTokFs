@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "OpenTokFs", "OpenTokFs.fsproj", "{05AE44A0-81CE-4819-84F8-1F33CFFB204E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "Example\Example.csproj", "{B69537E2-77FB-4813-A19A-DE6C749C59E4}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ArchiveHelper", "Examples\ArchiveHelper\ArchiveHelper.vbproj", "{08EE6CD2-4D19-4D0B-B17D-A7EE13AD40D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{05AE44A0-81CE-4819-84F8-1F33CFFB204E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05AE44A0-81CE-4819-84F8-1F33CFFB204E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05AE44A0-81CE-4819-84F8-1F33CFFB204E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B69537E2-77FB-4813-A19A-DE6C749C59E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B69537E2-77FB-4813-A19A-DE6C749C59E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B69537E2-77FB-4813-A19A-DE6C749C59E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B69537E2-77FB-4813-A19A-DE6C749C59E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08EE6CD2-4D19-4D0B-B17D-A7EE13AD40D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08EE6CD2-4D19-4D0B-B17D-A7EE13AD40D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08EE6CD2-4D19-4D0B-B17D-A7EE13AD40D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08EE6CD2-4D19-4D0B-B17D-A7EE13AD40D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
