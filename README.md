@@ -18,3 +18,7 @@ Most functions take a parameter of the type `OpenTokFs.IOpenTokCredentials`.
 This interface can be implemented by any object that can provide an OpenTok
 API key and secret. `OpenTokFs.OpenTokCredentials` is provided as a sample
 implementation.
+
+To generate OpenTok session tokens, you can use the module
+`OpenTokFs.OpenTokSessionTokens`, which is based on the implementation in the
+official [OpenTok .NET SDK.](https://github.com/opentok/Opentok-.NET-SDK)
