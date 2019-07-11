@@ -26,7 +26,7 @@ module Session =
 
             let parameters = seq {
                 yield sprintf "archiveMode=%s" (if session.ArchiveAlways then "always" else "manual")
-                yield sprintf "p2p.preference=%s" (if session.BypassMediaRouter then "enabled" else "disabled")
+                yield sprintf "p2p.preference=%s" (if session.P2PEnabled then "enabled" else "disabled")
                 if not (String.IsNullOrEmpty session.IpAddressLocationHint) then
                     yield sprintf "location=%s" session.IpAddressLocationHint
             }

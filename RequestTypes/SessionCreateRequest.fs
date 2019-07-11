@@ -6,4 +6,4 @@
 type SessionCreateRequest() =
     member val ArchiveAlways = false with get, set
     member val IpAddressLocationHint: string = null with get, set
-    member val BypassMediaRouter = false with get, set
+    member val P2PEnabled = false with get, set
