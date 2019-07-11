@@ -51,11 +51,11 @@ module Broadcast =
         let mutable finished = false
         while not finished do
             let! list = AsyncList credentials paging sessionId
-            if Seq.isEmpty list.items then
+            for item in list.items do
+                yield item
+            if paging.offset + Array.length list.items >= list.count then
                 finished <- true
             else
-                for item in list.items do
-                    yield item
                 paging <- { offset = paging.offset + Seq.length list.items; count = paging.count }
     }
 
