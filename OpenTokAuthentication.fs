@@ -74,4 +74,5 @@ module OpenTokAuthentication =
             |> sprintf "https://api.opentok.com/v2/project/%d/%s?%s" credentials.ApiKey path
             |> WebRequest.CreateHttp
         req.Headers.Add("X-OPENTOK-AUTH", CreateToken credentials)
+        req.Headers.Add("Accept", "application/json")
         req
