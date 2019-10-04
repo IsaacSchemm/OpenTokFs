@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.1.1</Version>
+    <Version>2.1.2</Version>
     <Authors>Isaac Schemm</Authors>
     <Description>An unofficial .NET wrapper for the OpenTok REST API (written in F#)</Description>
     <Copyright>(C) 2019 Isaac Schemm</Copyright>
