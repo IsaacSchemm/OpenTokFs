@@ -87,7 +87,7 @@ module Session =
         let! json = sr.ReadToEndAsync() |> Async.AwaitTask
 
         let list = JsonConvert.DeserializeObject<OpenTokList<OpenTokStream>> json
-        return list.items
+        return list.Items
     }
 
     /// <summary>

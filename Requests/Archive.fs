@@ -52,12 +52,12 @@ module Archive =
         let mutable finished = false
         while not finished do
             let! list = AsyncList credentials paging sessionId
-            for item in list.items do
+            for item in list.Items do
                 yield item
-            if paging.offset + Array.length list.items >= list.count then
+            if paging.offset + Array.length list.Items >= list.Count then
                 finished <- true
             else
-                paging <- { offset = paging.offset + Seq.length list.items; count = paging.count }
+                paging <- { offset = paging.offset + Seq.length list.Items; count = paging.count }
     }
 
     /// <summary>
