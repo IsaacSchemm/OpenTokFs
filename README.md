@@ -11,7 +11,7 @@ to .NET-style methods that return Task<T>.
 Namespaces:
 
 * **OpenTokFs.RequestTypes**: Custom types used as parameters in requests to the server. The library builds a corresponding JSON request internally.
-* **OpenTokFs.Types**: OpenTok API response types implemented as F# records; used for data returned from the server.
+* **OpenTokFs.Types**: OpenTok API response types implemented as .NET classes; used for data returned from the server.
 * **OpenTokFs.Requests**: Modules (static classes) with functions that wrap OpenTok API methods.
 
 Most functions take a parameter of the type `OpenTokFs.IOpenTokCredentials`.
