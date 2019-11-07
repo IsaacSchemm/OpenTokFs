@@ -38,16 +38,13 @@ Public Class Archives
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
         Dim item As Types.OpenTokArchive = ListBox1.SelectedItem
         If item Is Nothing Then
-            TextBox1.Text = ""
+            PropertyGrid1.SelectedObject = Nothing
 
             BtnStop.Enabled = False
             BtnDelete.Enabled = False
             BtnDownload.Enabled = False
         Else
-            TextBox1.Text = item.ToString()
-            If Not TextBox1.Text.Contains(vbCr) Then
-                TextBox1.Text = TextBox1.Text.Replace(vbLf, vbCrLf)
-            End If
+            PropertyGrid1.SelectedObject = item
 
             BtnStop.Enabled = item.status = "started"
             BtnDelete.Enabled = item.status = "available" Or item.status = "uploaded"

@@ -23,7 +23,7 @@ type OpenTokArchive() =
     member val ProjectId: int = 0 with get, set
     /// The reason an archive's status is "stopped" or "failed", if any.
     member val Reason: string = "" with get, set
-    /// The resolution of the archive (either "640x480" or "1280x720").
+    /// The resolution of the archive.
     member val Resolution: string = "" with get, set
     /// The session ID of the OpenTok session that was archived.
     member val SessionId: string = "" with get, set

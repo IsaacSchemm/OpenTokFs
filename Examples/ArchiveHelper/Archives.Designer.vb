@@ -32,21 +32,21 @@ Partial Class Archives
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.BtnRefresh = New System.Windows.Forms.Button()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.BtnDelete = New System.Windows.Forms.Button()
         Me.BtnDownload = New System.Windows.Forms.Button()
         Me.BtnStop = New System.Windows.Forms.Button()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.RadioIndividual = New System.Windows.Forms.RadioButton()
+        Me.RadioSD = New System.Windows.Forms.RadioButton()
+        Me.RadioHD = New System.Windows.Forms.RadioButton()
         Me.TxtName = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.BtnStart = New System.Windows.Forms.Button()
         Me.TxtNewArchiveSessionId = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.RadioHD = New System.Windows.Forms.RadioButton()
-        Me.RadioSD = New System.Windows.Forms.RadioButton()
-        Me.RadioIndividual = New System.Windows.Forms.RadioButton()
+        Me.PropertyGrid1 = New System.Windows.Forms.PropertyGrid()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -135,7 +135,7 @@ Partial Class Archives
         '
         'SplitContainer1.Panel2
         '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.TextBox1)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.PropertyGrid1)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Panel2)
         Me.SplitContainer1.Size = New System.Drawing.Size(554, 237)
         Me.SplitContainer1.SplitterDistance = 258
@@ -170,17 +170,6 @@ Partial Class Archives
         Me.BtnRefresh.TabIndex = 0
         Me.BtnRefresh.Text = "Refresh"
         Me.BtnRefresh.UseVisualStyleBackColor = True
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox1.Location = New System.Drawing.Point(0, 0)
-        Me.TextBox1.Multiline = True
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.ReadOnly = True
-        Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox1.Size = New System.Drawing.Size(292, 208)
-        Me.TextBox1.TabIndex = 11
         '
         'Panel2
         '
@@ -247,6 +236,39 @@ Partial Class Archives
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "New Archive"
         '
+        'RadioIndividual
+        '
+        Me.RadioIndividual.AutoSize = True
+        Me.RadioIndividual.Location = New System.Drawing.Point(223, 69)
+        Me.RadioIndividual.Name = "RadioIndividual"
+        Me.RadioIndividual.Size = New System.Drawing.Size(70, 17)
+        Me.RadioIndividual.TabIndex = 18
+        Me.RadioIndividual.TabStop = True
+        Me.RadioIndividual.Text = "Individual"
+        Me.RadioIndividual.UseVisualStyleBackColor = True
+        '
+        'RadioSD
+        '
+        Me.RadioSD.AutoSize = True
+        Me.RadioSD.Checked = True
+        Me.RadioSD.Location = New System.Drawing.Point(176, 69)
+        Me.RadioSD.Name = "RadioSD"
+        Me.RadioSD.Size = New System.Drawing.Size(40, 17)
+        Me.RadioSD.TabIndex = 17
+        Me.RadioSD.TabStop = True
+        Me.RadioSD.Text = "SD"
+        Me.RadioSD.UseVisualStyleBackColor = True
+        '
+        'RadioHD
+        '
+        Me.RadioHD.AutoSize = True
+        Me.RadioHD.Location = New System.Drawing.Point(129, 69)
+        Me.RadioHD.Name = "RadioHD"
+        Me.RadioHD.Size = New System.Drawing.Size(41, 17)
+        Me.RadioHD.TabIndex = 16
+        Me.RadioHD.Text = "HD"
+        Me.RadioHD.UseVisualStyleBackColor = True
+        '
         'TxtName
         '
         Me.TxtName.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -302,38 +324,13 @@ Partial Class Archives
         Me.Label3.TabIndex = 4
         Me.Label3.Text = "Session ID"
         '
-        'RadioHD
+        'PropertyGrid1
         '
-        Me.RadioHD.AutoSize = True
-        Me.RadioHD.Location = New System.Drawing.Point(129, 69)
-        Me.RadioHD.Name = "RadioHD"
-        Me.RadioHD.Size = New System.Drawing.Size(41, 17)
-        Me.RadioHD.TabIndex = 16
-        Me.RadioHD.Text = "HD"
-        Me.RadioHD.UseVisualStyleBackColor = True
-        '
-        'RadioSD
-        '
-        Me.RadioSD.AutoSize = True
-        Me.RadioSD.Checked = True
-        Me.RadioSD.Location = New System.Drawing.Point(176, 69)
-        Me.RadioSD.Name = "RadioSD"
-        Me.RadioSD.Size = New System.Drawing.Size(40, 17)
-        Me.RadioSD.TabIndex = 17
-        Me.RadioSD.TabStop = True
-        Me.RadioSD.Text = "SD"
-        Me.RadioSD.UseVisualStyleBackColor = True
-        '
-        'RadioIndividual
-        '
-        Me.RadioIndividual.AutoSize = True
-        Me.RadioIndividual.Location = New System.Drawing.Point(223, 69)
-        Me.RadioIndividual.Name = "RadioIndividual"
-        Me.RadioIndividual.Size = New System.Drawing.Size(70, 17)
-        Me.RadioIndividual.TabIndex = 18
-        Me.RadioIndividual.TabStop = True
-        Me.RadioIndividual.Text = "Individual"
-        Me.RadioIndividual.UseVisualStyleBackColor = True
+        Me.PropertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PropertyGrid1.Location = New System.Drawing.Point(0, 0)
+        Me.PropertyGrid1.Name = "PropertyGrid1"
+        Me.PropertyGrid1.Size = New System.Drawing.Size(292, 208)
+        Me.PropertyGrid1.TabIndex = 13
         '
         'Archives
         '
@@ -379,7 +376,6 @@ Partial Class Archives
     Friend WithEvents SplitContainer1 As SplitContainer
     Friend WithEvents BtnDownload As Button
     Friend WithEvents BtnStop As Button
-    Friend WithEvents TextBox1 As TextBox
     Friend WithEvents Panel2 As Panel
     Friend WithEvents Label6 As Label
     Friend WithEvents TxtName As TextBox
@@ -387,4 +383,5 @@ Partial Class Archives
     Friend WithEvents RadioIndividual As RadioButton
     Friend WithEvents RadioSD As RadioButton
     Friend WithEvents RadioHD As RadioButton
+    Friend WithEvents PropertyGrid1 As PropertyGrid
 End Class

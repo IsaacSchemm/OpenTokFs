@@ -39,7 +39,7 @@ type OpenTokBroadcast() =
     member val UpdatedAt: int64 = 0L with get, set
     /// The status of the broadcast. Not available on all requests.
     member val Status: string = null with get, set
-    /// The resolution of the broadcast (either "640x480" or "1280x720").
+    /// The resolution of the broadcast.
     member val Resolution: string = "" with get, set
 
     /// Gets the creation time of the archive as a DateTimeOffset object.
