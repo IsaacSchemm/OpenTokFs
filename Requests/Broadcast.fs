@@ -11,9 +11,7 @@ open OpenTokFs.RequestTypes
 open FSharp.Control
 
 module Broadcast =
-    /// <summary>
     /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
-    /// </summary>
     let AsyncList (credentials: IOpenTokCredentials) (paging: OpenTokPagingParameters) (sessionId: string option) = async {
         let query = seq {
             yield paging.offset |> sprintf "offset=%d"
@@ -34,18 +32,14 @@ module Broadcast =
         return JsonConvert.DeserializeObject<OpenTokList<OpenTokBroadcast>> json
     }
 
-    /// <summary>
     /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
-    /// </summary>
     let ListAsync credentials paging ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
         sessionId
         |> Option.ofObj
         |> AsyncList credentials paging
         |> Async.StartAsTask
 
-    /// <summary>
     /// Get details on broadcasts that are currently in progress, making as many requests to the server as necessary.
-    /// </summary>
     let AsyncListAll credentials sessionId = asyncSeq {
         let mutable paging = { offset = 0; count = Nullable 1000 }
         let mutable finished = false
@@ -59,9 +53,7 @@ module Broadcast =
                 paging <- { offset = paging.offset + Seq.length list.Items; count = paging.count }
     }
 
-    /// <summary>
     /// Get details on broadcasts that are currently in progress, making as many requests to the server as necessary.
-    /// </summary>
     let ListAllAsync credentials max ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
         sessionId
         |> Option.ofObj
@@ -70,11 +62,9 @@ module Broadcast =
         |> AsyncSeq.toArrayAsync
         |> Async.StartAsTask
 
-    /// <summary>
     /// Start a broadcast.
     /// A WebException might be thrown if there is an error in the request or if a broadcast is already running for the given session.
     /// (Even if an error is thrown, a broadcast may have been started; use one of the List functions to check.)
-    /// </summary>
     let AsyncStart (credentials: IOpenTokCredentials) (body: BroadcastStartRequest) = async {
         let rtmp = seq {
             for r in body.Rtmp do
@@ -119,20 +109,16 @@ module Broadcast =
         return JsonConvert.DeserializeObject<OpenTokBroadcast> json
     }
 
-    /// <summary>
     /// Start a broadcast.
     /// A WebException might be thrown if there is an error in the request or if a broadcast is already running for the given session.
     /// (Even if an error is thrown, a broadcast may have been started; use one of the List functions to check.)
-    /// </summary>
     let StartAsync credentials body =
         AsyncStart credentials body
         |> Async.StartAsTask
 
-    /// <summary>
     /// Stop a broadcast.
     /// A WebException might be thrown if there is an error in the request or if additonal broadcasts are also running for the session.
     /// (Even if an error is thrown, the broadcast may have been stopped; use one of the List functions to check.)
-    /// </summary>
     let AsyncStop (credentials: IOpenTokCredentials) (broadcastId: string) = async {
         let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s/stop"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
@@ -147,18 +133,14 @@ module Broadcast =
         return JsonConvert.DeserializeObject<OpenTokBroadcast> json
     }
 
-    /// <summary>
     /// Stop a broadcast.
     /// A WebException might be thrown if there is an error in the request or if additonal broadcasts are also running for the session.
     /// (Even if an error is thrown, the broadcast may have been stopped; use one of the List functions to check.)
-    /// </summary>
     let StopAsync credentials broadcastId =
         AsyncStop credentials broadcastId
         |> Async.StartAsTask
 
-    /// <summary>
     /// Get information about a broadcast by its ID.
-    /// </summary>
     let AsyncGet (credentials: IOpenTokCredentials) (broadcastId: string) = async {
         let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
@@ -172,16 +154,12 @@ module Broadcast =
         return JsonConvert.DeserializeObject<OpenTokBroadcast> json
     }
 
-    /// <summary>
     /// Get information about a broadcast by its ID.
-    /// </summary>
     let GetAsync credentials archiveId =
         AsyncGet credentials archiveId
         |> Async.StartAsTask
 
-    /// <summary>
     /// Change the layout type of an active broadcast.
-    /// </summary>
     let AsyncSetLayout (credentials: IOpenTokCredentials) (broadcastId: string) (layout: VideoLayout) = async {
         let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s/layout"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
@@ -204,10 +182,8 @@ module Broadcast =
         
         return JsonConvert.DeserializeObject<OpenTokArchive> json
     }
-        
-    /// <summary>
+
     /// Change the layout type of an active broadcast.
-    /// </summary>
     let SetLayoutAsync credentials archiveId layout =
         AsyncSetLayout credentials archiveId layout
         |> Async.StartAsTask
