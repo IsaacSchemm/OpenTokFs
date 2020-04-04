@@ -47,7 +47,6 @@ Partial Class Archives
         Me.BtnStart = New System.Windows.Forms.Button()
         Me.TxtNewArchiveSessionId = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -228,7 +227,6 @@ Partial Class Archives
         '
         Me.GroupBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBox3.Controls.Add(Me.Button1)
         Me.GroupBox3.Controls.Add(Me.RadioIndividual)
         Me.GroupBox3.Controls.Add(Me.RadioSD)
         Me.GroupBox3.Controls.Add(Me.RadioHD)
@@ -333,16 +331,6 @@ Partial Class Archives
         Me.Label3.TabIndex = 4
         Me.Label3.Text = "Session ID"
         '
-        'Button1
-        '
-        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button1.Location = New System.Drawing.Point(353, 69)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 20
-        Me.Button1.Text = "fff"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
         'Archives
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -395,5 +383,4 @@ Partial Class Archives
     Friend WithEvents RadioSD As RadioButton
     Friend WithEvents RadioHD As RadioButton
     Friend WithEvents PropertyGrid1 As PropertyGrid
-    Friend WithEvents Button1 As Button
 End Class
