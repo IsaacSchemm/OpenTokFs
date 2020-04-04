@@ -8,8 +8,8 @@ open System
 /// </summary>
 type BroadcastStartRequest(sessionId: string) =
     member __.SessionId = sessionId
-    member val Layout = VideoLayout.BestFit with get, set
-    member val Duration = TimeSpan.FromHours 2.0 with get, set
-    member val Hls = false with get, set
-    member val Rtmp = Seq.empty<RtmpDestination> with get, set
-    member val Resolution = "640x480" with get, set
+    member val Layout: VideoLayout = VideoLayout.BestFit with get, set
+    member val Duration: TimeSpan = TimeSpan.FromHours 2.0 with get, set
+    member val Hls: bool = false with get, set
+    member val Rtmp: RtmpDestination seq = Seq.empty with get, set
+    member val Resolution: string = "640x480" with get, set
