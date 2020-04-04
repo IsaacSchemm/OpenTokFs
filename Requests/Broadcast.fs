@@ -47,7 +47,7 @@ module Broadcast =
             let! list = AsyncList credentials paging sessionId
             for item in list.Items do
                 yield item
-            if paging.offset + Array.length list.Items >= list.Count then
+            if paging.offset + List.length list.Items >= list.Count then
                 finished <- true
             else
                 paging <- { offset = paging.offset + Seq.length list.Items; count = paging.count }
