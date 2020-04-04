@@ -66,17 +66,22 @@ module Archive =
     /// Start an archive.
     /// A WebException might be thrown if there is an error in the request or if an archive is already running for the given session.
     let AsyncStart (credentials: IOpenTokCredentials) (body: ArchiveStartRequest) = async {
-        let layout = body.Layout.ToSerializableObject()
+        let layout = body.Layout.ToIDictionary()
 
-        let requestObject = new Dictionary<string, obj>()
-        requestObject.Add("sessionId", body.SessionId)
-        requestObject.Add("hasAudio", body.HasAudio)
-        requestObject.Add("hasVideo", body.HasVideo)
-        requestObject.Add("name", body.Name)
-        requestObject.Add("outputMode", body.OutputMode)
-        if body.OutputMode <> "individual" then
-            requestObject.Add("layout", layout)
-            requestObject.Add("resolution", body.Resolution)
+        let requestObject =
+            seq {
+                let o x = x :> obj
+
+                yield ("sessionId", o body.SessionId)
+                yield ("hasAudio", o body.HasAudio)
+                yield ("hasVideo", o body.HasVideo)
+                yield ("name", o body.Name)
+                yield ("outputMode", o body.OutputMode)
+                if body.OutputMode <> "individual" then
+                    yield ("layout", o layout)
+                    yield ("resolution", o body.Resolution)
+            }
+            |> dict
 
         let req = OpenTokAuthentication.BuildRequest credentials "archive" Seq.empty
         req.Method <- "POST"
@@ -166,7 +171,7 @@ module Archive =
         req.ContentType <- "application/json"
 
         do! async {
-            let o = layout.ToSerializableObject()
+            let o = layout.ToIDictionary()
 
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)

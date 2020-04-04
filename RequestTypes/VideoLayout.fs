@@ -10,7 +10,7 @@ type VideoLayout =
 | HorizontalPresentation
 | Custom of css: string
 with
-    member internal this.ToSerializableObject() = dict (seq {
+    member internal this.ToIDictionary() = dict (seq {
         match this with
         | BestFit ->
             yield ("type", "bestFit")
