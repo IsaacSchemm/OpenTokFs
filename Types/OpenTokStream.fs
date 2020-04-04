@@ -11,3 +11,6 @@ type OpenTokStream() =
     member val Name: string = "" with get, set
     /// The array of layout classes for the stream (if any).
     member val LayoutClassList: string[] = Array.empty with get, set
+
+    override this.ToString() =
+        sprintf "%s (%s) (%s)" this.Id this.Name this.VideoType

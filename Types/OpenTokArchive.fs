@@ -38,3 +38,5 @@ type OpenTokArchive() =
     member this.GetCreationTime() = DateTimeOffset.FromUnixTimeMilliseconds this.CreatedAt
     /// Gets the duration time of the archive as a TimeSpan object.
     member this.GetDuration() = this.Duration |> float |> TimeSpan.FromSeconds
+
+    override this.ToString() = sprintf "%s: %s (%s) (%s)" this.Status this.Id this.Name this.OutputMode

@@ -7,3 +7,5 @@ type OpenTokList<'a>() =
     member val Count: int = 0 with get, set
     /// A partial list of items, based on the count and offset parameters in the request.
     member val Items: 'a[] = Array.empty with get, set
+
+    override this.ToString() = sprintf "Partial list (%d/%d items): %A" (Array.length this.Items) this.Count (List.ofArray this.Items)

@@ -32,6 +32,7 @@ Partial Class Archives
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.BtnRefresh = New System.Windows.Forms.Button()
+        Me.PropertyGrid1 = New System.Windows.Forms.PropertyGrid()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.BtnDelete = New System.Windows.Forms.Button()
         Me.BtnDownload = New System.Windows.Forms.Button()
@@ -46,7 +47,6 @@ Partial Class Archives
         Me.BtnStart = New System.Windows.Forms.Button()
         Me.TxtNewArchiveSessionId = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.PropertyGrid1 = New System.Windows.Forms.PropertyGrid()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -143,7 +143,6 @@ Partial Class Archives
         '
         'ListBox1
         '
-        Me.ListBox1.DisplayMember = "name"
         Me.ListBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.IntegralHeight = False
@@ -170,6 +169,14 @@ Partial Class Archives
         Me.BtnRefresh.TabIndex = 0
         Me.BtnRefresh.Text = "Refresh"
         Me.BtnRefresh.UseVisualStyleBackColor = True
+        '
+        'PropertyGrid1
+        '
+        Me.PropertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PropertyGrid1.Location = New System.Drawing.Point(0, 0)
+        Me.PropertyGrid1.Name = "PropertyGrid1"
+        Me.PropertyGrid1.Size = New System.Drawing.Size(292, 208)
+        Me.PropertyGrid1.TabIndex = 13
         '
         'Panel2
         '
@@ -323,14 +330,6 @@ Partial Class Archives
         Me.Label3.Size = New System.Drawing.Size(58, 13)
         Me.Label3.TabIndex = 4
         Me.Label3.Text = "Session ID"
-        '
-        'PropertyGrid1
-        '
-        Me.PropertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PropertyGrid1.Location = New System.Drawing.Point(0, 0)
-        Me.PropertyGrid1.Name = "PropertyGrid1"
-        Me.PropertyGrid1.Size = New System.Drawing.Size(292, 208)
-        Me.PropertyGrid1.TabIndex = 13
         '
         'Archives
         '

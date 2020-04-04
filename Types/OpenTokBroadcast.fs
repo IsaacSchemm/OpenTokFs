@@ -14,6 +14,8 @@ type OpenTokRtmpStream() =
     /// The status of the RTMP stream.
     member val Status: string = "" with get, set
 
+    override this.ToString() = sprintf "%s: %s/%s (%s)" this.Status this.ServerUrl this.StreamName this.Id
+
 /// Streaming endpoints for an OpenTok broadcast.
 [<AllowNullLiteral>]
 type OpenTokBroadcastStreams() =
@@ -21,6 +23,8 @@ type OpenTokBroadcastStreams() =
     member val Hls: string = null with get, set
     /// An array of RTMP endpoints that are being broadcasted to.
     member val Rtmp: OpenTokRtmpStream[] = Array.empty with get, set
+
+    override this.ToString() = sprintf "HLS: [%s], RTMP: %A" this.Hls (List.ofArray this.Rtmp)
 
 /// An OpenTok broadcast.
 [<AllowNullLiteral>]
@@ -46,3 +50,5 @@ type OpenTokBroadcast() =
     member this.GetCreationTime() = DateTimeOffset.FromUnixTimeMilliseconds this.CreatedAt
     /// Gets the time the broadcast was stopped as a DateTimeOffset object. Not available on all requests.
     member this.GetUpdatedTime() = DateTimeOffset.FromUnixTimeMilliseconds this.UpdatedAt
+
+    override this.ToString() = sprintf "%s: %s" this.Status this.Id
