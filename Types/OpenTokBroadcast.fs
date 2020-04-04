@@ -17,6 +17,8 @@ type OpenTokRtmpStream() =
     /// The status of the RTMP stream.
     member val Status: string = "" with get, set
 
+    override this.ToString() = sprintf "%s/%s (%s) (%s)" this.ServerUrl this.StreamName this.Id this.Status
+
 /// Streaming endpoints for an OpenTok broadcast.
 [<AllowNullLiteral>]
 type OpenTokBroadcastStreams() =
@@ -25,6 +27,8 @@ type OpenTokBroadcastStreams() =
 
     /// An array of RTMP endpoints that are being broadcasted to.
     member val Rtmp: OpenTokRtmpStream list = List.empty with get, set
+
+    override this.ToString() = sprintf "HLS: [%s]; RTMP: %A" this.Hls this.Rtmp
 
 /// An OpenTok broadcast.
 [<AllowNullLiteral>]
