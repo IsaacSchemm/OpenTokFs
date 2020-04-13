@@ -61,34 +61,24 @@ module Session =
         AsyncGetStreams credentials sessionId
         |> Async.StartAsTask
 
-    /// Change the layout classes of OpenTok streams in a broadcast, by providing stream IDs and lists of classes to apply.
-    let AsyncSetLayoutClasses (credentials: IOpenTokCredentials) (sessionId: string) (layouts: IDictionary<string, seq<string>>) = async {
+    /// Change the layout classes of OpenTok streams in a composed archive, by providing stream IDs and lists of classes to apply.
+    let AsyncSetLayoutClasses (credentials: IOpenTokCredentials) (sessionId: string) (body: OpenTokLayoutClassChangeRequest) = async {
         let path = sessionId |> Uri.EscapeDataString |> sprintf "session/%s/stream"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
         req.Method <- "PUT"
         req.ContentType <- "application/json"
 
         do! async {
-            let o = new Dictionary<string, obj>()
-            o.Add("items", seq {
-                for x in layouts do
-                    let item = new Dictionary<string, obj>()
-                    item.Add("id", x.Key)
-                    item.Add("layoutClassList", x.Value)
-                    yield item
-            })
-
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
-            let json = o |> JsonConvert.SerializeObject
-            do! json |> sw.WriteLineAsync |> Async.AwaitTask
+            do! body |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
 
         use! resp = req.AsyncGetResponse()
         ignore resp
     }
 
-    /// Change the layout classes of OpenTok streams in a broadcast, by providing stream IDs and lists of classes to apply.
+    /// Change the layout classes of OpenTok streams in a composed archive, by providing stream IDs and lists of classes to apply.
     let SetLayoutClassesAsync credentials sessionId layouts =
         AsyncSetLayoutClasses credentials sessionId layouts
         |> Async.StartAsTask

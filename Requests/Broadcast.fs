@@ -107,8 +107,8 @@ module Broadcast =
     }
 
     /// Get information about a broadcast by its ID.
-    let GetAsync credentials archiveId =
-        AsyncGet credentials archiveId
+    let GetAsync credentials broadcastId =
+        AsyncGet credentials broadcastId
         |> Async.StartAsTask
 
     /// Change the layout type of an active broadcast.
@@ -128,6 +128,6 @@ module Broadcast =
     }
 
     /// Change the layout type of an active broadcast.
-    let SetLayoutAsync credentials archiveId layout =
-        AsyncSetLayout credentials archiveId layout
+    let SetLayoutAsync credentials broadcastId layout =
+        AsyncSetLayout credentials broadcastId layout
         |> Async.StartAsTask
