@@ -23,13 +23,7 @@ module Broadcast =
         }
 
         let req = OpenTokAuthentication.BuildRequest credentials "broadcast" query
-        use! resp = req.AsyncGetResponse()
-
-        use s = resp.GetResponseStream()
-        use sr = new StreamReader(s)
-        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-
-        return JsonConvert.DeserializeObject<OpenTokList<OpenTokBroadcast>> json
+        return! OpenTokAuthentication.AsyncReadJson<OpenTokList<OpenTokBroadcast>> req
     }
 
     /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
@@ -76,13 +70,7 @@ module Broadcast =
             do! body.AsSerializableObject() |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
 
-        use! resp = req.AsyncGetResponse()
-
-        use s = resp.GetResponseStream()
-        use sr = new StreamReader(s)
-        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-
-        return JsonConvert.DeserializeObject<OpenTokBroadcast> json
+        return! OpenTokAuthentication.AsyncReadJson<OpenTokBroadcast> req
     }
 
     /// Start a broadcast.
@@ -100,13 +88,7 @@ module Broadcast =
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
         req.Method <- "POST"
 
-        use! resp = req.AsyncGetResponse()
-
-        use s = resp.GetResponseStream()
-        use sr = new StreamReader(s)
-        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-
-        return JsonConvert.DeserializeObject<OpenTokBroadcast> json
+        return! OpenTokAuthentication.AsyncReadJson<OpenTokBroadcast> req
     }
 
     /// Stop a broadcast.
@@ -121,13 +103,7 @@ module Broadcast =
         let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
 
-        use! resp = req.AsyncGetResponse()
-
-        use s = resp.GetResponseStream()
-        use sr = new StreamReader(s)
-        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-
-        return JsonConvert.DeserializeObject<OpenTokBroadcast> json
+        return! OpenTokAuthentication.AsyncReadJson<OpenTokBroadcast> req
     }
 
     /// Get information about a broadcast by its ID.
@@ -147,14 +123,8 @@ module Broadcast =
             use sw = new StreamWriter(rs)
             do! layout |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
-        
-        use! resp = req.AsyncGetResponse()
-        
-        use s = resp.GetResponseStream()
-        use sr = new StreamReader(s)
-        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-        
-        return JsonConvert.DeserializeObject<OpenTokArchive> json
+
+        return! OpenTokAuthentication.AsyncReadJson<OpenTokBroadcast> req
     }
 
     /// Change the layout type of an active broadcast.

@@ -25,14 +25,9 @@ module Session =
             use sw = new StreamWriter(rs)
             do! session.ToQueryString() |> sw.WriteLineAsync |> Async.AwaitTask
         }
-
-        use! resp = req.AsyncGetResponse()
-
-        use s = resp.GetResponseStream()
-        use sr = new StreamReader(s)
-        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-
-        return JsonConvert.DeserializeObject<seq<OpenTokSession>> json |> Seq.exactlyOne
+        
+        let! list = OpenTokAuthentication.AsyncReadJson<OpenTokSession list> req
+        return List.exactlyOne list
     }
 
     /// Create a session.
@@ -45,13 +40,7 @@ module Session =
         let path = sprintf "session/%s/stream/%s" (Uri.EscapeDataString sessionId) (Uri.EscapeDataString streamId)
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
 
-        use! resp = req.AsyncGetResponse()
-
-        use s = resp.GetResponseStream()
-        use sr = new StreamReader(s)
-        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-
-        return JsonConvert.DeserializeObject<OpenTokStream> json
+        return! OpenTokAuthentication.AsyncReadJson<OpenTokStream> req
     }
 
     /// Get information about one stream in a session. A WebException will be thrown if the stream no longer exists.
@@ -61,17 +50,10 @@ module Session =
 
     /// Get information about all streams in a session.
     let AsyncGetStreams (credentials: IOpenTokCredentials) (sessionId: string) = async {
-        let path = sessionId |> Uri.EscapeDataString |> sprintf "session/%s/stream"
+        let path = sprintf "session/%s/stream" (Uri.EscapeDataString sessionId)
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
 
-        use! resp = req.AsyncGetResponse()
-
-        use s = resp.GetResponseStream()
-        use sr = new StreamReader(s)
-        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-
-        let list = JsonConvert.DeserializeObject<OpenTokList<OpenTokStream>> json
-        return list.Items
+        return! OpenTokAuthentication.AsyncReadJson<OpenTokList<OpenTokStream>> req
     }
 
     /// Get information about all streams in a session.
@@ -79,7 +61,7 @@ module Session =
         AsyncGetStreams credentials sessionId
         |> Async.StartAsTask
 
-    /// Change the layout classes of OpenTok streams in a broadcast or archive, by providing stream IDs and lists of classes to apply.
+    /// Change the layout classes of OpenTok streams in a broadcast, by providing stream IDs and lists of classes to apply.
     let AsyncSetLayoutClasses (credentials: IOpenTokCredentials) (sessionId: string) (layouts: IDictionary<string, seq<string>>) = async {
         let path = sessionId |> Uri.EscapeDataString |> sprintf "session/%s/stream"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
@@ -106,7 +88,7 @@ module Session =
         ignore resp
     }
 
-    /// Change the layout classes of OpenTok streams in a broadcast or archive, by providing stream IDs and lists of classes to apply.
+    /// Change the layout classes of OpenTok streams in a broadcast, by providing stream IDs and lists of classes to apply.
     let SetLayoutClassesAsync credentials sessionId layouts =
         AsyncSetLayoutClasses credentials sessionId layouts
         |> Async.StartAsTask

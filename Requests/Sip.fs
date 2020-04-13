@@ -26,13 +26,7 @@ module Sip =
             do! JsonConvert.SerializeObject dial |> sw.WriteAsync |> Async.AwaitTask
         }
 
-        use! resp = req.AsyncGetResponse()
-
-        use s = resp.GetResponseStream()
-        use sr = new StreamReader(s)
-        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-
-        return JsonConvert.DeserializeObject<OpenTokSipConnection> json
+        return! OpenTokAuthentication.AsyncReadJson<OpenTokSipConnection> req
     }
 
     let DialAsync credentials req =

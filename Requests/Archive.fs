@@ -24,13 +24,8 @@ module Archive =
         }
 
         let req = OpenTokAuthentication.BuildRequest credentials "archive" query
-        use! resp = req.AsyncGetResponse()
 
-        use s = resp.GetResponseStream()
-        use sr = new StreamReader(s)
-        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-
-        return JsonConvert.DeserializeObject<OpenTokList<OpenTokArchive>> json
+        return! OpenTokAuthentication.AsyncReadJson<OpenTokList<OpenTokArchive>> req
     }
 
     /// Get details on both completed and in-progress archives.
@@ -76,16 +71,10 @@ module Archive =
             do! body.AsSerializableObject() |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
 
-        use! resp = req.AsyncGetResponse()
-
-        use s = resp.GetResponseStream()
-        use sr = new StreamReader(s)
-        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-
-        return JsonConvert.DeserializeObject<OpenTokArchive> json
+        return! OpenTokAuthentication.AsyncReadJson<OpenTokArchive> req
     }
 
-    /// Start a broadcast.
+    /// Start an archive.
     /// A WebException might be thrown if there is an error in the request or if an archive is already running for the given session.
     let StartAsync credentials body =
         AsyncStart credentials body
@@ -97,13 +86,7 @@ module Archive =
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
         req.Method <- "POST"
 
-        use! resp = req.AsyncGetResponse()
-
-        use s = resp.GetResponseStream()
-        use sr = new StreamReader(s)
-        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-
-        return JsonConvert.DeserializeObject<OpenTokArchive> json
+        return! OpenTokAuthentication.AsyncReadJson<OpenTokArchive> req
     }
 
     /// Stop an archive.
@@ -116,13 +99,7 @@ module Archive =
         let path = archiveId |> Uri.EscapeDataString |> sprintf "archive/%s"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
 
-        use! resp = req.AsyncGetResponse()
-
-        use s = resp.GetResponseStream()
-        use sr = new StreamReader(s)
-        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-
-        return JsonConvert.DeserializeObject<OpenTokArchive> json
+        return! OpenTokAuthentication.AsyncReadJson<OpenTokArchive> req
     }
 
     /// Get information about an archive by its ID.
@@ -159,13 +136,7 @@ module Archive =
             do! layout |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
 
-        use! resp = req.AsyncGetResponse()
-
-        use s = resp.GetResponseStream()
-        use sr = new StreamReader(s)
-        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-
-        return JsonConvert.DeserializeObject<OpenTokArchive> json
+        return! OpenTokAuthentication.AsyncReadJson<OpenTokArchive> req
     }
 
     /// Change the layout type of an archive while it is being recorded.
