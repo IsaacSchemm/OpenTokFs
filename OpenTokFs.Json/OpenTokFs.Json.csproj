@@ -4,6 +4,16 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>OpenTokFs.Json</RootNamespace>
     <AssemblyName>OpenTokFs.Json</AssemblyName>
+    <Version>4.0.0-a1</Version>
+    <Authors>Isaac Schemm</Authors>
+    <Company>Isaac Schemm</Company>
+    <Description>Plain .NET object representations of JSON objects in the OpenTok API</Description>
+    <Copyright>(C) 2020 Isaac Schemm</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/IsaacSchemm/OpenTokFs</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/IsaacSchemm/OpenTokFs</RepositoryUrl>
+    <PackageTags>opentok webrtc</PackageTags>
+    <PackageReleaseNotes>Move .NET representations of JSON objects to a C# package</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
