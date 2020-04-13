@@ -129,6 +129,10 @@
       <Project>{05ae44a0-81ce-4819-84f8-1f33cffb204e}</Project>
       <Name>OpenTokFs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\OpenTokFs.Json\OpenTokFs.Json.csproj">
+      <Project>{98a2329a-4a62-4ccd-9593-6b9f61b75703}</Project>
+      <Name>OpenTokFs.Json</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
