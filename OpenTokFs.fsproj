@@ -24,11 +24,6 @@
     <Compile Include="RequestTypes\RtmpDestination.fs" />
     <Compile Include="RequestTypes\VideoLayout.fs" />
     <Compile Include="RequestTypes\ArchiveStartRequest.fs" />
-    <Compile Include="Types\OpenTokList.fs" />
-    <Compile Include="Types\OpenTokArchive.fs" />
-    <Compile Include="Types\OpenTokBroadcast.fs" />
-    <Compile Include="Types\OpenTokSession.fs" />
-    <Compile Include="Types\OpenTokStream.fs" />
     <Compile Include="RequestTypes\BroadcastStartRequest.fs" />
     <Compile Include="RequestTypes\SessionCreateRequest.fs" />
     <Compile Include="RequestTypes\Signal.fs" />
@@ -45,6 +40,10 @@
   <ItemGroup>
     <PackageReference Include="FSharp.Control.AsyncSeq" Version="2.0.21" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpenTokFs.Types\OpenTokFs.Types.csproj" />
   </ItemGroup>
 
 </Project>
