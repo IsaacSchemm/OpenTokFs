@@ -62,14 +62,8 @@ module Broadcast =
     let AsyncStart (credentials: IOpenTokCredentials) (body: BroadcastStartRequest) = async {
         let req = OpenTokAuthentication.BuildRequest credentials "broadcast" Seq.empty
         req.Method <- "POST"
-        req.ContentType <- "application/json"
 
-        do! async {
-            use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
-            use sw = new StreamWriter(rs)
-            do! body.AsSerializableObject() |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
-        }
-
+        do! OpenTokAuthentication.AsyncWriteJson req (body.AsSerializableObject())
         return! OpenTokAuthentication.AsyncReadJson<OpenTokBroadcast> req
     }
 
@@ -116,14 +110,8 @@ module Broadcast =
         let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s/layout"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
         req.Method <- "PUT"
-        req.ContentType <- "application/json"
         
-        do! async {
-            use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
-            use sw = new StreamWriter(rs)
-            do! layout |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
-        }
-
+        do! OpenTokAuthentication.AsyncWriteJson req layout
         return! OpenTokAuthentication.AsyncReadJson<OpenTokBroadcast> req
     }
 

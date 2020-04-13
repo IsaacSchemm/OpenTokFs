@@ -79,6 +79,13 @@ module OpenTokAuthentication =
         req.Accept <- "application/json"
         req
 
+    let AsyncWriteJson<'a> (req: WebRequest) (obj: obj) = async {
+        req.ContentType <- "application/json"
+        use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
+        use sw = new StreamWriter(rs)
+        do! obj |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+    }
+
     let AsyncReadJson<'a> (req: WebRequest) = async {
         use! resp = req.AsyncGetResponse()
         use s = resp.GetResponseStream()

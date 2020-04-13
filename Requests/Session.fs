@@ -63,16 +63,11 @@ module Session =
 
     /// Change the layout classes of OpenTok streams in a composed archive, by providing stream IDs and lists of classes to apply.
     let AsyncSetLayoutClasses (credentials: IOpenTokCredentials) (sessionId: string) (body: OpenTokLayoutClassChangeRequest) = async {
-        let path = sessionId |> Uri.EscapeDataString |> sprintf "session/%s/stream"
+        let path = sprintf "session/%s/stream" (Uri.EscapeDataString sessionId)
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
         req.Method <- "PUT"
-        req.ContentType <- "application/json"
-
-        do! async {
-            use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
-            use sw = new StreamWriter(rs)
-            do! body |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
-        }
+        
+        do! OpenTokAuthentication.AsyncWriteJson req body
 
         use! resp = req.AsyncGetResponse()
         ignore resp
@@ -89,13 +84,8 @@ module Session =
         let path = sprintf "session/%s/connection/%s/signal" (Uri.EscapeDataString sessionId) (Uri.EscapeDataString connectionId)
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
         req.Method <- "POST"
-        req.ContentType <- "application/json"
 
-        do! async {
-            use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
-            use sw = new StreamWriter(rs)
-            do! signal |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
-        }
+        do! OpenTokAuthentication.AsyncWriteJson req signal
 
         use! resp = req.AsyncGetResponse()
         ignore resp
@@ -109,16 +99,11 @@ module Session =
 
     /// Send a signal to all participants in a session.
     let AsyncSendSignalToAll (credentials: IOpenTokCredentials) (sessionId: string) (signal: OpenTokSignal) = async {
-        let path = sessionId |> Uri.EscapeDataString |> sprintf "session/%s/signal"
+        let path = sprintf "session/%s/signal" (Uri.EscapeDataString sessionId)
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
         req.Method <- "POST"
-        req.ContentType <- "application/json"
 
-        do! async {
-            use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
-            use sw = new StreamWriter(rs)
-            do! signal |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
-        }
+        do! OpenTokAuthentication.AsyncWriteJson req signal
 
         use! resp = req.AsyncGetResponse()
         ignore resp

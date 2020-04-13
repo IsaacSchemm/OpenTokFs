@@ -16,15 +16,8 @@ module Sip =
         req.Headers.Add("X-OPENTOK-AUTH", OpenTokAuthentication.CreateToken credentials)
         req.Accept <- "application/json"
         req.Method <- "POST"
-        req.ContentType <- "application/json"
 
-        do! async {
-            use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
-            use sw = new StreamWriter(rs)
-            let m = JsonConvert.SerializeObject dial
-            System.Diagnostics.Debug.WriteLine m
-            do! JsonConvert.SerializeObject dial |> sw.WriteAsync |> Async.AwaitTask
-        }
+        do! OpenTokAuthentication.AsyncWriteJson req dial
 
         return! OpenTokAuthentication.AsyncReadJson<OpenTokSipConnection> req
     }
