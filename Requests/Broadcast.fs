@@ -6,7 +6,7 @@ open System.IO
 open System.Runtime.InteropServices
 open Newtonsoft.Json
 open OpenTokFs
-open OpenTokFs.Types
+open OpenTokFs.Json.ResponseTypes
 open OpenTokFs.RequestTypes
 open FSharp.Control
 
