@@ -26,7 +26,6 @@
     <Compile Include="RequestTypes\ArchiveStartRequest.fs" />
     <Compile Include="RequestTypes\BroadcastStartRequest.fs" />
     <Compile Include="RequestTypes\SessionCreateRequest.fs" />
-    <Compile Include="RequestTypes\Signal.fs" />
     <Compile Include="Requests\Archive.fs" />
     <Compile Include="Requests\Broadcast.fs" />
     <Compile Include="Requests\Session.fs" />
@@ -35,7 +34,7 @@
 
   <ItemGroup>
     <PackageReference Include="FSharp.Control.AsyncSeq" Version="2.0.21" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>

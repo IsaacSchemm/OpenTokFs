@@ -8,6 +8,7 @@ open System.Threading.Tasks
 open Newtonsoft.Json
 open OpenTokFs
 open OpenTokFs.RequestTypes
+open OpenTokFs.Json.RequestTypes
 open OpenTokFs.Json.ResponseTypes
 
 module Session =
@@ -119,7 +120,7 @@ module Session =
         :> Task
 
     /// Send a signal to one participant in a session.
-    let AsyncSendSignal (credentials: IOpenTokCredentials) (sessionId: string) (connectionId: string) (signal: Signal) = async {
+    let AsyncSendSignal (credentials: IOpenTokCredentials) (sessionId: string) (connectionId: string) (signal: OpenTokSignal) = async {
         let path = sprintf "session/%s/connection/%s/signal" (Uri.EscapeDataString sessionId) (Uri.EscapeDataString connectionId)
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
         req.Method <- "POST"
@@ -128,11 +129,7 @@ module Session =
         do! async {
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
-            let o = dict (seq {
-                yield ("type", signal.Type)
-                yield ("data", signal.Data)
-            })
-            do! o |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+            do! signal |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
 
         use! resp = req.AsyncGetResponse()
@@ -146,7 +143,7 @@ module Session =
         :> Task
 
     /// Send a signal to all participants in a session.
-    let AsyncSendSignalToAll (credentials: IOpenTokCredentials) (sessionId: string) (signal: Signal) = async {
+    let AsyncSendSignalToAll (credentials: IOpenTokCredentials) (sessionId: string) (signal: OpenTokSignal) = async {
         let path = sessionId |> Uri.EscapeDataString |> sprintf "session/%s/signal"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
         req.Method <- "POST"
@@ -155,11 +152,7 @@ module Session =
         do! async {
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
-            let o = dict (seq {
-                yield ("type", signal.Type)
-                yield ("data", signal.Data)
-            })
-            do! o |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+            do! signal |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
 
         use! resp = req.AsyncGetResponse()

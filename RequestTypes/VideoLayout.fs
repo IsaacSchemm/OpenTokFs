@@ -10,17 +10,19 @@ type VideoLayout =
 | HorizontalPresentation
 | Custom of css: string
 with
-    member internal this.ToIDictionary() = dict (seq {
-        match this with
-        | BestFit ->
-            yield ("type", "bestFit")
-        | Pip ->
-            yield ("type", "pip")
-        | VerticalPresentation ->
-            yield ("type", "verticalPresentation")
-        | HorizontalPresentation ->
-            yield ("type", "horizontalPresentation")
-        | Custom css ->
-            yield ("type", "custom")
-            yield ("stylesheet", css)
-    })
+    member internal this.ToIDictionary() =
+        seq {
+            match this with
+            | BestFit ->
+                yield ("type", "bestFit")
+            | Pip ->
+                yield ("type", "pip")
+            | VerticalPresentation ->
+                yield ("type", "verticalPresentation")
+            | HorizontalPresentation ->
+                yield ("type", "horizontalPresentation")
+            | Custom css ->
+                yield ("type", "custom")
+                yield ("stylesheet", css)
+        }
+        |> dict

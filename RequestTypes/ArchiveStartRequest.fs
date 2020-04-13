@@ -22,6 +22,7 @@ type ArchiveStartRequest(sessionId: string) =
             yield ("name", o body.Name)
             yield ("outputMode", o body.OutputMode)
             if body.OutputMode <> "individual" then
+                let layout = body.Layout.ToIDictionary()
                 yield ("layout", o layout)
                 yield ("resolution", o body.Resolution)
         }
