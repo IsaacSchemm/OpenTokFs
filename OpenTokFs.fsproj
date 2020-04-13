@@ -27,10 +27,6 @@
     <Compile Include="RequestTypes\BroadcastStartRequest.fs" />
     <Compile Include="RequestTypes\SessionCreateRequest.fs" />
     <Compile Include="RequestTypes\Signal.fs" />
-    <Compile Include="Sip\DialRequestSipCredentials.fs" />
-    <Compile Include="Sip\DialRequestSip.fs" />
-    <Compile Include="Sip\DialRequest.fs" />
-    <Compile Include="Sip\DialResponse.fs" />
     <Compile Include="Requests\Archive.fs" />
     <Compile Include="Requests\Broadcast.fs" />
     <Compile Include="Requests\Session.fs" />

@@ -4,10 +4,11 @@ open System.IO
 open System.Net
 open Newtonsoft.Json
 open OpenTokFs
-open OpenTokFs.Sip
+open OpenTokFs.Json.RequestTypes
+open OpenTokFs.Json.ResponseTypes
 
 module Sip =
-    let AsyncDial (credentials: IOpenTokCredentials) (dial: DialRequest) = async {
+    let AsyncDial (credentials: IOpenTokCredentials) (dial: OpenTokDialRequest) = async {
         let req =
             credentials.ApiKey
             |> sprintf "https://api.opentok.com/v2/project/%d/dial"
@@ -31,7 +32,7 @@ module Sip =
         use sr = new StreamReader(s)
         let! json = sr.ReadToEndAsync() |> Async.AwaitTask
 
-        return JsonConvert.DeserializeObject<DialResponse> json
+        return JsonConvert.DeserializeObject<OpenTokSipConnection> json
     }
 
     let DialAsync credentials req =
