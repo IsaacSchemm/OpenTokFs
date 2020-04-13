@@ -1,11 +1,9 @@
 ﻿namespace OpenTokFs.Requests
 
 open System
-open System.Collections.Generic
 open System.IO
 open System.Net
 open System.Threading.Tasks
-open Newtonsoft.Json
 open OpenTokFs
 open OpenTokFs.RequestOptions
 open OpenTokFs.Json.RequestTypes

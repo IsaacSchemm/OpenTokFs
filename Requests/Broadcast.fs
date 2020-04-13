@@ -1,9 +1,7 @@
 ﻿namespace OpenTokFs.Requests
 
 open System
-open System.IO
 open System.Runtime.InteropServices
-open Newtonsoft.Json
 open OpenTokFs
 open OpenTokFs.Json.RequestTypes
 open OpenTokFs.Json.ResponseTypes
@@ -14,11 +12,14 @@ module Broadcast =
     /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
     let AsyncList (credentials: IOpenTokCredentials) (paging: OpenTokPagingParameters) (sessionId: string option) = async {
         let query = seq {
-            yield paging.offset |> sprintf "offset=%d"
-            if paging.count.HasValue then
-                yield paging.count.Value |> sprintf "count=%d"
+            yield sprintf "offset=%d" paging.offset
+
+            match Option.ofNullable paging.count with
+            | Some c -> yield sprintf "count=%d" c
+            | None -> ()
+
             match sessionId with
-            | Some s -> yield s |> Uri.EscapeDataString |> sprintf "sessionId=%s"
+            | Some s -> yield sprintf "sessionId=%s" (Uri.EscapeDataString s)
             | None -> ()
         }
 

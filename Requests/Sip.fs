@@ -1,8 +1,6 @@
 ﻿namespace OpenTokFs.Requests
 
-open System.IO
 open System.Net
-open Newtonsoft.Json
 open OpenTokFs
 open OpenTokFs.Json.RequestTypes
 open OpenTokFs.Json.ResponseTypes
