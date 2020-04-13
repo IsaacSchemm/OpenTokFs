@@ -1,4 +1,4 @@
-﻿namespace OpenTokFs.RequestTypes
+﻿namespace OpenTokFs.RequestOptions
 
 /// <summary>
 /// An object that provides parameters for starting an OpenTok archive, using reasonable defaults.
@@ -12,7 +12,7 @@ type ArchiveStartRequest(sessionId: string) =
     member val OutputMode: string = "composed" with get, set
     member val Resolution: string = "640x480" with get, set
 
-    member internal body.ToIDictionary() =
+    member internal body.AsSerializableObject() =
         seq {
             let o x = x :> obj
 
@@ -22,7 +22,7 @@ type ArchiveStartRequest(sessionId: string) =
             yield ("name", o body.Name)
             yield ("outputMode", o body.OutputMode)
             if body.OutputMode <> "individual" then
-                let layout = body.Layout.ToIDictionary()
+                let layout = body.Layout.AsSerializableObject()
                 yield ("layout", o layout)
                 yield ("resolution", o body.Resolution)
         }

@@ -1,4 +1,4 @@
-﻿namespace OpenTokFs.RequestTypes
+﻿namespace OpenTokFs.RequestOptions
 
 /// <summary>
 /// An object that provides information about the video layout to use for an OpenTok archive or broadcast.
@@ -10,7 +10,7 @@ type VideoLayout =
 | HorizontalPresentation
 | Custom of css: string
 with
-    member internal this.ToIDictionary() =
+    member internal this.AsSerializableObject() =
         seq {
             match this with
             | BestFit ->

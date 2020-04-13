@@ -1,4 +1,4 @@
-﻿namespace OpenTokFs.RequestTypes
+﻿namespace OpenTokFs.RequestOptions
 
 open System
 
@@ -14,12 +14,12 @@ type BroadcastStartRequest(sessionId: string) =
     member val Rtmp: RtmpDestination seq = Seq.empty with get, set
     member val Resolution: string = "640x480" with get, set
 
-    member internal body.ToIDictionary() =
+    member internal body.AsSerializableObject() =
         let o x = x :> obj
 
         let rtmp = seq {
             for r in body.Rtmp do
-                yield r.ToIDictionary()
+                yield r.AsSerializableObject()
         }
 
         let outputs =
@@ -33,7 +33,7 @@ type BroadcastStartRequest(sessionId: string) =
         seq {
             yield ("sessionId", o body.SessionId)
         
-            let layout = body.Layout.ToIDictionary()
+            let layout = body.Layout.AsSerializableObject()
             yield ("layout", o layout)
                         
             let maxDuration = int body.Duration.TotalSeconds

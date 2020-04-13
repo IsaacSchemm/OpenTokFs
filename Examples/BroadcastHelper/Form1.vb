@@ -1,4 +1,6 @@
 ﻿Imports OpenTokFs
+Imports OpenTokFs.RequestOptions
+Imports OpenTokFs.Json.ResponseTypes
 
 Public Class Form1
     Implements IOpenTokCredentials
@@ -36,7 +38,7 @@ Public Class Form1
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
-        Dim item As Types.OpenTokBroadcast = ListBox1.SelectedItem
+        Dim item As OpenTokBroadcast = ListBox1.SelectedItem
         If item Is Nothing Then
             PropertyGrid1.SelectedObject = Nothing
 
@@ -52,7 +54,7 @@ Public Class Form1
         BtnStart.Enabled = False
 
         Try
-            Dim req = New RequestTypes.BroadcastStartRequest(TxtNewBroadcastSessionId.Text) With {
+            Dim req = New BroadcastStartRequest(TxtNewBroadcastSessionId.Text) With {
                 .Resolution = If(RadioHD.Checked, "1280x720", "640x480"),
                 .Hls = True
             }
@@ -70,7 +72,7 @@ Public Class Form1
         BtnStop.Enabled = False
 
         Try
-            Dim item As Types.OpenTokBroadcast = ListBox1.SelectedItem
+            Dim item As OpenTokBroadcast = ListBox1.SelectedItem
             Dim updated = Await Requests.Broadcast.StopAsync(Me, item.Id)
 
             Dim index = ListBox1.SelectedIndex

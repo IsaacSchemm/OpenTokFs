@@ -1,4 +1,4 @@
-﻿namespace OpenTokFs.RequestTypes
+﻿namespace OpenTokFs.RequestOptions
 
 open System
 open System.Runtime.InteropServices
@@ -11,7 +11,7 @@ type RtmpDestination(serverUrl: string, streamName: string, [<Optional;DefaultPa
     member __.ServerUrl = serverUrl
     member __.StreamName = streamName
 
-    member internal this.ToIDictionary() =
+    member internal this.AsSerializableObject() =
         seq {
             let o x = x :> obj
             if not (String.IsNullOrEmpty this.Id) then

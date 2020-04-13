@@ -1,4 +1,6 @@
 ﻿Imports OpenTokFs
+Imports OpenTokFs.RequestOptions
+Imports OpenTokFs.Json.ResponseTypes
 
 Public Class Archives
     Implements IOpenTokCredentials
@@ -36,7 +38,7 @@ Public Class Archives
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
-        Dim item As Types.OpenTokArchive = ListBox1.SelectedItem
+        Dim item As OpenTokArchive = ListBox1.SelectedItem
         If item Is Nothing Then
             PropertyGrid1.SelectedObject = Nothing
 
@@ -46,9 +48,9 @@ Public Class Archives
         Else
             PropertyGrid1.SelectedObject = item
 
-            BtnStop.Enabled = item.status = "started"
-            BtnDelete.Enabled = item.status = "available" Or item.status = "uploaded"
-            BtnDownload.Enabled = item.status = "available" Or item.status = "uploaded"
+            BtnStop.Enabled = item.Status = "started"
+            BtnDelete.Enabled = item.Status = "available" Or item.Status = "uploaded"
+            BtnDownload.Enabled = item.Status = "available" Or item.Status = "uploaded"
         End If
     End Sub
 
@@ -56,7 +58,7 @@ Public Class Archives
         BtnStart.Enabled = False
 
         Try
-            Dim req = New RequestTypes.ArchiveStartRequest(TxtNewArchiveSessionId.Text) With {
+            Dim req = New ArchiveStartRequest(TxtNewArchiveSessionId.Text) With {
                 .Name = If(TxtName.Text <> "", TxtName.Text, Nothing),
                 .OutputMode = If(RadioIndividual.Checked, "individual", "composed"),
                 .Resolution = If(RadioHD.Checked, "1280x720", "640x480")
@@ -75,8 +77,8 @@ Public Class Archives
         BtnStop.Enabled = False
 
         Try
-            Dim item As Types.OpenTokArchive = ListBox1.SelectedItem
-            Dim updated = Await Requests.Archive.StopAsync(Me, item.id)
+            Dim item As OpenTokArchive = ListBox1.SelectedItem
+            Dim updated = Await Requests.Archive.StopAsync(Me, item.Id)
 
             Dim index = ListBox1.SelectedIndex
             ListBox1.Items.RemoveAt(index)
@@ -91,9 +93,9 @@ Public Class Archives
 
     Private Sub BtnDownload_Click(sender As Object, e As EventArgs) Handles BtnDownload.Click
         Try
-            Dim item As Types.OpenTokArchive = ListBox1.SelectedItem
-            If item.url.StartsWith("https://") Then
-                Process.Start(item.url)
+            Dim item As OpenTokArchive = ListBox1.SelectedItem
+            If item.Url.StartsWith("https://") Then
+                Process.Start(item.Url)
             End If
         Catch ex As Exception
             Console.Error.WriteLine(ex)
@@ -106,8 +108,8 @@ Public Class Archives
 
         Try
             If MsgBox("Are you sure you want to permanently delete this recording?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
-                Dim item As Types.OpenTokArchive = ListBox1.SelectedItem
-                Await Requests.Archive.DeleteAsync(Me, item.id)
+                Dim item As OpenTokArchive = ListBox1.SelectedItem
+                Await Requests.Archive.DeleteAsync(Me, item.Id)
                 ListBox1.Items.Remove(item)
             End If
         Catch ex As Exception

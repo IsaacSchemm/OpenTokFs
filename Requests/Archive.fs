@@ -8,7 +8,7 @@ open System.Threading.Tasks
 open Newtonsoft.Json
 open OpenTokFs
 open OpenTokFs.Json.ResponseTypes
-open OpenTokFs.RequestTypes
+open OpenTokFs.RequestOptions
 open FSharp.Control
 
 module Archive =
@@ -73,7 +73,7 @@ module Archive =
         do! async {
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
-            do! body.ToIDictionary() |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+            do! body.AsSerializableObject() |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
 
         use! resp = req.AsyncGetResponse()
@@ -156,7 +156,7 @@ module Archive =
         do! async {
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
-            do! layout.ToIDictionary() |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+            do! layout.AsSerializableObject() |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
 
         use! resp = req.AsyncGetResponse()

@@ -1,4 +1,4 @@
-﻿namespace OpenTokFs.RequestTypes
+﻿namespace OpenTokFs.RequestOptions
 
 /// <summary>
 /// An object that provides parameters for creating an OpenTok session.

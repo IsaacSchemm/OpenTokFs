@@ -7,7 +7,7 @@ open System.Runtime.InteropServices
 open Newtonsoft.Json
 open OpenTokFs
 open OpenTokFs.Json.ResponseTypes
-open OpenTokFs.RequestTypes
+open OpenTokFs.RequestOptions
 open FSharp.Control
 
 module Broadcast =
@@ -73,7 +73,7 @@ module Broadcast =
         do! async {
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
-            do! body.ToIDictionary() |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+            do! body.AsSerializableObject() |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
 
         use! resp = req.AsyncGetResponse()
@@ -143,7 +143,7 @@ module Broadcast =
         req.ContentType <- "application/json"
         
         do! async {
-            let o = layout.ToIDictionary()
+            let o = layout.AsSerializableObject()
         
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
