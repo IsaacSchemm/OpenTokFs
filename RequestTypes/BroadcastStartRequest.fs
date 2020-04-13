@@ -13,3 +13,33 @@ type BroadcastStartRequest(sessionId: string) =
     member val Hls: bool = false with get, set
     member val Rtmp: RtmpDestination seq = Seq.empty with get, set
     member val Resolution: string = "640x480" with get, set
+
+    member internal body.ToIDictionary() =
+        let o x = x :> obj
+
+        let rtmp = seq {
+            for r in body.Rtmp do
+                yield r.ToIDictionary()
+        }
+
+        let outputs =
+            seq {
+                if body.Hls then
+                    yield ("hls", new obj())
+                yield ("rtmp", o rtmp)
+            }
+            |> dict
+
+        seq {
+            yield ("sessionId", o body.SessionId)
+        
+            let layout = body.Layout.ToIDictionary()
+            yield ("layout", o layout)
+                        
+            let maxDuration = int body.Duration.TotalSeconds
+            yield ("maxDuration", o maxDuration)
+        
+            yield ("outputs", o outputs)
+            yield ("resolution", o body.Resolution)
+        }
+        |> dict

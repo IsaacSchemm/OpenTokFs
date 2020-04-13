@@ -66,36 +66,6 @@ module Broadcast =
     /// A WebException might be thrown if there is an error in the request or if a broadcast is already running for the given session.
     /// (Even if an error is thrown, a broadcast may have been started; use one of the List functions to check.)
     let AsyncStart (credentials: IOpenTokCredentials) (body: BroadcastStartRequest) = async {
-        let o x = x :> obj
-
-        let rtmp = seq {
-            for r in body.Rtmp do
-                yield r.ToIDictionary()
-        }
-
-        let outputs =
-            seq {
-                if body.Hls then
-                    yield ("hls", new obj())
-                yield ("rtmp", o rtmp)
-            }
-            |> dict
-
-        let requestObject =
-            seq {
-                yield ("sessionId", o body.SessionId)
-
-                let layout = body.Layout.ToIDictionary()
-                yield ("layout", o layout)
-                
-                let maxDuration = int body.Duration.TotalSeconds
-                yield ("maxDuration", o maxDuration)
-
-                yield ("outputs", o outputs)
-                yield ("resolution", o body.Resolution)
-            }
-            |> dict
-
         let req = OpenTokAuthentication.BuildRequest credentials "broadcast" Seq.empty
         req.Method <- "POST"
         req.ContentType <- "application/json"
@@ -103,7 +73,7 @@ module Broadcast =
         do! async {
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
-            do! requestObject |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+            do! body.ToIDictionary() |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
 
         use! resp = req.AsyncGetResponse()
