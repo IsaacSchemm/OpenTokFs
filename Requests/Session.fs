@@ -23,14 +23,7 @@ module Session =
         do! async {
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
-
-            let parameters = seq {
-                yield sprintf "archiveMode=%s" (if session.ArchiveAlways then "always" else "manual")
-                yield sprintf "p2p.preference=%s" (if session.P2PEnabled then "enabled" else "disabled")
-                if not (String.IsNullOrEmpty session.IpAddressLocationHint) then
-                    yield sprintf "location=%s" session.IpAddressLocationHint
-            }
-            do! parameters |> String.concat "&" |> sw.WriteLineAsync |> Async.AwaitTask
+            do! session.ToQueryString() |> sw.WriteLineAsync |> Async.AwaitTask
         }
 
         use! resp = req.AsyncGetResponse()

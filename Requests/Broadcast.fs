@@ -1,11 +1,11 @@
 ﻿namespace OpenTokFs.Requests
 
 open System
-open System.Collections.Generic
 open System.IO
 open System.Runtime.InteropServices
 open Newtonsoft.Json
 open OpenTokFs
+open OpenTokFs.Json.RequestTypes
 open OpenTokFs.Json.ResponseTypes
 open OpenTokFs.RequestOptions
 open FSharp.Control
@@ -136,18 +136,16 @@ module Broadcast =
         |> Async.StartAsTask
 
     /// Change the layout type of an active broadcast.
-    let AsyncSetLayout (credentials: IOpenTokCredentials) (broadcastId: string) (layout: VideoLayout) = async {
+    let AsyncSetLayout (credentials: IOpenTokCredentials) (broadcastId: string) (layout: OpenTokVideoLayout) = async {
         let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s/layout"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
         req.Method <- "PUT"
         req.ContentType <- "application/json"
         
         do! async {
-            let o = layout.AsSerializableObject()
-        
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
-            do! o |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+            do! layout |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
         
         use! resp = req.AsyncGetResponse()

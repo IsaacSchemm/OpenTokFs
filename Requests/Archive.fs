@@ -1,12 +1,12 @@
 ﻿namespace OpenTokFs.Requests
 
 open System
-open System.Collections.Generic
 open System.IO
 open System.Runtime.InteropServices
 open System.Threading.Tasks
 open Newtonsoft.Json
 open OpenTokFs
+open OpenTokFs.Json.RequestTypes
 open OpenTokFs.Json.ResponseTypes
 open OpenTokFs.RequestOptions
 open FSharp.Control
@@ -147,7 +147,7 @@ module Archive =
         :> Task
 
     /// Change the layout type of an archive while it is being recorded.
-    let AsyncSetLayout (credentials: IOpenTokCredentials) (archiveId: string) (layout: VideoLayout) = async {
+    let AsyncSetLayout (credentials: IOpenTokCredentials) (archiveId: string) (layout: OpenTokVideoLayout) = async {
         let path = archiveId |> Uri.EscapeDataString |> sprintf "archive/%s/layout"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
         req.Method <- "PUT"
@@ -156,7 +156,7 @@ module Archive =
         do! async {
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
-            do! layout.AsSerializableObject() |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+            do! layout |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
 
         use! resp = req.AsyncGetResponse()

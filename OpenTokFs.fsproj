@@ -21,8 +21,6 @@
     <Compile Include="OpenTokPagingParameters.fs" />
     <Compile Include="OpenTokAuthentication.fs" />
     <Compile Include="OpenTokSessionTokens.fs" />
-    <Compile Include="RequestOptions\RtmpDestination.fs" />
-    <Compile Include="RequestOptions\VideoLayout.fs" />
     <Compile Include="RequestOptions\ArchiveStartRequest.fs" />
     <Compile Include="RequestOptions\BroadcastStartRequest.fs" />
     <Compile Include="RequestOptions\SessionCreateRequest.fs" />
