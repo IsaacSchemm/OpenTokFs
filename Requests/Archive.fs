@@ -15,9 +15,9 @@ module Archive =
         let query = seq {
             yield sprintf "offset=%d" paging.offset
 
-            match Option.ofNullable paging.count with
-            | Some c -> yield sprintf "count=%d" c
-            | None -> ()
+            match paging.count with
+            | OpenTokPageSize.Count c -> yield sprintf "count=%d" c
+            | OpenTokPageSize.Default -> ()
 
             match sessionId with
             | Some s -> yield sprintf "sessionId=%s" (Uri.EscapeDataString s)
@@ -36,8 +36,8 @@ module Archive =
         |> Async.StartAsTask
 
     /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
-    let AsyncListAll credentials sessionId = asyncSeq {
-        let mutable paging = { offset = 0; count = Nullable 1000 }
+    let AsyncListAll credentials pageSize sessionId = asyncSeq {
+        let mutable paging = { offset = 0; count = pageSize }
         let mutable finished = false
         while not finished do
             let! list = AsyncList credentials paging sessionId
@@ -51,11 +51,16 @@ module Archive =
 
     /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
     let ListAllAsync credentials max ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
-        sessionId
-        |> Option.ofObj
-        |> AsyncListAll credentials
+        AsyncListAll credentials (OpenTokPageSize.Count 1000) (Option.ofObj sessionId)
         |> AsyncSeq.take max
-        |> AsyncSeq.toArrayAsync
+        |> AsyncSeq.toListAsync
+        |> Async.StartAsTask
+
+    /// Get details on both completed and in-progress archives that were started after the given date and time, making as many requests to the server as necessary.
+    let ListAllAfterAsync credentials datetime =
+        AsyncListAll credentials OpenTokPageSize.Default None
+        |> AsyncSeq.takeWhile (fun a -> a.GetCreationTime() > datetime)
+        |> AsyncSeq.toListAsync
         |> Async.StartAsTask
 
     /// Start an archive.
