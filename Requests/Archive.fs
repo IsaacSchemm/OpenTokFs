@@ -11,7 +11,7 @@ open FSharp.Control
 
 module Archive =
     /// Get details on both completed and in-progress archives.
-    let AsyncList (credentials: IOpenTokCredentials) (paging: OpenTokPagingParameters) (sessionId: string option) = async {
+    let AsyncList (credentials: IOpenTokCredentials) (paging: OpenTokPagingParameters) (sessionId: OpenTokSessionId) = async {
         let query = seq {
             yield sprintf "offset=%d" paging.offset
 
@@ -20,8 +20,8 @@ module Archive =
             | OpenTokPageSize.Default -> ()
 
             match sessionId with
-            | Some s -> yield sprintf "sessionId=%s" (Uri.EscapeDataString s)
-            | None -> ()
+            | OpenTokSessionId.Id s -> yield sprintf "sessionId=%s" (Uri.EscapeDataString s)
+            | OpenTokSessionId.Any -> ()
         }
 
         let req = OpenTokAuthentication.BuildRequest credentials "archive" query
@@ -29,10 +29,8 @@ module Archive =
     }
 
     /// Get details on both completed and in-progress archives.
-    let ListAsync credentials paging ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
-        sessionId
-        |> Option.ofObj
-        |> AsyncList credentials paging
+    let ListAsync credentials paging (sessionId: OpenTokSessionId) =
+        AsyncList credentials paging sessionId
         |> Async.StartAsTask
 
     /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
@@ -50,15 +48,15 @@ module Archive =
     }
 
     /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
-    let ListAllAsync credentials max ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
-        AsyncListAll credentials (OpenTokPageSize.Count 1000) (Option.ofObj sessionId)
+    let ListAllAsync credentials max sessionId =
+        AsyncListAll credentials (OpenTokPageSize.Count 1000) sessionId
         |> AsyncSeq.take max
         |> AsyncSeq.toListAsync
         |> Async.StartAsTask
 
     /// Get details on both completed and in-progress archives that were started after the given date and time, making as many requests to the server as necessary.
     let ListAllAfterAsync credentials datetime =
-        AsyncListAll credentials OpenTokPageSize.Default None
+        AsyncListAll credentials OpenTokPageSize.Default OpenTokSessionId.Any
         |> AsyncSeq.takeWhile (fun a -> a.GetCreationTime() > datetime)
         |> AsyncSeq.toListAsync
         |> Async.StartAsTask

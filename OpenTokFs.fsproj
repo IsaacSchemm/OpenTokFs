@@ -18,6 +18,7 @@
     <None Include="LICENSE.txt" />
     <None Include="README.md" />
     <Compile Include="IOpenTokCredentials.fs" />
+    <Compile Include="OpenTokSessionId.fs" />
     <Compile Include="OpenTokPagingParameters.fs" />
     <Compile Include="OpenTokAuthentication.fs" />
     <Compile Include="OpenTokSessionTokens.fs" />

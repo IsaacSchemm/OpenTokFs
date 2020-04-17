@@ -10,7 +10,7 @@ open FSharp.Control
 
 module Broadcast =
     /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
-    let AsyncList (credentials: IOpenTokCredentials) (paging: OpenTokPagingParameters) (sessionId: string option) = async {
+    let AsyncList (credentials: IOpenTokCredentials) (paging: OpenTokPagingParameters) (sessionId: OpenTokSessionId) = async {
         let query = seq {
             yield sprintf "offset=%d" paging.offset
 
@@ -19,8 +19,8 @@ module Broadcast =
             | OpenTokPageSize.Default -> ()
 
             match sessionId with
-            | Some s -> yield sprintf "sessionId=%s" (Uri.EscapeDataString s)
-            | None -> ()
+            | OpenTokSessionId.Id s -> yield sprintf "sessionId=%s" (Uri.EscapeDataString s)
+            | OpenTokSessionId.Any -> ()
         }
 
         let req = OpenTokAuthentication.BuildRequest credentials "broadcast" query
@@ -28,10 +28,8 @@ module Broadcast =
     }
 
     /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
-    let ListAsync credentials paging ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
-        sessionId
-        |> Option.ofObj
-        |> AsyncList credentials paging
+    let ListAsync credentials paging sessionId =
+        AsyncList credentials paging sessionId
         |> Async.StartAsTask
 
     /// Get details on broadcasts that are currently in progress, making as many requests to the server as necessary.
@@ -49,8 +47,8 @@ module Broadcast =
     }
 
     /// Get details on broadcasts that are currently in progress, making as many requests to the server as necessary.
-    let ListAllAsync credentials max ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
-        AsyncListAll credentials (OpenTokPageSize.Count 1000) (Option.ofObj sessionId)
+    let ListAllAsync credentials max sessionId =
+        AsyncListAll credentials (OpenTokPageSize.Count 1000) sessionId
         |> AsyncSeq.take max
         |> AsyncSeq.toListAsync
         |> Async.StartAsTask

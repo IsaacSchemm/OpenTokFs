@@ -23,12 +23,14 @@ Public Class Form1
         Try
             ListBox1.Items.Clear()
 
-            Dim list = Await Requests.Broadcast.ListAllAsync(Me, 100)
+            Dim list = Await Requests.Broadcast.ListAllAsync(Me, 100, OpenTokSessionId.Any)
             If list.Length >= 100 Then
                 MsgBox("There are 100 or more items in the list. Only showing the top 100 items.")
             End If
 
-            ListBox1.Items.AddRange(list)
+            For Each x In list
+                ListBox1.Items.Add(x)
+            Next
         Catch ex As Exception
             Console.Error.WriteLine(ex)
             MsgBox(ex.Message)
