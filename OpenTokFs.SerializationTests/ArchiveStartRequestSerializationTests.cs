@@ -1,5 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
+using OpenTokFs;
 using OpenTokFs.RequestTypes;
 
 namespace OpenTokFs.SerializationTests {
@@ -15,7 +15,7 @@ namespace OpenTokFs.SerializationTests {
                 OutputMode = "composed",
                 Resolution = "640x480"
             };
-            string json1 = JsonConvert.SerializeObject(req1);
+            string json1 = OpenTokAuthentication.SerializeObject(req1);
             Assert.AreEqual(@"{""sessionId"":""sessionIdHere"",""hasAudio"":true,""hasVideo"":false,""name"":""name-here"",""outputMode"":""composed"",""layout"":{""type"":""bestFit""},""resolution"":""640x480""}", json1);
         }
 
@@ -27,8 +27,22 @@ namespace OpenTokFs.SerializationTests {
                 Name = "name-here",
                 OutputMode = "individual"
             };
-            string json1 = JsonConvert.SerializeObject(req1);
+            string json1 = OpenTokAuthentication.SerializeObject(req1);
             Assert.AreEqual(@"{""sessionId"":""sessionIdHere"",""hasAudio"":true,""hasVideo"":false,""name"":""name-here"",""outputMode"":""individual""}", json1);
+        }
+
+        [TestMethod]
+        public void ArchiveStartRequestTest3() {
+            var req1 = new OpenTokArchiveStartRequest("sessionIdHere") {
+                HasAudio = true,
+                HasVideo = false,
+                Layout = OpenTokVideoLayout.Custom("https://www.example.com/example.css"),
+                Name = "name-here",
+                OutputMode = "composed",
+                Resolution = "1280x720"
+            };
+            string json1 = OpenTokAuthentication.SerializeObject(req1);
+            Assert.AreEqual(@"{""sessionId"":""sessionIdHere"",""hasAudio"":true,""hasVideo"":false,""name"":""name-here"",""outputMode"":""composed"",""layout"":{""type"":""custom"",""stylesheet"":""https://www.example.com/example.css""},""resolution"":""1280x720""}", json1);
         }
     }
 }

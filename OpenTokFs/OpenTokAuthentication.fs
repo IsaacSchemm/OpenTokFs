@@ -53,6 +53,9 @@ module OpenTokAuthentication =
         jti: string
     }
 
+    let SerializeObject = JsonConvert.SerializeObject
+    let DeserializeObject<'a> = JsonConvert.DeserializeObject<'a>
+
     let CreateToken(credentials: IOpenTokCredentials) =
         let payload = {
             iss = credentials.ApiKey.ToString()
@@ -83,7 +86,7 @@ module OpenTokAuthentication =
         req.ContentType <- "application/json"
         use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
         use sw = new StreamWriter(rs)
-        do! obj |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+        do! obj |> SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
     }
 
     let AsyncReadJson<'a> (req: WebRequest) = async {
@@ -91,5 +94,5 @@ module OpenTokAuthentication =
         use s = resp.GetResponseStream()
         use sr = new StreamReader(s)
         let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-        return JsonConvert.DeserializeObject<'a> json
+        return DeserializeObject<'a> json
     }

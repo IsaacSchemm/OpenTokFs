@@ -1,5 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
+using OpenTokFs;
 using OpenTokFs.RequestTypes;
 using System;
 
@@ -14,7 +14,7 @@ namespace OpenTokFs.SerializationTests {
                 Layout = OpenTokVideoLayout.BestFit,
                 Resolution = "640x480"
             };
-            string json1 = JsonConvert.SerializeObject(req1);
+            string json1 = OpenTokAuthentication.SerializeObject(req1);
             Assert.AreEqual(@"{""sessionId"":""sessionIdHere"",""layout"":{""type"":""bestFit""},""maxDuration"":300,""outputs"":{""hls"":{},""rtmp"":[]},""resolution"":""640x480""}", json1);
         }
 
@@ -31,7 +31,7 @@ namespace OpenTokFs.SerializationTests {
                     }
                 }
             };
-            string json1 = JsonConvert.SerializeObject(req1);
+            string json1 = OpenTokAuthentication.SerializeObject(req1);
             Assert.AreEqual(@"{""sessionId"":""sessionIdHere"",""layout"":{""type"":""custom"",""stylesheet"":""https://www.example.com/example.css""},""maxDuration"":300,""outputs"":{""rtmp"":[{""serverUrl"":""rtmp://media.example.com"",""streamName"":""demo""}]},""resolution"":""640x480""}", json1);
         }
     }
