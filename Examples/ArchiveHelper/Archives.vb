@@ -23,7 +23,7 @@ Public Class Archives
         Try
             ListBox1.Items.Clear()
 
-            Dim list = Await Requests.Archive.ListAllAsync(Me, 100, OpenTokSessionId.Any)
+            Dim list = Await Api.Archive.ListAllAsync(Me, 100, OpenTokSessionId.Any)
             If list.Length >= 100 Then
                 MsgBox("There are 100 or more items in the list. Only showing the top 100 items.")
             End If
@@ -65,7 +65,7 @@ Public Class Archives
                 .OutputMode = If(RadioIndividual.Checked, "individual", "composed"),
                 .Resolution = If(RadioHD.Checked, "1280x720", "640x480")
             }
-            Dim newArchive = Await Requests.Archive.StartAsync(Me, req)
+            Dim newArchive = Await Api.Archive.StartAsync(Me, req)
             ListBox1.Items.Insert(0, newArchive)
         Catch ex As Exception
             Console.Error.WriteLine(ex)
@@ -80,7 +80,7 @@ Public Class Archives
 
         Try
             Dim item As OpenTokArchive = ListBox1.SelectedItem
-            Dim updated = Await Requests.Archive.StopAsync(Me, item.Id)
+            Dim updated = Await Api.Archive.StopAsync(Me, item.Id)
 
             Dim index = ListBox1.SelectedIndex
             ListBox1.Items.RemoveAt(index)
@@ -111,7 +111,7 @@ Public Class Archives
         Try
             If MsgBox("Are you sure you want to permanently delete this recording?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
                 Dim item As OpenTokArchive = ListBox1.SelectedItem
-                Await Requests.Archive.DeleteAsync(Me, item.Id)
+                Await Api.Archive.DeleteAsync(Me, item.Id)
                 ListBox1.Items.Remove(item)
             End If
         Catch ex As Exception

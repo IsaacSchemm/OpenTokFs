@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>4.0.0-a2</Version>
+    <Version>4.0.0-a3</Version>
     <Authors>Isaac Schemm</Authors>
     <Description>An unofficial .NET wrapper for the OpenTok REST API (written in F#)</Description>
     <Copyright>(C) 2020 Isaac Schemm</Copyright>
@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <EmbeddedResource Remove="Examples\**" />
+    <EmbeddedResource Remove="Requests\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,10 +25,10 @@
     <Compile Include="OpenTokAuthentication.fs" />
     <Compile Include="OpenTokSessionId.fs" />
     <Compile Include="OpenTokSessionTokens.fs" />
-    <Compile Include="Requests\Archive.fs" />
-    <Compile Include="Requests\Broadcast.fs" />
-    <Compile Include="Requests\Session.fs" />
-    <Compile Include="Requests\Sip.fs" />
+    <Compile Include="Api\Archive.fs" />
+    <Compile Include="Api\Broadcast.fs" />
+    <Compile Include="Api\Session.fs" />
+    <Compile Include="Api\Sip.fs" />
   </ItemGroup>
 
   <ItemGroup>

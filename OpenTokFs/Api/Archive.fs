@@ -1,4 +1,4 @@
-﻿namespace OpenTokFs.Requests
+﻿namespace OpenTokFs.Api
 
 open System
 open System.Threading.Tasks

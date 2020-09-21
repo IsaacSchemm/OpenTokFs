@@ -23,7 +23,7 @@ Public Class Form1
         Try
             ListBox1.Items.Clear()
 
-            Dim list = Await Requests.Broadcast.ListAllAsync(Me, 100, OpenTokSessionId.Any)
+            Dim list = Await Api.Broadcast.ListAllAsync(Me, 100, OpenTokSessionId.Any)
             If list.Length >= 100 Then
                 MsgBox("There are 100 or more items in the list. Only showing the top 100 items.")
             End If
@@ -60,7 +60,7 @@ Public Class Form1
                 .Resolution = If(RadioHD.Checked, "1280x720", "640x480"),
                 .Hls = True
             }
-            Dim newBroadcast = Await Requests.Broadcast.StartAsync(Me, req)
+            Dim newBroadcast = Await Api.Broadcast.StartAsync(Me, req)
             ListBox1.Items.Insert(0, newBroadcast)
         Catch ex As Exception
             Console.Error.WriteLine(ex)
@@ -75,7 +75,7 @@ Public Class Form1
 
         Try
             Dim item As OpenTokBroadcast = ListBox1.SelectedItem
-            Dim updated = Await Requests.Broadcast.StopAsync(Me, item.Id)
+            Dim updated = Await Api.Broadcast.StopAsync(Me, item.Id)
 
             Dim index = ListBox1.SelectedIndex
             ListBox1.Items.RemoveAt(index)
