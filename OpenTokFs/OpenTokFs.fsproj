@@ -24,8 +24,6 @@
     <Compile Include="OpenTokAuthentication.fs" />
     <Compile Include="OpenTokSessionId.fs" />
     <Compile Include="OpenTokSessionTokens.fs" />
-    <Compile Include="RequestOptions\ArchiveStartRequest.fs" />
-    <Compile Include="RequestOptions\BroadcastStartRequest.fs" />
     <Compile Include="RequestOptions\SessionCreateRequest.fs" />
     <Compile Include="Requests\Archive.fs" />
     <Compile Include="Requests\Broadcast.fs" />

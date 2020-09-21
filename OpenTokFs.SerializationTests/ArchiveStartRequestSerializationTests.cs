@@ -7,7 +7,7 @@ namespace OpenTokFs.SerializationTests {
     public class ArchiveStartRequestSerializationTests {
         [TestMethod]
         public void ArchiveStartRequestTest1() {
-            var req1 = new RequestOptions.ArchiveStartRequest("sessionIdHere") {
+            var req1 = new OpenTokArchiveStartRequest("sessionIdHere") {
                 HasAudio = true,
                 HasVideo = false,
                 Layout = OpenTokVideoLayout.BestFit,
@@ -15,19 +15,19 @@ namespace OpenTokFs.SerializationTests {
                 OutputMode = "composed",
                 Resolution = "640x480"
             };
-            string json1 = JsonConvert.SerializeObject(req1.AsSerializableObject());
+            string json1 = JsonConvert.SerializeObject(req1);
             Assert.AreEqual(@"{""sessionId"":""sessionIdHere"",""hasAudio"":true,""hasVideo"":false,""name"":""name-here"",""outputMode"":""composed"",""layout"":{""type"":""bestFit""},""resolution"":""640x480""}", json1);
         }
 
         [TestMethod]
         public void ArchiveStartRequestTest2() {
-            var req1 = new RequestOptions.ArchiveStartRequest("sessionIdHere") {
+            var req1 = new OpenTokArchiveStartRequest("sessionIdHere") {
                 HasAudio = true,
                 HasVideo = false,
                 Name = "name-here",
                 OutputMode = "individual"
             };
-            string json1 = JsonConvert.SerializeObject(req1.AsSerializableObject());
+            string json1 = JsonConvert.SerializeObject(req1);
             Assert.AreEqual(@"{""sessionId"":""sessionIdHere"",""hasAudio"":true,""hasVideo"":false,""name"":""name-here"",""outputMode"":""individual""}", json1);
         }
     }

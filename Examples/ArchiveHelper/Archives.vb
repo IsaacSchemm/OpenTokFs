@@ -1,5 +1,5 @@
 ﻿Imports OpenTokFs
-Imports OpenTokFs.RequestOptions
+Imports OpenTokFs.RequestTypes
 Imports OpenTokFs.ResponseTypes
 
 Public Class Archives
@@ -60,7 +60,7 @@ Public Class Archives
         BtnStart.Enabled = False
 
         Try
-            Dim req = New ArchiveStartRequest(TxtNewArchiveSessionId.Text) With {
+            Dim req = New OpenTokArchiveStartRequest(TxtNewArchiveSessionId.Text) With {
                 .Name = If(TxtName.Text <> "", TxtName.Text, Nothing),
                 .OutputMode = If(RadioIndividual.Checked, "individual", "composed"),
                 .Resolution = If(RadioHD.Checked, "1280x720", "640x480")

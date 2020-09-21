@@ -1,5 +1,5 @@
 ﻿Imports OpenTokFs
-Imports OpenTokFs.RequestOptions
+Imports OpenTokFs.RequestTypes
 Imports OpenTokFs.ResponseTypes
 
 Public Class Form1
@@ -56,7 +56,7 @@ Public Class Form1
         BtnStart.Enabled = False
 
         Try
-            Dim req = New BroadcastStartRequest(TxtNewBroadcastSessionId.Text) With {
+            Dim req = New OpenTokBroadcastStartRequest(TxtNewBroadcastSessionId.Text) With {
                 .Resolution = If(RadioHD.Checked, "1280x720", "640x480"),
                 .Hls = True
             }
