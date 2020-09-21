@@ -5,13 +5,12 @@ open System.IO
 open System.Net
 open System.Threading.Tasks
 open OpenTokFs
-open OpenTokFs.RequestOptions
 open OpenTokFs.RequestTypes
 open OpenTokFs.ResponseTypes
 
 module Session =
     /// Create a session.
-    let AsyncCreate (credentials: IOpenTokCredentials) (session: SessionCreateRequest) = async {
+    let AsyncCreate (credentials: IOpenTokCredentials) (session: OpenTokSessionCreateRequest) = async {
         let req = WebRequest.CreateHttp "https://api.opentok.com/session/create"
         req.Headers.Add("X-OPENTOK-AUTH", OpenTokAuthentication.CreateToken credentials)
         req.Accept <- "application/json"
@@ -21,7 +20,15 @@ module Session =
         do! async {
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
-            do! session.ToQueryString() |> sw.WriteLineAsync |> Async.AwaitTask
+            let qs =
+                seq {
+                    yield sprintf "archiveMode=%s" (if session.ArchiveAlways then "always" else "manual")
+                    yield sprintf "p2p.preference=%s" (if session.P2PEnabled then "enabled" else "disabled")
+                    if not (String.IsNullOrEmpty session.IpAddressLocationHint) then
+                        yield sprintf "location=%s" (Uri.EscapeDataString session.IpAddressLocationHint)
+                }
+                |> String.concat "&"
+            do! qs |> sw.WriteLineAsync |> Async.AwaitTask
         }
         
         let! list = OpenTokAuthentication.AsyncReadJson<OpenTokSession list> req

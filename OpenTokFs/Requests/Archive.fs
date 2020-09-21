@@ -1,12 +1,10 @@
 ﻿namespace OpenTokFs.Requests
 
 open System
-open System.Runtime.InteropServices
 open System.Threading.Tasks
 open OpenTokFs
 open OpenTokFs.RequestTypes
 open OpenTokFs.ResponseTypes
-open OpenTokFs.RequestOptions
 open FSharp.Control
 
 module Archive =
