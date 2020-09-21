@@ -25,4 +25,4 @@ jobs:
       working-directory: ./OpenTokFs/
     - name: Test
       run: dotnet test --no-restore --verbosity normal
-      working-directory: ./OpenTokFs/
+      working-directory: ./OpenTokFs.SerializationTests/
