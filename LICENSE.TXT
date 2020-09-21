@@ -1,4 +1,4 @@
-﻿Copyright (c) 2019 Isaac Schemm
+﻿Copyright (c) 2020 Isaac Schemm
 
 Includes code based on the OpenTok .NET SDK
 Copyright (c) 2014-2018 TokBox, Inc.

@@ -3,6 +3,8 @@ namespace OpenTokFs
 open System
 open System.Net
 open System.Security.Cryptography
+open System.IO
+open Newtonsoft.Json
 
 // http://www.fssnip.net/7RK/title/Creating-and-validating-JWTs-in-just-35-lines-of-F-code
 module internal JsonWebToken =
@@ -51,6 +53,9 @@ module OpenTokAuthentication =
         jti: string
     }
 
+    let SerializeObject = JsonConvert.SerializeObject
+    let DeserializeObject<'a> = JsonConvert.DeserializeObject<'a>
+
     let CreateToken(credentials: IOpenTokCredentials) =
         let payload = {
             iss = credentials.ApiKey.ToString()
@@ -76,3 +81,18 @@ module OpenTokAuthentication =
         req.Headers.Add("X-OPENTOK-AUTH", CreateToken credentials)
         req.Accept <- "application/json"
         req
+
+    let AsyncWriteJson<'a> (req: WebRequest) (obj: obj) = async {
+        req.ContentType <- "application/json"
+        use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
+        use sw = new StreamWriter(rs)
+        do! obj |> SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+    }
+
+    let AsyncReadJson<'a> (req: WebRequest) = async {
+        use! resp = req.AsyncGetResponse()
+        use s = resp.GetResponseStream()
+        use sr = new StreamReader(s)
+        let! json = sr.ReadToEndAsync() |> Async.AwaitTask
+        return DeserializeObject<'a> json
+    }

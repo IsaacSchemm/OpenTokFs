@@ -2,17 +2,9 @@
 
 This is an unofficial .NET wrapper for the OpenTok REST API.
 
-Although this library is written in F#, it was written primarily to be used
-from a C# or VB.NET application. As such, it does not use option types;
-strings can be null, and Nullable<T> is used for value types. However, it does
-provide F#-friendly methods that return Async<T> and AsyncSeq<T> in addition
-to .NET-style methods that return Task<T>.
-
-Namespaces:
-
-* **OpenTokFs.RequestTypes**: Custom types used as parameters in requests to the server. The library builds a corresponding JSON request internally.
-* **OpenTokFs.Types**: OpenTok API response types implemented as .NET classes; used for data returned from the server.
-* **OpenTokFs.Requests**: Modules (static classes) with functions that wrap OpenTok API methods.
+The `OpenTokFs.Json` C# library contains .NET representations of (most of) the
+JSON objects used for requests and responses in the OpenTok API. The main
+`OpenTokFs` project is written in F# and contains the main library logic.
 
 Most functions take a parameter of the type `OpenTokFs.IOpenTokCredentials`.
 This interface can be implemented by any object that can provide an OpenTok

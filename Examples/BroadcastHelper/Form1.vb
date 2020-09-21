@@ -1,4 +1,6 @@
 ﻿Imports OpenTokFs
+Imports OpenTokFs.RequestTypes
+Imports OpenTokFs.ResponseTypes
 
 Public Class Form1
     Implements IOpenTokCredentials
@@ -21,12 +23,14 @@ Public Class Form1
         Try
             ListBox1.Items.Clear()
 
-            Dim list = Await Requests.Broadcast.ListAllAsync(Me, 100)
+            Dim list = Await Api.Broadcast.ListAllAsync(Me, 100, OpenTokSessionId.Any)
             If list.Length >= 100 Then
                 MsgBox("There are 100 or more items in the list. Only showing the top 100 items.")
             End If
 
-            ListBox1.Items.AddRange(list)
+            For Each x In list
+                ListBox1.Items.Add(x)
+            Next
         Catch ex As Exception
             Console.Error.WriteLine(ex)
             MsgBox(ex.Message)
@@ -36,7 +40,7 @@ Public Class Form1
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
-        Dim item As Types.OpenTokBroadcast = ListBox1.SelectedItem
+        Dim item As OpenTokBroadcast = ListBox1.SelectedItem
         If item Is Nothing Then
             PropertyGrid1.SelectedObject = Nothing
 
@@ -52,11 +56,11 @@ Public Class Form1
         BtnStart.Enabled = False
 
         Try
-            Dim req = New RequestTypes.BroadcastStartRequest(TxtNewBroadcastSessionId.Text) With {
+            Dim req = New OpenTokBroadcastStartRequest(TxtNewBroadcastSessionId.Text) With {
                 .Resolution = If(RadioHD.Checked, "1280x720", "640x480"),
                 .Hls = True
             }
-            Dim newBroadcast = Await Requests.Broadcast.StartAsync(Me, req)
+            Dim newBroadcast = Await Api.Broadcast.StartAsync(Me, req)
             ListBox1.Items.Insert(0, newBroadcast)
         Catch ex As Exception
             Console.Error.WriteLine(ex)
@@ -70,8 +74,8 @@ Public Class Form1
         BtnStop.Enabled = False
 
         Try
-            Dim item As Types.OpenTokBroadcast = ListBox1.SelectedItem
-            Dim updated = Await Requests.Broadcast.StopAsync(Me, item.Id)
+            Dim item As OpenTokBroadcast = ListBox1.SelectedItem
+            Dim updated = Await Api.Broadcast.StopAsync(Me, item.Id)
 
             Dim index = ListBox1.SelectedIndex
             ListBox1.Items.RemoveAt(index)

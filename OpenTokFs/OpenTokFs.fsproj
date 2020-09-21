@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>4.0.0-a3</Version>
+    <Authors>Isaac Schemm</Authors>
+    <Description>An unofficial .NET wrapper for Vonage Video API's REST API (written in F#)</Description>
+    <Copyright>(C) 2020 Isaac Schemm</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/IsaacSchemm/OpenTokFs</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/IsaacSchemm/OpenTokFs</RepositoryUrl>
+    <PackageTags>opentok webrtc fsharp</PackageTags>
+    <PackageReleaseNotes>Reorganize types and namespaces</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Examples\**" />
+    <EmbeddedResource Remove="Requests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="IOpenTokCredentials.fs" />
+    <Compile Include="OpenTokPagingParameters.fs" />
+    <Compile Include="OpenTokAuthentication.fs" />
+    <Compile Include="OpenTokSessionId.fs" />
+    <Compile Include="OpenTokSessionTokens.fs" />
+    <Compile Include="Api\Archive.fs" />
+    <Compile Include="Api\Broadcast.fs" />
+    <Compile Include="Api\Session.fs" />
+    <Compile Include="Api\Sip.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FSharp.Control.AsyncSeq" Version="2.0.21" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpenTokFs.RequestTypes\OpenTokFs.RequestTypes.csproj" />
+    <ProjectReference Include="..\OpenTokFs.ResponseTypes\OpenTokFs.ResponseTypes.csproj" />
+  </ItemGroup>
+
+</Project>
