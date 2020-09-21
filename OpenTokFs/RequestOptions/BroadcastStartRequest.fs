@@ -1,7 +1,7 @@
 ﻿namespace OpenTokFs.RequestOptions
 
 open System
-open OpenTokFs.Json.RequestTypes
+open OpenTokFs.RequestTypes
 
 /// <summary>
 /// An object that provides parameters for starting an OpenTok broadcast, using reasonable defaults.
@@ -15,7 +15,7 @@ type BroadcastStartRequest(sessionId: string) =
     member val Rtmp: OpenTokRtmpDestination seq = Seq.empty with get, set
     member val Resolution: string = "640x480" with get, set
 
-    member internal body.AsSerializableObject() =
+    member body.AsSerializableObject() =
         let o x = x :> obj
 
         let outputs =

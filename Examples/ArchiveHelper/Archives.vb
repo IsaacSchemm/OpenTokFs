@@ -1,6 +1,6 @@
 ﻿Imports OpenTokFs
 Imports OpenTokFs.RequestOptions
-Imports OpenTokFs.Json.ResponseTypes
+Imports OpenTokFs.ResponseTypes
 
 Public Class Archives
     Implements IOpenTokCredentials

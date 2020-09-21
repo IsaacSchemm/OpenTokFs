@@ -6,8 +6,8 @@ open System.Net
 open System.Threading.Tasks
 open OpenTokFs
 open OpenTokFs.RequestOptions
-open OpenTokFs.Json.RequestTypes
-open OpenTokFs.Json.ResponseTypes
+open OpenTokFs.RequestTypes
+open OpenTokFs.ResponseTypes
 
 module Session =
     /// Create a session.

@@ -3,8 +3,8 @@
 open System
 open System.Runtime.InteropServices
 open OpenTokFs
-open OpenTokFs.Json.RequestTypes
-open OpenTokFs.Json.ResponseTypes
+open OpenTokFs.RequestTypes
+open OpenTokFs.ResponseTypes
 open OpenTokFs.RequestOptions
 open FSharp.Control
 

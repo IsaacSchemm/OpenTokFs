@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OpenTokFs.Json.ResponseTypes {
+namespace OpenTokFs.ResponseTypes {
     public class OpenTokRtmpStream {
         public string Id { get; set; }
         public string ServerUrl { get; set; }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenTokFs.Json.RequestTypes {
+namespace OpenTokFs.RequestTypes {
     public class OpenTokLayoutClassChangeRequest {
         [JsonProperty("items")]
         public IEnumerable<ClassChange> Items { get; set; } = Enumerable.Empty<ClassChange>();

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace OpenTokFs.Json.RequestTypes {
+namespace OpenTokFs.RequestTypes {
     public class OpenTokVideoLayout {
         [JsonProperty("type")]
         public string Type { get; set; }

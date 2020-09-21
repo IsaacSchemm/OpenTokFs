@@ -1,6 +1,6 @@
 ﻿namespace OpenTokFs.RequestOptions
 
-open OpenTokFs.Json.RequestTypes
+open OpenTokFs.RequestTypes
 
 /// <summary>
 /// An object that provides parameters for starting an OpenTok archive, using reasonable defaults.
@@ -14,7 +14,7 @@ type ArchiveStartRequest(sessionId: string) =
     member val OutputMode: string = "composed" with get, set
     member val Resolution: string = "640x480" with get, set
 
-    member internal body.AsSerializableObject() =
+    member body.AsSerializableObject() =
         seq {
             let o x = x :> obj
 
