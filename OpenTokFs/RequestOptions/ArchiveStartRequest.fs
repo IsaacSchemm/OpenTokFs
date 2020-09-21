@@ -14,7 +14,7 @@ type ArchiveStartRequest(sessionId: string) =
     member val OutputMode: string = "composed" with get, set
     member val Resolution: string = "640x480" with get, set
 
-    member internal body.AsSerializableObject() =
+    member body.AsSerializableObject() =
         seq {
             let o x = x :> obj
 

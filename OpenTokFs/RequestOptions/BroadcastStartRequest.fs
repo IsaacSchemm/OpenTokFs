@@ -15,7 +15,7 @@ type BroadcastStartRequest(sessionId: string) =
     member val Rtmp: OpenTokRtmpDestination seq = Seq.empty with get, set
     member val Resolution: string = "640x480" with get, set
 
-    member internal body.AsSerializableObject() =
+    member body.AsSerializableObject() =
         let o x = x :> obj
 
         let outputs =
