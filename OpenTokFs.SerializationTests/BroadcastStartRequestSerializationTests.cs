@@ -34,8 +34,5 @@ namespace OpenTokFs.SerializationTests {
             string json1 = OpenTokAuthentication.SerializeObject(req1);
             Assert.AreEqual(@"{""sessionId"":""sessionIdHere"",""layout"":{""type"":""custom"",""stylesheet"":""https://www.example.com/example.css""},""maxDuration"":300,""outputs"":{""rtmp"":[{""serverUrl"":""rtmp://media.example.com"",""streamName"":""demo""}]},""resolution"":""640x480""}", json1);
         }
-        
-        [TestMethod]
-        public void BreakTest() { Assert.Fail("Test failure"); }
     }
 }
