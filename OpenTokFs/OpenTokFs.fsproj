@@ -4,13 +4,13 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Version>4.0.0-a3</Version>
     <Authors>Isaac Schemm</Authors>
-    <Description>An unofficial .NET wrapper for the OpenTok REST API (written in F#)</Description>
+    <Description>An unofficial .NET wrapper for Vonage Video API's REST API (written in F#)</Description>
     <Copyright>(C) 2020 Isaac Schemm</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/IsaacSchemm/OpenTokFs</PackageProjectUrl>
     <RepositoryUrl>https://github.com/IsaacSchemm/OpenTokFs</RepositoryUrl>
     <PackageTags>opentok webrtc fsharp</PackageTags>
-    <PackageReleaseNotes>Move .NET representations of JSON objects to a C# package</PackageReleaseNotes>
+    <PackageReleaseNotes>Reorganize types and namespaces</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 

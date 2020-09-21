@@ -2,6 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>4.0.0-a3</Version>
+    <Company>Isaac Schemm</Company>
+    <Authors>Isaac Schemm</Authors>
+    <Product>OpenTokFs</Product>
+    <Description>C#-defined request types for OpenTokFs</Description>
+    <Copyright>(C) 2020 Isaac Schemm</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/IsaacSchemm/OpenTokFs</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/IsaacSchemm/OpenTokFs</RepositoryUrl>
+    <PackageTags>opentok</PackageTags>
+    <PackageReleaseNotes>Reorganize types and namespaces</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
