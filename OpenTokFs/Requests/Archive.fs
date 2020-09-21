@@ -3,15 +3,16 @@
 open System
 open System.IO
 open System.Runtime.InteropServices
+open System.Threading.Tasks
 open Newtonsoft.Json
 open OpenTokFs
-open OpenTokFs.Json.RequestTypes
-open OpenTokFs.Json.ResponseTypes
+open OpenTokFs.RequestTypes
+open OpenTokFs.ResponseTypes
 open OpenTokFs.RequestOptions
 open FSharp.Control
 
-module Broadcast =
-    /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
+module Archive =
+    /// Get details on both completed and in-progress archives.
     let AsyncList (credentials: IOpenTokCredentials) (paging: OpenTokPagingParameters) (sessionId: string option) = async {
         let query = seq {
             yield paging.offset |> sprintf "offset=%d"
@@ -22,24 +23,24 @@ module Broadcast =
             | None -> ()
         }
 
-        let req = OpenTokAuthentication.BuildRequest credentials "broadcast" query
+        let req = OpenTokAuthentication.BuildRequest credentials "archive" query
         use! resp = req.AsyncGetResponse()
 
         use s = resp.GetResponseStream()
         use sr = new StreamReader(s)
         let! json = sr.ReadToEndAsync() |> Async.AwaitTask
 
-        return JsonConvert.DeserializeObject<OpenTokList<OpenTokBroadcast>> json
+        return JsonConvert.DeserializeObject<OpenTokList<OpenTokArchive>> json
     }
 
-    /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
+    /// Get details on both completed and in-progress archives.
     let ListAsync credentials paging ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
         sessionId
         |> Option.ofObj
         |> AsyncList credentials paging
         |> Async.StartAsTask
 
-    /// Get details on broadcasts that are currently in progress, making as many requests to the server as necessary.
+    /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
     let AsyncListAll credentials sessionId = asyncSeq {
         let mutable paging = { offset = 0; count = Nullable 1000 }
         let mutable finished = false
@@ -53,7 +54,7 @@ module Broadcast =
                 paging <- { offset = paging.offset + Seq.length list.Items; count = paging.count }
     }
 
-    /// Get details on broadcasts that are currently in progress, making as many requests to the server as necessary.
+    /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
     let ListAllAsync credentials max ([<Optional;DefaultParameterValue(null)>] sessionId: string) =
         sessionId
         |> Option.ofObj
@@ -62,11 +63,10 @@ module Broadcast =
         |> AsyncSeq.toArrayAsync
         |> Async.StartAsTask
 
-    /// Start a broadcast.
-    /// A WebException might be thrown if there is an error in the request or if a broadcast is already running for the given session.
-    /// (Even if an error is thrown, a broadcast may have been started; use one of the List functions to check.)
-    let AsyncStart (credentials: IOpenTokCredentials) (body: BroadcastStartRequest) = async {
-        let req = OpenTokAuthentication.BuildRequest credentials "broadcast" Seq.empty
+    /// Start an archive.
+    /// A WebException might be thrown if there is an error in the request or if an archive is already running for the given session.
+    let AsyncStart (credentials: IOpenTokCredentials) (body: ArchiveStartRequest) = async {
+        let req = OpenTokAuthentication.BuildRequest credentials "archive" Seq.empty
         req.Method <- "POST"
         req.ContentType <- "application/json"
 
@@ -82,21 +82,18 @@ module Broadcast =
         use sr = new StreamReader(s)
         let! json = sr.ReadToEndAsync() |> Async.AwaitTask
 
-        return JsonConvert.DeserializeObject<OpenTokBroadcast> json
+        return JsonConvert.DeserializeObject<OpenTokArchive> json
     }
 
     /// Start a broadcast.
-    /// A WebException might be thrown if there is an error in the request or if a broadcast is already running for the given session.
-    /// (Even if an error is thrown, a broadcast may have been started; use one of the List functions to check.)
+    /// A WebException might be thrown if there is an error in the request or if an archive is already running for the given session.
     let StartAsync credentials body =
         AsyncStart credentials body
         |> Async.StartAsTask
 
-    /// Stop a broadcast.
-    /// A WebException might be thrown if there is an error in the request or if additonal broadcasts are also running for the session.
-    /// (Even if an error is thrown, the broadcast may have been stopped; use one of the List functions to check.)
-    let AsyncStop (credentials: IOpenTokCredentials) (broadcastId: string) = async {
-        let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s/stop"
+    /// Stop an archive.
+    let AsyncStop (credentials: IOpenTokCredentials) (archiveId: string) = async {
+        let path = archiveId |> Uri.EscapeDataString |> sprintf "archive/%s/stop"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
         req.Method <- "POST"
 
@@ -106,19 +103,17 @@ module Broadcast =
         use sr = new StreamReader(s)
         let! json = sr.ReadToEndAsync() |> Async.AwaitTask
 
-        return JsonConvert.DeserializeObject<OpenTokBroadcast> json
+        return JsonConvert.DeserializeObject<OpenTokArchive> json
     }
 
-    /// Stop a broadcast.
-    /// A WebException might be thrown if there is an error in the request or if additonal broadcasts are also running for the session.
-    /// (Even if an error is thrown, the broadcast may have been stopped; use one of the List functions to check.)
-    let StopAsync credentials broadcastId =
-        AsyncStop credentials broadcastId
+    /// Stop an archive.
+    let StopAsync credentials archiveId =
+        AsyncStop credentials archiveId
         |> Async.StartAsTask
 
-    /// Get information about a broadcast by its ID.
-    let AsyncGet (credentials: IOpenTokCredentials) (broadcastId: string) = async {
-        let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s"
+    /// Get information about an archive by its ID.
+    let AsyncGet (credentials: IOpenTokCredentials) (archiveId: string) = async {
+        let path = archiveId |> Uri.EscapeDataString |> sprintf "archive/%s"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
 
         use! resp = req.AsyncGetResponse()
@@ -127,37 +122,53 @@ module Broadcast =
         use sr = new StreamReader(s)
         let! json = sr.ReadToEndAsync() |> Async.AwaitTask
 
-        return JsonConvert.DeserializeObject<OpenTokBroadcast> json
+        return JsonConvert.DeserializeObject<OpenTokArchive> json
     }
 
-    /// Get information about a broadcast by its ID.
+    /// Get information about an archive by its ID.
     let GetAsync credentials archiveId =
         AsyncGet credentials archiveId
         |> Async.StartAsTask
 
-    /// Change the layout type of an active broadcast.
-    let AsyncSetLayout (credentials: IOpenTokCredentials) (broadcastId: string) (layout: OpenTokVideoLayout) = async {
-        let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s/layout"
+    /// Delete an archive.
+    let AsyncDelete (credentials: IOpenTokCredentials) (archiveId: string) = async {
+        let path = archiveId |> Uri.EscapeDataString |> sprintf "archive/%s"
+        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        req.Method <- "DELETE"
+
+        use! resp = req.AsyncGetResponse()
+        ignore resp
+    }
+
+    /// Delete an archive.
+    let DeleteAsync credentials archiveId =
+        AsyncDelete credentials archiveId
+        |> Async.StartAsTask
+        :> Task
+
+    /// Change the layout type of an archive while it is being recorded.
+    let AsyncSetLayout (credentials: IOpenTokCredentials) (archiveId: string) (layout: OpenTokVideoLayout) = async {
+        let path = archiveId |> Uri.EscapeDataString |> sprintf "archive/%s/layout"
         let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
         req.Method <- "PUT"
         req.ContentType <- "application/json"
-        
+
         do! async {
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
             do! layout |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
-        
+
         use! resp = req.AsyncGetResponse()
-        
+
         use s = resp.GetResponseStream()
         use sr = new StreamReader(s)
         let! json = sr.ReadToEndAsync() |> Async.AwaitTask
-        
+
         return JsonConvert.DeserializeObject<OpenTokArchive> json
     }
 
-    /// Change the layout type of an active broadcast.
+    /// Change the layout type of an archive while it is being recorded.
     let SetLayoutAsync credentials archiveId layout =
         AsyncSetLayout credentials archiveId layout
         |> Async.StartAsTask

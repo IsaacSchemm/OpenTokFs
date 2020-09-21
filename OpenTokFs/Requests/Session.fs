@@ -8,8 +8,8 @@ open System.Threading.Tasks
 open Newtonsoft.Json
 open OpenTokFs
 open OpenTokFs.RequestOptions
-open OpenTokFs.Json.RequestTypes
-open OpenTokFs.Json.ResponseTypes
+open OpenTokFs.RequestTypes
+open OpenTokFs.ResponseTypes
 
 module Session =
     /// Create a session.

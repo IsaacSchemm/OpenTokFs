@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace OpenTokFs.Json.RequestTypes {
+namespace OpenTokFs.RequestTypes {
     public class OpenTokDialRequest {
         [JsonProperty("sessionId")]
         public string SessionId { get; set; } = "";

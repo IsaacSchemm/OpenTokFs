@@ -3,13 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "OpenTokFs", "OpenTokFs.fsproj", "{05AE44A0-81CE-4819-84F8-1F33CFFB204E}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "OpenTokFs", "OpenTokFs\OpenTokFs.fsproj", "{05AE44A0-81CE-4819-84F8-1F33CFFB204E}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ArchiveHelper", "Examples\ArchiveHelper\ArchiveHelper.vbproj", "{08EE6CD2-4D19-4D0B-B17D-A7EE13AD40D7}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "BroadcastHelper", "Examples\BroadcastHelper\BroadcastHelper.vbproj", "{B3B49C79-9F8F-4C35-8C66-F6DAA6EBA124}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTokFs.Json", "OpenTokFs.Json\OpenTokFs.Json.csproj", "{98A2329A-4A62-4CCD-9593-6B9F61B75703}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7BB42AF2-A8E3-4CDA-B4F1-9B53FEFA02FC}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.TXT = LICENSE.TXT
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTokFs.RequestTypes", "OpenTokFs.RequestTypes\OpenTokFs.RequestTypes.csproj", "{9AC49FB9-B013-49B2-BC13-7E86D7C320E7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTokFs.ResponseTypes", "OpenTokFs.ResponseTypes\OpenTokFs.ResponseTypes.csproj", "{91E80075-F78B-44D3-9F60-CC39BDBC87DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +37,14 @@ Global
 		{B3B49C79-9F8F-4C35-8C66-F6DAA6EBA124}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3B49C79-9F8F-4C35-8C66-F6DAA6EBA124}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3B49C79-9F8F-4C35-8C66-F6DAA6EBA124}.Release|Any CPU.Build.0 = Release|Any CPU
-		{98A2329A-4A62-4CCD-9593-6B9F61B75703}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{98A2329A-4A62-4CCD-9593-6B9F61B75703}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{98A2329A-4A62-4CCD-9593-6B9F61B75703}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{98A2329A-4A62-4CCD-9593-6B9F61B75703}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AC49FB9-B013-49B2-BC13-7E86D7C320E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AC49FB9-B013-49B2-BC13-7E86D7C320E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AC49FB9-B013-49B2-BC13-7E86D7C320E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AC49FB9-B013-49B2-BC13-7E86D7C320E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91E80075-F78B-44D3-9F60-CC39BDBC87DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91E80075-F78B-44D3-9F60-CC39BDBC87DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91E80075-F78B-44D3-9F60-CC39BDBC87DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91E80075-F78B-44D3-9F60-CC39BDBC87DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

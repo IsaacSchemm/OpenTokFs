@@ -120,13 +120,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenTokFs.fsproj">
+    <ProjectReference Include="..\..\OpenTokFs.RequestTypes\OpenTokFs.RequestTypes.csproj">
+      <Project>{9ac49fb9-b013-49b2-bc13-7e86d7c320e7}</Project>
+      <Name>OpenTokFs.RequestTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OpenTokFs.ResponseTypes\OpenTokFs.ResponseTypes.csproj">
+      <Project>{91e80075-f78b-44d3-9f60-cc39bdbc87db}</Project>
+      <Name>OpenTokFs.ResponseTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OpenTokFs\OpenTokFs.fsproj">
       <Project>{05ae44a0-81ce-4819-84f8-1f33cffb204e}</Project>
       <Name>OpenTokFs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OpenTokFs.Json\OpenTokFs.Json.csproj">
-      <Project>{98a2329a-4a62-4ccd-9593-6b9f61b75703}</Project>
-      <Name>OpenTokFs.Json</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

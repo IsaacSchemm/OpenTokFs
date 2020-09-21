@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace OpenTokFs.Json.RequestTypes {
+namespace OpenTokFs.RequestTypes {
     public class OpenTokRtmpDestination {
         [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public string Id { get; set; }

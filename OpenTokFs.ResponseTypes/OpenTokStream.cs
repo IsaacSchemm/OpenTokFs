@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OpenTokFs.Json.ResponseTypes {
+namespace OpenTokFs.ResponseTypes {
     public class OpenTokStream {
         public string Id { get; set; }
         public string VideoType { get; set; }

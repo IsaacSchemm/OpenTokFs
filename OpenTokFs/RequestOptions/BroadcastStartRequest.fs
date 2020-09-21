@@ -1,7 +1,7 @@
 ﻿namespace OpenTokFs.RequestOptions
 
 open System
-open OpenTokFs.Json.RequestTypes
+open OpenTokFs.RequestTypes
 
 /// <summary>
 /// An object that provides parameters for starting an OpenTok broadcast, using reasonable defaults.

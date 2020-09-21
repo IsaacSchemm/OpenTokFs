@@ -1,6 +1,6 @@
 ﻿namespace OpenTokFs.RequestOptions
 
-open OpenTokFs.Json.RequestTypes
+open OpenTokFs.RequestTypes
 
 /// <summary>
 /// An object that provides parameters for starting an OpenTok archive, using reasonable defaults.

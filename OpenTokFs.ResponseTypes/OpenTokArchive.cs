@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenTokFs.Json.ResponseTypes {
+namespace OpenTokFs.ResponseTypes {
     public class OpenTokArchive {
         public long CreatedAt { get; set; }
         public int Duration { get; set; }

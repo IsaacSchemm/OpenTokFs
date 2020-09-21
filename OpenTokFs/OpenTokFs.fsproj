@@ -15,8 +15,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="LICENSE.txt" />
-    <None Include="README.md" />
+    <EmbeddedResource Remove="Examples\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="IOpenTokCredentials.fs" />
     <Compile Include="OpenTokPagingParameters.fs" />
     <Compile Include="OpenTokAuthentication.fs" />
@@ -36,7 +38,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="OpenTokFs.Json\OpenTokFs.Json.csproj" />
+    <ProjectReference Include="..\OpenTokFs.RequestTypes\OpenTokFs.RequestTypes.csproj" />
+    <ProjectReference Include="..\OpenTokFs.ResponseTypes\OpenTokFs.ResponseTypes.csproj" />
   </ItemGroup>
 
 </Project>

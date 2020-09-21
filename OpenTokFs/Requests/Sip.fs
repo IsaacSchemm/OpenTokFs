@@ -4,8 +4,8 @@ open System.IO
 open System.Net
 open Newtonsoft.Json
 open OpenTokFs
-open OpenTokFs.Json.RequestTypes
-open OpenTokFs.Json.ResponseTypes
+open OpenTokFs.RequestTypes
+open OpenTokFs.ResponseTypes
 
 module Sip =
     let AsyncDial (credentials: IOpenTokCredentials) (dial: OpenTokDialRequest) = async {

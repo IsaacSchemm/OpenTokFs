@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenTokFs.Json.ResponseTypes {
+namespace OpenTokFs.ResponseTypes {
     public class OpenTokSipConnection {
         public Guid Id { get; set; }
         public Guid ConnectionId { get; set; }
