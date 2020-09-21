@@ -70,7 +70,16 @@ module Broadcast =
 
         let rtmp = seq {
             for r in body.Rtmp do
-                yield r.ToIDictionary()
+                let dest =
+                    seq {
+                        let o x = x :> obj
+                        if not (String.IsNullOrEmpty r.Id) then
+                            yield ("id", o r.Id)
+                        yield ("serverUrl", o r.ServerUrl)
+                        yield ("streamName", o r.StreamName)
+                    }
+                    |> dict
+                yield dest
         }
 
         let outputs =
@@ -85,8 +94,7 @@ module Broadcast =
             seq {
                 yield ("sessionId", o body.SessionId)
 
-                let layout = body.Layout.ToIDictionary()
-                yield ("layout", o layout)
+                yield ("layout", o body.Layout.RequestParameters)
                 
                 let maxDuration = int body.Duration.TotalSeconds
                 yield ("maxDuration", o maxDuration)
@@ -173,11 +181,9 @@ module Broadcast =
         req.ContentType <- "application/json"
         
         do! async {
-            let o = layout.ToIDictionary()
-        
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
-            do! o |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+            do! layout.RequestParameters |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
         
         use! resp = req.AsyncGetResponse()

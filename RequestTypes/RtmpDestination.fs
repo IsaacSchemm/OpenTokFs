@@ -1,6 +1,5 @@
 ﻿namespace OpenTokFs.RequestTypes
 
-open System
 open System.Runtime.InteropServices
 
 /// <summary>
@@ -10,13 +9,3 @@ type RtmpDestination(serverUrl: string, streamName: string, [<Optional;DefaultPa
     member __.Id = id
     member __.ServerUrl = serverUrl
     member __.StreamName = streamName
-
-    member internal this.ToIDictionary() =
-        seq {
-            let o x = x :> obj
-            if not (String.IsNullOrEmpty this.Id) then
-                yield ("id", o this.Id)
-            yield ("serverUrl", o this.ServerUrl)
-            yield ("streamName", o this.StreamName)
-        }
-        |> dict

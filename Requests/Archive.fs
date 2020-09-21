@@ -66,8 +66,6 @@ module Archive =
     /// Start an archive.
     /// A WebException might be thrown if there is an error in the request or if an archive is already running for the given session.
     let AsyncStart (credentials: IOpenTokCredentials) (body: ArchiveStartRequest) = async {
-        let layout = body.Layout.ToIDictionary()
-
         let requestObject =
             seq {
                 let o x = x :> obj
@@ -78,7 +76,7 @@ module Archive =
                 yield ("name", o body.Name)
                 yield ("outputMode", o body.OutputMode)
                 if body.OutputMode <> "individual" then
-                    yield ("layout", o layout)
+                    yield ("layout", o body.Layout.RequestParameters)
                     yield ("resolution", o body.Resolution)
             }
             |> dict
@@ -171,11 +169,9 @@ module Archive =
         req.ContentType <- "application/json"
 
         do! async {
-            let o = layout.ToIDictionary()
-
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
-            do! o |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+            do! layout.RequestParameters |> JsonConvert.SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
         }
 
         use! resp = req.AsyncGetResponse()
