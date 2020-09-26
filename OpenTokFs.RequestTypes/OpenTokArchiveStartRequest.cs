@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace OpenTokFs.RequestTypes {
     [JsonConverter(typeof(OpenTokArchiveStartRequestPropertyConverter))]
@@ -11,7 +10,7 @@ namespace OpenTokFs.RequestTypes {
         public OpenTokVideoLayout Layout { get; set; } = OpenTokVideoLayout.BestFit;
         public bool HasAudio { get; set; } = true;
         public bool HasVideo { get; set; } = true;
-        public string Name { get; set; }
+        public string? Name { get; set; } = null;
         public string OutputMode { get; set; } = "composed";
         public string Resolution { get; set; } = "640x480";
 
@@ -21,22 +20,21 @@ namespace OpenTokFs.RequestTypes {
     }
 
     public class OpenTokArchiveStartRequestPropertyConverter : JsonConverter {
-        public override bool CanConvert(Type objectType) {
+        public override bool CanConvert(Type? objectType) {
             return objectType == typeof(OpenTokArchiveStartRequest);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
+        public override object? ReadJson(JsonReader? reader, Type? objectType, object? existingValue, JsonSerializer? serializer) {
             return false;
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
-            if (value == null) {
-                serializer.Serialize(writer, null);
+        public override void WriteJson(JsonWriter? writer, object? value, JsonSerializer? serializer) {
+            if (!(value is OpenTokArchiveStartRequest obj)) {
+                serializer!.Serialize(writer!, value);
                 return;
             }
 
-            var obj = value as OpenTokArchiveStartRequest;
-            var dict = new Dictionary<string, object> {
+            var dict = new Dictionary<string, object?> {
                 ["sessionId"] = obj.SessionId,
                 ["hasAudio"] = obj.HasAudio,
                 ["hasVideo"] = obj.HasVideo,
@@ -47,7 +45,7 @@ namespace OpenTokFs.RequestTypes {
                 dict.Add("layout", obj.Layout);
                 dict.Add("resolution", obj.Resolution);
             }
-            serializer.Serialize(writer, dict);
+            serializer!.Serialize(writer!, dict);
         }
     }
 }

@@ -3,13 +3,13 @@
 namespace OpenTokFs.RequestTypes {
     public class OpenTokRtmpDestination {
         [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
-        public string Id { get; set; }
+        public string? Id { get; set; } = null;
 
         [JsonProperty("serverUrl")]
-        public string ServerUrl { get; set; }
+        public string ServerUrl { get; set; } = "";
 
         [JsonProperty("streamName")]
-        public string StreamName { get; set; }
+        public string StreamName { get; set; } = "";
 
         public override string ToString() => $"{ServerUrl}/{StreamName} ({Id ?? "no ID"})";
     }

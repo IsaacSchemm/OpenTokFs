@@ -3,10 +3,10 @@
 namespace OpenTokFs.RequestTypes {
     public class OpenTokVideoLayout {
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public string Type { get; set; } = "";
 
         [JsonProperty("stylesheet", NullValueHandling = NullValueHandling.Ignore)]
-        public string Stylesheet { get; set; }
+        public string? Stylesheet { get; set; } = null;
 
         public static OpenTokVideoLayout BestFit => new OpenTokVideoLayout { Type = "bestFit" };
         public static OpenTokVideoLayout Pip => new OpenTokVideoLayout { Type = "pip" };

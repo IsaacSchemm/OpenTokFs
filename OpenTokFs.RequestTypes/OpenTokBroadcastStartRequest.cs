@@ -20,21 +20,19 @@ namespace OpenTokFs.RequestTypes {
     }
 
     public class OpenTokBroadcastStartRequestPropertyConverter : JsonConverter {
-        public override bool CanConvert(Type objectType) {
+        public override bool CanConvert(Type? objectType) {
             return objectType == typeof(OpenTokBroadcastStartRequest);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
+        public override object? ReadJson(JsonReader? reader, Type? objectType, object? existingValue, JsonSerializer? serializer) {
             return false;
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
-            if (value == null) {
-                serializer.Serialize(writer, null);
+        public override void WriteJson(JsonWriter? writer, object? value, JsonSerializer? serializer) {
+            if (!(value is OpenTokBroadcastStartRequest obj)) {
+                serializer!.Serialize(writer!, value!);
                 return;
             }
-
-            var obj = value as OpenTokBroadcastStartRequest;
 
             var outputs = new Dictionary<string, object>();
             if (obj.Hls)
@@ -48,7 +46,7 @@ namespace OpenTokFs.RequestTypes {
                 ["outputs"] = outputs,
                 ["resolution"] = obj.Resolution
             };
-            serializer.Serialize(writer, dict);
+            serializer!.Serialize(writer!, dict);
         }
     }
 }

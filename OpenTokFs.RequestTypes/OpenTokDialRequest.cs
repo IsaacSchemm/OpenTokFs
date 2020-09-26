@@ -17,13 +17,13 @@ namespace OpenTokFs.RequestTypes {
             public string Uri { get; set; } = "";
 
             [JsonProperty("from", NullValueHandling = NullValueHandling.Ignore)]
-            public string From { get; set; } = null;
+            public string? From { get; set; } = null;
 
             [JsonProperty("headers")]
             public Dictionary<string, string> Headers { get; set; } = new Dictionary<string, string>();
 
             [JsonProperty("auth", NullValueHandling = NullValueHandling.Ignore)]
-            public Credentials Auth { get; set; } = null;
+            public Credentials? Auth { get; set; } = null;
 
             [JsonProperty("secure")]
             public bool Secure { get; set; } = false;
