@@ -17,14 +17,21 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.301
-    - name: Install dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
-    - name: Build and Deploy OpenTokFs.ResponseTypes
+    - name: Build and Deploy OpenTokFs.RequestTypes
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
           PROJECT_FILE_PATH: OpenTokFs.RequestTypes/OpenTokFs.RequestTypes.csproj
+          VERSION_STATIC: 4.0.0-a4
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+    - name: Build and Deploy OpenTokFs.ResponseTypes
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+          PROJECT_FILE_PATH: OpenTokFs.ResponseTypes/OpenTokFs.ResponseTypes.csproj
+          VERSION_STATIC: 4.0.0-a4
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+    - name: Build and Deploy OpenTokFs
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+          PROJECT_FILE_PATH: OpenTokFs/OpenTokFs.fsproj
+          VERSION_STATIC: 4.0.0-a4
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
