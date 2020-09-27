@@ -12,7 +12,7 @@ module Session =
     /// Create a session.
     let AsyncCreate (credentials: IOpenTokCredentials) (session: OpenTokSessionCreateRequest) = async {
         let req = WebRequest.CreateHttp "https://api.opentok.com/session/create"
-        req.Headers.Add("X-OPENTOK-AUTH", OpenTokAuthentication.CreateToken credentials)
+        req.Headers.Add("X-OPENTOK-AUTH", OpenTokAuthentication.CreateProjectToken credentials)
         req.Accept <- "application/json"
         req.Method <- "POST"
         req.ContentType <- "application/x-www-form-urlencoded"

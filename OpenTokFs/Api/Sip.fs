@@ -11,7 +11,7 @@ module Sip =
             credentials.ApiKey
             |> sprintf "https://api.opentok.com/v2/project/%d/dial"
             |> WebRequest.CreateHttp
-        req.Headers.Add("X-OPENTOK-AUTH", OpenTokAuthentication.CreateToken credentials)
+        req.Headers.Add("X-OPENTOK-AUTH", OpenTokAuthentication.CreateProjectToken credentials)
         req.Accept <- "application/json"
         req.Method <- "POST"
 

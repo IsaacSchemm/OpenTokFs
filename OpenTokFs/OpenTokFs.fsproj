@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>4.0.0-b1</Version>
+    <Version>4.0.1-a1</Version>
     <Authors>Isaac Schemm</Authors>
     <Description>An unofficial .NET wrapper for Vonage Video API's REST API (written in F#)</Description>
     <Copyright>(C) 2020 Isaac Schemm</Copyright>
@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Compile Include="IOpenTokCredentials.fs" />
+    <Compile Include="IOpenTokAccountCredentials.fs" />
     <Compile Include="OpenTokPagingParameters.fs" />
     <Compile Include="OpenTokAuthentication.fs" />
     <Compile Include="OpenTokSessionId.fs" />
@@ -29,6 +30,7 @@
     <Compile Include="Api\Broadcast.fs" />
     <Compile Include="Api\Session.fs" />
     <Compile Include="Api\Sip.fs" />
+    <Compile Include="Api\Project.fs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,6 +4,7 @@ open System
 open System.Net
 open System.Security.Cryptography
 open System.IO
+open System.Text
 open Newtonsoft.Json
 
 // http://www.fssnip.net/7RK/title/Creating-and-validating-JWTs-in-just-35-lines-of-F-code
@@ -53,18 +54,22 @@ module OpenTokAuthentication =
         jti: string
     }
 
-    let SerializeObject = JsonConvert.SerializeObject
-    let DeserializeObject<'a> = JsonConvert.DeserializeObject<'a>
+    [<RequireQualifiedAccess>]
+    type JwtCredentialSource = Account of IOpenTokAccountCredentials | Project of IOpenTokCredentials
 
-    let CreateToken(credentials: IOpenTokCredentials) =
+    let CreateToken (credentials: JwtCredentialSource) =
+        let (key, secret, ist) =
+            match credentials with
+            | JwtCredentialSource.Account a -> (a.ApiKey, a.ApiSecret, "account")
+            | JwtCredentialSource.Project p -> (p.ApiKey, p.ApiSecret, "project")
         let payload = {
-            iss = credentials.ApiKey.ToString()
-            ist = "project"
+            iss = key.ToString()
+            ist = ist
             iat = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
             exp = DateTimeOffset.UtcNow.AddMinutes(3.0).ToUnixTimeSeconds()
             jti = Guid.NewGuid().ToString()
         }
-        let encodedSecret = credentials.ApiSecret |> System.Text.Encoding.UTF8.GetBytes
+        let encodedSecret = Encoding.UTF8.GetBytes secret
         let testAuth = JsonWebToken.newJwtAuthority (fun key -> new HMACSHA256(key) :> HMAC) encodedSecret
         let header = 
             """{
@@ -73,14 +78,20 @@ module OpenTokAuthentication =
             }"""
         testAuth.IssueToken header (Newtonsoft.Json.JsonConvert.SerializeObject payload)
 
+    let CreateProjectToken credentials = JwtCredentialSource.Project credentials |> CreateToken
+    let CreateAccountToken credentials = JwtCredentialSource.Account credentials |> CreateToken
+
     let BuildRequest (credentials: IOpenTokCredentials) (path: string) (query: seq<string>) =
         let req =
             String.concat "&" query
             |> sprintf "https://api.opentok.com/v2/project/%d/%s?%s" credentials.ApiKey path
             |> WebRequest.CreateHttp
-        req.Headers.Add("X-OPENTOK-AUTH", CreateToken credentials)
+        req.Headers.Add("X-OPENTOK-AUTH", CreateProjectToken credentials)
         req.Accept <- "application/json"
         req
+
+    let SerializeObject = JsonConvert.SerializeObject
+    let DeserializeObject<'a> = JsonConvert.DeserializeObject<'a>
 
     let AsyncWriteJson<'a> (req: WebRequest) (obj: obj) = async {
         req.ContentType <- "application/json"
