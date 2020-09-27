@@ -1,18 +1,13 @@
 ﻿namespace OpenTokFs.Api
 
-open System.Net
 open OpenTokFs
+open OpenTokFs.Credentials
 open OpenTokFs.RequestTypes
 open OpenTokFs.ResponseTypes
 
 module Sip =
-    let AsyncDial (credentials: IOpenTokCredentials) (dial: OpenTokDialRequest) = async {
-        let req =
-            credentials.ApiKey
-            |> sprintf "https://api.opentok.com/v2/project/%d/dial"
-            |> WebRequest.CreateHttp
-        req.Headers.Add("X-OPENTOK-AUTH", OpenTokAuthentication.CreateProjectToken credentials)
-        req.Accept <- "application/json"
+    let AsyncDial (credentials: IProjectCredentials) (dial: OpenTokDialRequest) = async {
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials "dial" Seq.empty
         req.Method <- "POST"
 
         do! OpenTokAuthentication.AsyncWriteJson req dial

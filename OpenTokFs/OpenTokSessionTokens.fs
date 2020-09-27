@@ -3,6 +3,7 @@
 open System
 open System.Security.Cryptography
 open System.Text
+open OpenTokFs.Credentials
 
 type OpenTokSessionTokenRole =
 | Subscriber = 1
@@ -63,7 +64,7 @@ module OpenTokSessionTokens =
         }
         |> String.concat "&"
 
-    let BuildTokenString (credentials: IOpenTokCredentials) (dataString: string) =
+    let BuildTokenString (credentials: IProjectCredentials) (dataString: string) =
         let signature = EncodeHMAC dataString credentials.ApiSecret
 
         sprintf "partner_id=%d&sig=%s:%s" credentials.ApiKey signature dataString
@@ -71,7 +72,7 @@ module OpenTokSessionTokens =
         |> Convert.ToBase64String
         |> sprintf "T1==%s"
 
-    let GenerateToken (credentials: IOpenTokCredentials) (parameters: OpenTokSessionTokenParameters) =
+    let GenerateToken (credentials: IProjectCredentials) (parameters: OpenTokSessionTokenParameters) =
         let nonce = R.Next(0, 999999)
         let dataString = BuildDataString parameters DateTimeOffset.UtcNow nonce
         BuildTokenString credentials dataString

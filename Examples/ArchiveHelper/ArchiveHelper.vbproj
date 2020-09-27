@@ -125,6 +125,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\OpenTokFs.Credentials\OpenTokFs.Credentials.csproj">
+      <Project>{5614e811-8de5-44dd-ac12-9380756c4127}</Project>
+      <Name>OpenTokFs.Credentials</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\OpenTokFs.RequestTypes\OpenTokFs.RequestTypes.csproj">
       <Project>{9ac49fb9-b013-49b2-bc13-7e86d7c320e7}</Project>
       <Name>OpenTokFs.RequestTypes</Name>

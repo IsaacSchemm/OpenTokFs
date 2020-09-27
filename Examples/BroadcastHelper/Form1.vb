@@ -1,17 +1,18 @@
 ﻿Imports OpenTokFs
+Imports OpenTokFs.Credentials
 Imports OpenTokFs.RequestTypes
 Imports OpenTokFs.ResponseTypes
 
 Public Class Form1
-    Implements IOpenTokCredentials
+    Implements IProjectCredentials
 
-    Public ReadOnly Property ApiKey As Integer Implements IOpenTokCredentials.ApiKey
+    Public ReadOnly Property ApiKey As Integer Implements IProjectCredentials.ApiKey
         Get
             Return Integer.Parse(TxtApiKey.Text)
         End Get
     End Property
 
-    Public ReadOnly Property ApiSecret As String Implements IOpenTokCredentials.ApiSecret
+    Public ReadOnly Property ApiSecret As String Implements IProjectCredentials.ApiSecret
         Get
             Return TxtApiSecret.Text
         End Get

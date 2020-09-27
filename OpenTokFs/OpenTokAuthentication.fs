@@ -6,10 +6,10 @@ open System.Security.Cryptography
 open System.IO
 open System.Text
 open Newtonsoft.Json
+open OpenTokFs.Credentials
 
 // http://www.fssnip.net/7RK/title/Creating-and-validating-JWTs-in-just-35-lines-of-F-code
 module internal JsonWebToken =
-    open System.Text
     open System.Text.RegularExpressions
     let replace (oldVal: string) (newVal: string) = fun (s: string) -> s.Replace(oldVal, newVal)
     let minify = 
@@ -55,7 +55,7 @@ module OpenTokAuthentication =
     }
 
     [<RequireQualifiedAccess>]
-    type JwtCredentialSource = Account of IOpenTokAccountCredentials | Project of IOpenTokCredentials
+    type JwtCredentialSource = Account of IAccountCredentials | Project of IProjectCredentials
 
     let CreateToken (credentials: JwtCredentialSource) =
         let (key, secret, ist) =
@@ -81,13 +81,18 @@ module OpenTokAuthentication =
     let CreateProjectToken credentials = JwtCredentialSource.Project credentials |> CreateToken
     let CreateAccountToken credentials = JwtCredentialSource.Account credentials |> CreateToken
 
-    let BuildRequest (credentials: IOpenTokCredentials) (path: string) (query: seq<string>) =
+    let BuildProjectLevelRequest (credentials: IProjectCredentials) (path: string) (query: seq<string>) =
         let req =
             String.concat "&" query
             |> sprintf "https://api.opentok.com/v2/project/%d/%s?%s" credentials.ApiKey path
             |> WebRequest.CreateHttp
         req.Headers.Add("X-OPENTOK-AUTH", CreateProjectToken credentials)
         req.Accept <- "application/json"
+        req
+
+    let BuildAccountLevelRequest (credentials: IAccountCredentials) (url: string) =
+        let req = WebRequest.CreateHttp url
+        req.Headers.Add("X-OPENTOK-AUTH", CreateAccountToken credentials)
         req
 
     let SerializeObject = JsonConvert.SerializeObject

@@ -2,13 +2,14 @@
 
 open System
 open OpenTokFs
+open OpenTokFs.Credentials
 open OpenTokFs.RequestTypes
 open OpenTokFs.ResponseTypes
 open FSharp.Control
 
 module Broadcast =
     /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
-    let AsyncList (credentials: IOpenTokCredentials) (paging: OpenTokPagingParameters) (sessionId: OpenTokSessionId) = async {
+    let AsyncList (credentials: IProjectCredentials) (paging: OpenTokPagingParameters) (sessionId: OpenTokSessionId) = async {
         let query = seq {
             yield sprintf "offset=%d" paging.offset
 
@@ -21,7 +22,7 @@ module Broadcast =
             | OpenTokSessionId.Any -> ()
         }
 
-        let req = OpenTokAuthentication.BuildRequest credentials "broadcast" query
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials "broadcast" query
         return! OpenTokAuthentication.AsyncReadJson<OpenTokList<OpenTokBroadcast>> req
     }
 
@@ -54,8 +55,8 @@ module Broadcast =
     /// Start a broadcast.
     /// A WebException might be thrown if there is an error in the request or if a broadcast is already running for the given session.
     /// (Even if an error is thrown, a broadcast may have been started; use one of the List functions to check.)
-    let AsyncStart (credentials: IOpenTokCredentials) (body: OpenTokBroadcastStartRequest) = async {
-        let req = OpenTokAuthentication.BuildRequest credentials "broadcast" Seq.empty
+    let AsyncStart (credentials: IProjectCredentials) (body: OpenTokBroadcastStartRequest) = async {
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials "broadcast" Seq.empty
         req.Method <- "POST"
 
         do! OpenTokAuthentication.AsyncWriteJson req body
@@ -72,9 +73,9 @@ module Broadcast =
     /// Stop a broadcast.
     /// A WebException might be thrown if there is an error in the request or if additonal broadcasts are also running for the session.
     /// (Even if an error is thrown, the broadcast may have been stopped; use one of the List functions to check.)
-    let AsyncStop (credentials: IOpenTokCredentials) (broadcastId: string) = async {
+    let AsyncStop (credentials: IProjectCredentials) (broadcastId: string) = async {
         let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s/stop"
-        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
         req.Method <- "POST"
 
         return! OpenTokAuthentication.AsyncReadJson<OpenTokBroadcast> req
@@ -88,9 +89,9 @@ module Broadcast =
         |> Async.StartAsTask
 
     /// Get information about a broadcast by its ID.
-    let AsyncGet (credentials: IOpenTokCredentials) (broadcastId: string) = async {
+    let AsyncGet (credentials: IProjectCredentials) (broadcastId: string) = async {
         let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s"
-        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
 
         return! OpenTokAuthentication.AsyncReadJson<OpenTokBroadcast> req
     }
@@ -101,9 +102,9 @@ module Broadcast =
         |> Async.StartAsTask
 
     /// Change the layout type of an active broadcast.
-    let AsyncSetLayout (credentials: IOpenTokCredentials) (broadcastId: string) (layout: OpenTokVideoLayout) = async {
+    let AsyncSetLayout (credentials: IProjectCredentials) (broadcastId: string) (layout: OpenTokVideoLayout) = async {
         let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s/layout"
-        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
         req.Method <- "PUT"
         
         do! OpenTokAuthentication.AsyncWriteJson req layout

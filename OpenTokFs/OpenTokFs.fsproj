@@ -20,11 +20,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="IOpenTokCredentials.fs" />
-    <Compile Include="IOpenTokAccountCredentials.fs" />
+    <Compile Include="OpenTokProjectCredentials.fs" />
+    <Compile Include="OpenTokAccountCredentials.fs" />
     <Compile Include="OpenTokPagingParameters.fs" />
-    <Compile Include="OpenTokAuthentication.fs" />
     <Compile Include="OpenTokSessionId.fs" />
+    <Compile Include="OpenTokAuthentication.fs" />
     <Compile Include="OpenTokSessionTokens.fs" />
     <Compile Include="Api\Archive.fs" />
     <Compile Include="Api\Broadcast.fs" />
@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OpenTokFs.Credentials\OpenTokFs.Credentials.csproj" />
     <ProjectReference Include="..\OpenTokFs.RequestTypes\OpenTokFs.RequestTypes.csproj" />
     <ProjectReference Include="..\OpenTokFs.ResponseTypes\OpenTokFs.ResponseTypes.csproj" />
   </ItemGroup>

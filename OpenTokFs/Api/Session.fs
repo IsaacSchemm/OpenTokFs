@@ -5,12 +5,13 @@ open System.IO
 open System.Net
 open System.Threading.Tasks
 open OpenTokFs
+open OpenTokFs.Credentials
 open OpenTokFs.RequestTypes
 open OpenTokFs.ResponseTypes
 
 module Session =
     /// Create a session.
-    let AsyncCreate (credentials: IOpenTokCredentials) (session: OpenTokSessionCreateRequest) = async {
+    let AsyncCreate (credentials: IProjectCredentials) (session: OpenTokSessionCreateRequest) = async {
         let req = WebRequest.CreateHttp "https://api.opentok.com/session/create"
         req.Headers.Add("X-OPENTOK-AUTH", OpenTokAuthentication.CreateProjectToken credentials)
         req.Accept <- "application/json"
@@ -41,9 +42,9 @@ module Session =
         |> Async.StartAsTask
 
     /// Get information about one stream in a session. A WebException will be thrown if the stream no longer exists.
-    let AsyncGetStream (credentials: IOpenTokCredentials) (sessionId: string) (streamId: string) = async {
+    let AsyncGetStream (credentials: IProjectCredentials) (sessionId: string) (streamId: string) = async {
         let path = sprintf "session/%s/stream/%s" (Uri.EscapeDataString sessionId) (Uri.EscapeDataString streamId)
-        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
 
         return! OpenTokAuthentication.AsyncReadJson<OpenTokStream> req
     }
@@ -54,9 +55,9 @@ module Session =
         |> Async.StartAsTask
 
     /// Get information about all streams in a session.
-    let AsyncGetStreams (credentials: IOpenTokCredentials) (sessionId: string) = async {
+    let AsyncGetStreams (credentials: IProjectCredentials) (sessionId: string) = async {
         let path = sprintf "session/%s/stream" (Uri.EscapeDataString sessionId)
-        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
 
         return! OpenTokAuthentication.AsyncReadJson<OpenTokList<OpenTokStream>> req
     }
@@ -67,9 +68,9 @@ module Session =
         |> Async.StartAsTask
 
     /// Change the layout classes of OpenTok streams in a composed archive, by providing stream IDs and lists of classes to apply.
-    let AsyncSetLayoutClasses (credentials: IOpenTokCredentials) (sessionId: string) (body: OpenTokLayoutClassChangeRequest) = async {
+    let AsyncSetLayoutClasses (credentials: IProjectCredentials) (sessionId: string) (body: OpenTokLayoutClassChangeRequest) = async {
         let path = sprintf "session/%s/stream" (Uri.EscapeDataString sessionId)
-        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
         req.Method <- "PUT"
         
         do! OpenTokAuthentication.AsyncWriteJson req body
@@ -85,9 +86,9 @@ module Session =
         :> Task
 
     /// Send a signal to one participant in a session.
-    let AsyncSendSignal (credentials: IOpenTokCredentials) (sessionId: string) (connectionId: string) (signal: OpenTokSignal) = async {
+    let AsyncSendSignal (credentials: IProjectCredentials) (sessionId: string) (connectionId: string) (signal: OpenTokSignal) = async {
         let path = sprintf "session/%s/connection/%s/signal" (Uri.EscapeDataString sessionId) (Uri.EscapeDataString connectionId)
-        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
         req.Method <- "POST"
 
         do! OpenTokAuthentication.AsyncWriteJson req signal
@@ -103,9 +104,9 @@ module Session =
         :> Task
 
     /// Send a signal to all participants in a session.
-    let AsyncSendSignalToAll (credentials: IOpenTokCredentials) (sessionId: string) (signal: OpenTokSignal) = async {
+    let AsyncSendSignalToAll (credentials: IProjectCredentials) (sessionId: string) (signal: OpenTokSignal) = async {
         let path = sprintf "session/%s/signal" (Uri.EscapeDataString sessionId)
-        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
         req.Method <- "POST"
 
         do! OpenTokAuthentication.AsyncWriteJson req signal
@@ -121,9 +122,9 @@ module Session =
         :> Task
 
     /// Force a single participant to disconnect from an OpenTok session.
-    let AsyncForceDisconnect (credentials: IOpenTokCredentials) (sessionId: string) (connectionId: string) = async {
+    let AsyncForceDisconnect (credentials: IProjectCredentials) (sessionId: string) (connectionId: string) = async {
         let path = sprintf "session/%s/connection/%s" (Uri.EscapeDataString sessionId) (Uri.EscapeDataString connectionId)
-        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
         req.Method <- "DELETE"
 
         use! resp = req.AsyncGetResponse()

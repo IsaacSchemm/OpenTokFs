@@ -3,13 +3,14 @@
 open System
 open System.Threading.Tasks
 open OpenTokFs
+open OpenTokFs.Credentials
 open OpenTokFs.RequestTypes
 open OpenTokFs.ResponseTypes
 open FSharp.Control
 
 module Archive =
     /// Get details on both completed and in-progress archives.
-    let AsyncList (credentials: IOpenTokCredentials) (paging: OpenTokPagingParameters) (sessionId: OpenTokSessionId) = async {
+    let AsyncList (credentials: IProjectCredentials) (paging: OpenTokPagingParameters) (sessionId: OpenTokSessionId) = async {
         let query = seq {
             yield sprintf "offset=%d" paging.offset
 
@@ -22,7 +23,7 @@ module Archive =
             | OpenTokSessionId.Any -> ()
         }
 
-        let req = OpenTokAuthentication.BuildRequest credentials "archive" query
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials "archive" query
         return! OpenTokAuthentication.AsyncReadJson<OpenTokList<OpenTokArchive>> req
     }
 
@@ -61,8 +62,8 @@ module Archive =
 
     /// Start an archive.
     /// A WebException might be thrown if there is an error in the request or if an archive is already running for the given session.
-    let AsyncStart (credentials: IOpenTokCredentials) (body: OpenTokArchiveStartRequest) = async {
-        let req = OpenTokAuthentication.BuildRequest credentials "archive" Seq.empty
+    let AsyncStart (credentials: IProjectCredentials) (body: OpenTokArchiveStartRequest) = async {
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials "archive" Seq.empty
         req.Method <- "POST"
 
         do! OpenTokAuthentication.AsyncWriteJson req body
@@ -76,9 +77,9 @@ module Archive =
         |> Async.StartAsTask
 
     /// Stop an archive.
-    let AsyncStop (credentials: IOpenTokCredentials) (archiveId: string) = async {
+    let AsyncStop (credentials: IProjectCredentials) (archiveId: string) = async {
         let path = archiveId |> Uri.EscapeDataString |> sprintf "archive/%s/stop"
-        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
         req.Method <- "POST"
 
         return! OpenTokAuthentication.AsyncReadJson<OpenTokArchive> req
@@ -90,9 +91,9 @@ module Archive =
         |> Async.StartAsTask
 
     /// Get information about an archive by its ID.
-    let AsyncGet (credentials: IOpenTokCredentials) (archiveId: string) = async {
+    let AsyncGet (credentials: IProjectCredentials) (archiveId: string) = async {
         let path = archiveId |> Uri.EscapeDataString |> sprintf "archive/%s"
-        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
 
         return! OpenTokAuthentication.AsyncReadJson<OpenTokArchive> req
     }
@@ -103,9 +104,9 @@ module Archive =
         |> Async.StartAsTask
 
     /// Delete an archive.
-    let AsyncDelete (credentials: IOpenTokCredentials) (archiveId: string) = async {
+    let AsyncDelete (credentials: IProjectCredentials) (archiveId: string) = async {
         let path = archiveId |> Uri.EscapeDataString |> sprintf "archive/%s"
-        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
         req.Method <- "DELETE"
 
         use! resp = req.AsyncGetResponse()
@@ -119,9 +120,9 @@ module Archive =
         :> Task
 
     /// Change the layout type of an archive while it is being recorded.
-    let AsyncSetLayout (credentials: IOpenTokCredentials) (archiveId: string) (layout: OpenTokVideoLayout) = async {
+    let AsyncSetLayout (credentials: IProjectCredentials) (archiveId: string) (layout: OpenTokVideoLayout) = async {
         let path = archiveId |> Uri.EscapeDataString |> sprintf "archive/%s/layout"
-        let req = OpenTokAuthentication.BuildRequest credentials path Seq.empty
+        let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
         req.Method <- "PUT"
 
         do! OpenTokAuthentication.AsyncWriteJson req layout
