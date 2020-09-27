@@ -19,6 +19,7 @@ module Archive =
             | OpenTokPageSize.Default -> ()
 
             match sessionId with
+            | OpenTokSessionId.Id null -> failwithf "A null session ID was provided. To list all archives, pass OpenTokSessionId.Any instead."
             | OpenTokSessionId.Id s -> yield sprintf "sessionId=%s" (Uri.EscapeDataString s)
             | OpenTokSessionId.Any -> ()
         }
