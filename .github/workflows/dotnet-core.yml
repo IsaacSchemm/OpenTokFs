@@ -17,6 +17,12 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.301
+    - name: Build and Deploy OpenTokFs.Credentials
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+          PROJECT_FILE_PATH: OpenTokFs.Credentials/OpenTokFs.Credentials.csproj
+          TAG_COMMIT: false
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
     - name: Build and Deploy OpenTokFs.RequestTypes
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
