@@ -21,19 +21,16 @@ jobs:
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
           PROJECT_FILE_PATH: OpenTokFs.RequestTypes/OpenTokFs.RequestTypes.csproj
-          VERSION_STATIC: 4.0.0-a4
           TAG_COMMIT: false
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
     - name: Build and Deploy OpenTokFs.ResponseTypes
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
           PROJECT_FILE_PATH: OpenTokFs.ResponseTypes/OpenTokFs.ResponseTypes.csproj
-          VERSION_STATIC: 4.0.0-a4
           TAG_COMMIT: false
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
     - name: Build and Deploy OpenTokFs
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
           PROJECT_FILE_PATH: OpenTokFs/OpenTokFs.fsproj
-          VERSION_STATIC: 4.0.0-a4
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
