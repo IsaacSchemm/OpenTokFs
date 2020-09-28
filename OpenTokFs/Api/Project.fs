@@ -27,7 +27,7 @@ module Project =
     [<RequireQualifiedAccess>]
     type ProjectStatus = Active | Suspended
 
-    let AsyncChangeProjectStatus (credentials: IAccountCredentials) (projectId: int) (status: ProjectStatus) = async {
+    let AsyncChangeStatus (credentials: IAccountCredentials) (projectId: int) (status: ProjectStatus) = async {
         let req =
             sprintf "https://api.opentok.com/v2/project/%d" projectId
             |> OpenTokAuthentication.BuildAccountLevelRequest credentials
@@ -44,11 +44,11 @@ module Project =
         ignore resp
     }
 
-    let ChangeProjectStatusAsync credentials projectId status =
-        AsyncChangeProjectStatus credentials projectId status
+    let ChangeStatusAsync credentials projectId status =
+        AsyncChangeStatus credentials projectId status
         |> Async.StartAsTask
 
-    let AsyncDeleteProject (credentials: IAccountCredentials) (projectId: int) = async {
+    let AsyncDelete (credentials: IAccountCredentials) (projectId: int) = async {
         let req =
             sprintf "https://api.opentok.com/v2/project/%d" projectId
             |> OpenTokAuthentication.BuildAccountLevelRequest credentials
@@ -58,11 +58,11 @@ module Project =
         ignore resp
     }
 
-    let DeleteProjectAsync credentials projectId =
-        AsyncDeleteProject credentials projectId
+    let DeleteAsync credentials projectId =
+        AsyncDelete credentials projectId
         |> Async.StartAsTask
 
-    let AsyncGetProject (credentials: IAccountCredentials) (projectId: int) = async {
+    let AsyncGet (credentials: IAccountCredentials) (projectId: int) = async {
         let req =
             sprintf "https://api.opentok.com/v2/project/%d" projectId
             |> OpenTokAuthentication.BuildAccountLevelRequest credentials
@@ -72,11 +72,11 @@ module Project =
         return! OpenTokAuthentication.AsyncReadJson<OpenTokProjectDetails> req
     }
 
-    let GetProjectAsync credentials projectId =
-        AsyncGetProject credentials projectId
+    let GetAsync credentials projectId =
+        AsyncGet credentials projectId
         |> Async.StartAsTask
 
-    let AsyncGetProjects (credentials: IAccountCredentials) = async {
+    let AsyncListAll (credentials: IAccountCredentials) = async {
         let req =
             "https://api.opentok.com/v2/project"
             |> OpenTokAuthentication.BuildAccountLevelRequest credentials
@@ -86,8 +86,8 @@ module Project =
         return! OpenTokAuthentication.AsyncReadJson<OpenTokProjectDetails list> req
     }
 
-    let GetProjectsAsync credentials =
-        AsyncGetProjects credentials
+    let ListAllAsync credentials =
+        AsyncListAll credentials
         |> Async.StartAsTask
 
     let AsyncRefreshSecret (credentials: IAccountCredentials) (projectId: int) = async {
