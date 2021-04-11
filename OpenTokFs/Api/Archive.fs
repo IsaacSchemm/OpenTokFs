@@ -55,8 +55,8 @@ module Archive =
         |> Async.StartAsTask
 
     /// Get details on both completed and in-progress archives that were started after the given date and time, making as many requests to the server as necessary.
-    let ListAllAfterAsync credentials datetime =
-        AsyncListAll credentials OpenTokPageSize.Default OpenTokSessionId.Any
+    let ListAllAfterAsync credentials datetime sessionId =
+        AsyncListAll credentials OpenTokPageSize.Default sessionId
         |> AsyncSeq.takeWhile (fun a -> a.GetCreationTime() > datetime)
         |> AsyncSeq.toListAsync
         |> Async.StartAsTask
