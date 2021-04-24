@@ -1,10 +1,8 @@
-name: OpenTokFs Build/Test
+name: OpenTokFs
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: [ release ]
 
 jobs:
   build:
