@@ -23,11 +23,11 @@ with
     member this.JsonObject = Map.ofList [
         match this with
         | Standard t ->
-            ("type", t.Name)
+            ("type", t.Name :> obj)
         | BestFitOr (ScreenshareType s) ->
-            ("type", BestFit.Name)
-            ("screenshareType", s.Name)
+            ("type", BestFit.Name :> obj)
+            ("screenshareType", s.Name :> obj)
         | CustomCss str ->
-            ("type", "custom")
-            ("stylesheet", str)
+            ("type", "custom" :> obj)
+            ("stylesheet", str :> obj)
     ]

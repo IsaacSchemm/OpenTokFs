@@ -78,7 +78,7 @@ Public Class Archives
                 sessionId:=TxtNewArchiveSessionId.Text,
                 hasAudio:=True,
                 hasVideo:=True,
-                name:=StringOption.IfNotNullOrWhitespace(TxtName.Text),
+                name:=[Option].IfNotNullOrWhitespace(TxtName.Text),
                 outputType:=GetOutputType())
             Dim newArchive = Await Api.Archive.StartAsync(Me, req)
             ListBox1.Items.Insert(0, newArchive)

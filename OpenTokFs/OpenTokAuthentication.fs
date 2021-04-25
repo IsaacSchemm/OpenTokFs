@@ -98,11 +98,11 @@ module OpenTokAuthentication =
     let SerializeObject = JsonConvert.SerializeObject
     let DeserializeObject<'a> = JsonConvert.DeserializeObject<'a>
 
-    let AsyncWriteJson<'a> (req: WebRequest) (obj: obj) = async {
+    let AsyncWriteJson<'a> (req: WebRequest) (map: Map<string, obj>) = async {
         req.ContentType <- "application/json"
         use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
         use sw = new StreamWriter(rs)
-        do! obj |> SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
+        do! map |> SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
     }
 
     let AsyncReadJson<'a> (req: WebRequest) = async {

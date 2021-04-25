@@ -8,13 +8,12 @@ type RtmpDestination = {
     streamName: string
 } with
     member this.JsonObject = Map.ofList [
-        let o x = x :> obj
-        ("serverUrl", o this.serverUrl)
-        ("streamName", o this.streamName)
-
         match this.id with
-        | Some id -> ("id", o id)
+        | Some id -> ("id", id :> obj)
         | None -> ()
+
+        ("serverUrl", this.serverUrl :> obj)
+        ("streamName", this.streamName :> obj)
     ]
 
 type BroadcastTargets = {
@@ -23,11 +22,10 @@ type BroadcastTargets = {
 } with
     static member HlsOnly = { hls = true; rtmp = Seq.empty }
     member this.JsonObject = Map.ofList [
-        let o x = x :> obj
         if this.hls then
-            ("hls", o Map.empty)
+            ("hls", Map.empty :> obj)
         if not (Seq.isEmpty this.rtmp) then
-            ("rtmp", o [for r in this.rtmp do yield r.JsonObject])
+            ("rtmp", [for r in this.rtmp do yield r.JsonObject] :> obj)
     ]
 
 type BroadcastStartRequest = {
@@ -38,10 +36,9 @@ type BroadcastStartRequest = {
     resolution: Resolution
 } with
     member this.JsonObject = Map.ofList [
-        let o x = x :> obj
-        ("sessionId", o this.sessionId)
-        ("layout", o this.layout.JsonObject)
-        ("maxDuration", o (int this.maxDuration.TotalSeconds))
-        ("resolution", o this.resolution.Dimensions)
-        ("outputs", o this.outputs.JsonObject)
+        ("sessionId", this.sessionId :> obj)
+        ("layout", this.layout.JsonObject :> obj)
+        ("maxDuration", (int this.maxDuration.TotalSeconds) :> obj)
+        ("resolution", this.resolution.Dimensions :> obj)
+        ("outputs", this.outputs.JsonObject :> obj)
     ]

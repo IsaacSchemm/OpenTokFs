@@ -2,15 +2,15 @@
 
 open OpenTokFs
 open OpenTokFs.Credentials
-open OpenTokFs.RequestTypes
+open OpenTokFs.RequestDomain
 open OpenTokFs.ResponseTypes
 
 module Sip =
-    let AsyncDial (credentials: IProjectCredentials) (dial: OpenTokDialRequest) = async {
+    let AsyncDial (credentials: IProjectCredentials) (dial: DialRequest) = async {
         let req = OpenTokAuthentication.BuildProjectLevelRequest credentials "dial" Seq.empty
         req.Method <- "POST"
 
-        do! OpenTokAuthentication.AsyncWriteJson req dial
+        do! OpenTokAuthentication.AsyncWriteJson req dial.JsonObject
 
         return! OpenTokAuthentication.AsyncReadJson<OpenTokSipConnection> req
     }

@@ -3,7 +3,7 @@
 open System
 open OpenTokFs
 open OpenTokFs.Credentials
-open OpenTokFs.RequestTypes
+open OpenTokFs.RequestDomain
 open OpenTokFs.ResponseTypes
 open FSharp.Control
 
@@ -56,7 +56,7 @@ module Broadcast =
     /// Start a broadcast.
     /// A WebException might be thrown if there is an error in the request or if a broadcast is already running for the given session.
     /// (Even if an error is thrown, a broadcast may have been started; use one of the List functions to check.)
-    let AsyncStart (credentials: IProjectCredentials) (body: RequestDomain.BroadcastStartRequest) = async {
+    let AsyncStart (credentials: IProjectCredentials) (body: BroadcastStartRequest) = async {
         let req = OpenTokAuthentication.BuildProjectLevelRequest credentials "broadcast" Seq.empty
         req.Method <- "POST"
 
@@ -103,12 +103,12 @@ module Broadcast =
         |> Async.StartAsTask
 
     /// Change the layout type of an active broadcast.
-    let AsyncSetLayout (credentials: IProjectCredentials) (broadcastId: string) (layout: OpenTokVideoLayout) = async {
+    let AsyncSetLayout (credentials: IProjectCredentials) (broadcastId: string) (layout: Layout) = async {
         let path = broadcastId |> Uri.EscapeDataString |> sprintf "broadcast/%s/layout"
         let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
         req.Method <- "PUT"
         
-        do! OpenTokAuthentication.AsyncWriteJson req layout
+        do! OpenTokAuthentication.AsyncWriteJson req layout.JsonObject
         return! OpenTokAuthentication.AsyncReadJson<OpenTokBroadcast> req
     }
 

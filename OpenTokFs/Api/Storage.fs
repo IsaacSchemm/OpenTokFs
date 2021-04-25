@@ -10,7 +10,15 @@ module Storage =
         accountKey: string
         container: string
         domain: AzureDomain
-    }
+    } with
+        member this.JsonObject = Map.ofList [
+            ("accountName", this.accountName :> obj)
+            ("accountKey", this.accountKey :> obj)
+            ("container", this.container :> obj)
+            match this.domain with
+            | CustomAzureDomain d -> ("domain", d :> obj)
+            | DefaultAzureDomain -> ()
+        ]
 
     type Fallback =
     | OpenTokFallback
@@ -25,17 +33,13 @@ module Storage =
 
         match target with
         | AzureArchiveTarget (config, fallback) ->
-            let body = {|
-                ``type`` = "azure"
-                config =
-                    {|
-                        accountName = config.accountName
-                        accountKey = config.accountKey
-                        container = config.container
-                        domain = match config.domain with CustomAzureDomain d -> d | DefaultAzureDomain -> null
-                    |}
-                fallback = match fallback with OpenTokFallback -> "opentok" | NoFallback -> "none"
-            |}
+            let body = Map.ofList [
+                ("type", "azure" :> obj)
+                ("config", config.JsonObject :> obj)
+                match fallback with
+                | OpenTokFallback -> ("fallback", "opentok" :> obj)
+                | NoFallback -> ("fallback", "none" :> obj)
+            ]
 
             req.Method <- "PUT"
             do! OpenTokAuthentication.AsyncWriteJson req body

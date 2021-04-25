@@ -4,7 +4,7 @@ open System
 open System.Threading.Tasks
 open OpenTokFs
 open OpenTokFs.Credentials
-open OpenTokFs.RequestTypes
+open OpenTokFs.RequestDomain
 open OpenTokFs.ResponseTypes
 open FSharp.Control
 
@@ -63,7 +63,7 @@ module Archive =
 
     /// Start an archive.
     /// A WebException might be thrown if there is an error in the request or if an archive is already running for the given session.
-    let AsyncStart (credentials: IProjectCredentials) (body: RequestDomain.ArchiveStartRequest) = async {
+    let AsyncStart (credentials: IProjectCredentials) (body: ArchiveStartRequest) = async {
         let req = OpenTokAuthentication.BuildProjectLevelRequest credentials "archive" Seq.empty
         req.Method <- "POST"
 
@@ -121,12 +121,12 @@ module Archive =
         :> Task
 
     /// Change the layout type of an archive while it is being recorded.
-    let AsyncSetLayout (credentials: IProjectCredentials) (archiveId: string) (layout: OpenTokVideoLayout) = async {
+    let AsyncSetLayout (credentials: IProjectCredentials) (archiveId: string) (layout: Layout) = async {
         let path = archiveId |> Uri.EscapeDataString |> sprintf "archive/%s/layout"
         let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
         req.Method <- "PUT"
 
-        do! OpenTokAuthentication.AsyncWriteJson req layout
+        do! OpenTokAuthentication.AsyncWriteJson req layout.JsonObject
         return! OpenTokAuthentication.AsyncReadJson<OpenTokArchive> req
     }
 

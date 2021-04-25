@@ -6,17 +6,12 @@ open System.Net
 open System.Threading.Tasks
 open OpenTokFs
 open OpenTokFs.Credentials
-open OpenTokFs.RequestTypes
+open OpenTokFs.RequestDomain
 open OpenTokFs.ResponseTypes
 
 module Session =
-    type CreationParameters() =
-        member val ArchiveAlways: bool = false with get, set
-        member val IpAddressLocationHint: string = null with get, set
-        member val P2PEnabled: bool = false with get, set
-
     /// Create a session.
-    let AsyncCreate (credentials: IProjectCredentials) (session: CreationParameters) = async {
+    let AsyncCreate (credentials: IProjectCredentials) (session: SessionCreationParameters) = async {
         let req = WebRequest.CreateHttp "https://api.opentok.com/session/create"
         req.Headers.Add("X-OPENTOK-AUTH", OpenTokAuthentication.CreateProjectToken credentials)
         req.Accept <- "application/json"
@@ -26,15 +21,7 @@ module Session =
         do! async {
             use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
             use sw = new StreamWriter(rs)
-            let qs =
-                seq {
-                    yield sprintf "archiveMode=%s" (if session.ArchiveAlways then "always" else "manual")
-                    yield sprintf "p2p.preference=%s" (if session.P2PEnabled then "enabled" else "disabled")
-                    if not (String.IsNullOrEmpty session.IpAddressLocationHint) then
-                        yield sprintf "location=%s" (Uri.EscapeDataString session.IpAddressLocationHint)
-                }
-                |> String.concat "&"
-            do! qs |> sw.WriteLineAsync |> Async.AwaitTask
+            do! session.QueryString |> sw.WriteLineAsync |> Async.AwaitTask
         }
         
         let! list = OpenTokAuthentication.AsyncReadJson<OpenTokSession list> req
@@ -73,12 +60,12 @@ module Session =
         |> Async.StartAsTask
 
     /// Change the layout classes of OpenTok streams in a composed archive, by providing stream IDs and lists of classes to apply.
-    let AsyncSetLayoutClasses (credentials: IProjectCredentials) (sessionId: string) (body: OpenTokLayoutClassChangeRequest) = async {
+    let AsyncSetLayoutClasses (credentials: IProjectCredentials) (sessionId: string) (body: LayoutClassChangeRequest) = async {
         let path = sprintf "session/%s/stream" (Uri.EscapeDataString sessionId)
         let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
         req.Method <- "PUT"
         
-        do! OpenTokAuthentication.AsyncWriteJson req body
+        do! OpenTokAuthentication.AsyncWriteJson req body.JsonObject
 
         use! resp = req.AsyncGetResponse()
         ignore resp
@@ -91,12 +78,12 @@ module Session =
         :> Task
 
     /// Send a signal to one participant in a session.
-    let AsyncSendSignal (credentials: IProjectCredentials) (sessionId: string) (connectionId: string) (signal: OpenTokSignal) = async {
+    let AsyncSendSignal (credentials: IProjectCredentials) (sessionId: string) (connectionId: string) (signal: Signal) = async {
         let path = sprintf "session/%s/connection/%s/signal" (Uri.EscapeDataString sessionId) (Uri.EscapeDataString connectionId)
         let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
         req.Method <- "POST"
 
-        do! OpenTokAuthentication.AsyncWriteJson req signal
+        do! OpenTokAuthentication.AsyncWriteJson req signal.JsonObject
 
         use! resp = req.AsyncGetResponse()
         ignore resp
@@ -109,12 +96,12 @@ module Session =
         :> Task
 
     /// Send a signal to all participants in a session.
-    let AsyncSendSignalToAll (credentials: IProjectCredentials) (sessionId: string) (signal: OpenTokSignal) = async {
+    let AsyncSendSignalToAll (credentials: IProjectCredentials) (sessionId: string) (signal: Signal) = async {
         let path = sprintf "session/%s/signal" (Uri.EscapeDataString sessionId)
         let req = OpenTokAuthentication.BuildProjectLevelRequest credentials path Seq.empty
         req.Method <- "POST"
 
-        do! OpenTokAuthentication.AsyncWriteJson req signal
+        do! OpenTokAuthentication.AsyncWriteJson req signal.JsonObject
 
         use! resp = req.AsyncGetResponse()
         ignore resp

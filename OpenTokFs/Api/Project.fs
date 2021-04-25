@@ -14,7 +14,9 @@ module Project =
         req.Accept <- "application/json"
 
         match name with
-        | Some n -> do! OpenTokAuthentication.AsyncWriteJson req {| name = n |}
+        | Some n ->
+            let map = Map.ofList [("name", n :> obj)]
+            do! OpenTokAuthentication.AsyncWriteJson req map
         | None -> ()
 
         return! OpenTokAuthentication.AsyncReadJson<OpenTokProjectDetails> req
@@ -34,11 +36,12 @@ module Project =
         req.Method <- "PUT"
         req.ContentType <- "application/json"
 
-        let body =
+        let map = Map.ofList [
             match status with
-            | ProjectStatus.Active -> {| status = "ACTIVE" |}
-            | ProjectStatus.Suspended -> {| status = "SUSPENDED" |}
-        do! OpenTokAuthentication.AsyncWriteJson req body
+            | ProjectStatus.Active -> ("status", "ACTIVE" :> obj)
+            | ProjectStatus.Suspended -> ("status", "SUSPENDED" :> obj)
+        ]
+        do! OpenTokAuthentication.AsyncWriteJson req map
 
         use! resp = req.AsyncGetResponse()
         ignore resp
