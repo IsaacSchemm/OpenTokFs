@@ -63,11 +63,11 @@ module Archive =
 
     /// Start an archive.
     /// A WebException might be thrown if there is an error in the request or if an archive is already running for the given session.
-    let AsyncStart (credentials: IProjectCredentials) (body: OpenTokArchiveStartRequest) = async {
+    let AsyncStart (credentials: IProjectCredentials) (body: RequestDomain.ArchiveStartRequest) = async {
         let req = OpenTokAuthentication.BuildProjectLevelRequest credentials "archive" Seq.empty
         req.Method <- "POST"
 
-        do! OpenTokAuthentication.AsyncWriteJson req body
+        do! OpenTokAuthentication.AsyncWriteJson req body.JsonObject
         return! OpenTokAuthentication.AsyncReadJson<OpenTokArchive> req
     }
 
