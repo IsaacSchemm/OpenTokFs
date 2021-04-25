@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="OptionUtilities\StringOption.fs" />
     <Compile Include="RequestDomain\Layout.fs" />
     <Compile Include="RequestDomain\Resolution.fs" />
     <Compile Include="RequestDomain\ArchiveStartRequest.fs" />

@@ -1,5 +1,6 @@
 ﻿Imports OpenTokFs
 Imports OpenTokFs.Credentials
+Imports OpenTokFs.OptionUtilities
 Imports OpenTokFs.RequestDomain
 Imports OpenTokFs.ResponseTypes
 
@@ -77,9 +78,7 @@ Public Class Archives
                 sessionId:=TxtNewArchiveSessionId.Text,
                 hasAudio:=True,
                 hasVideo:=True,
-                name:=If(TxtName.Text <> "",
-                    ArchiveName.NewCustomArchiveName(TxtName.Text),
-                    ArchiveName.NoArchiveName),
+                name:=StringOption.IfNotNullOrWhitespace(TxtName.Text),
                 outputType:=GetOutputType())
             Dim newArchive = Await Api.Archive.StartAsync(Me, req)
             ListBox1.Items.Insert(0, newArchive)

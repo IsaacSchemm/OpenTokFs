@@ -1,16 +1,12 @@
 ﻿namespace OpenTokFs.RequestDomain
 
-type ArchiveName =
-| CustomArchiveName of string
-| NoArchiveName
-
 type ArchiveOutputType = Composed of Resolution * Layout | Individual
 
 type ArchiveStartRequest = {
     sessionId: string
     hasAudio: bool
     hasVideo: bool
-    name: ArchiveName
+    name: string option
     outputType: ArchiveOutputType
 } with
     member this.JsonObject = Map.ofList [
@@ -19,8 +15,8 @@ type ArchiveStartRequest = {
         ("hasAudio", o this.hasAudio)
         ("hasVideo", o this.hasVideo)
         match this.name with
-        | CustomArchiveName str -> ("name", o str)
-        | NoArchiveName -> ()
+        | Some str -> ("name", o str)
+        | None -> ()
         match this.outputType with
         | Individual ->
             ("outputMode", o "individual")

@@ -2,12 +2,8 @@
 
 open System
 
-type RtmpId =
-| CustomRtmpId of string
-| NoRtmpId
-
 type RtmpDestination = {
-    id: RtmpId
+    id: string option
     serverUrl: string
     streamName: string
 } with
@@ -17,8 +13,8 @@ type RtmpDestination = {
         ("streamName", o this.streamName)
 
         match this.id with
-        | CustomRtmpId id -> ("id", o id)
-        | NoRtmpId -> ()
+        | Some id -> ("id", o id)
+        | None -> ()
     ]
 
 type BroadcastTargets = {
