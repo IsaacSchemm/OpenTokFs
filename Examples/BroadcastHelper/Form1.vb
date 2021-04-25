@@ -1,5 +1,6 @@
 ﻿Imports OpenTokFs
 Imports OpenTokFs.Credentials
+Imports OpenTokFs.RequestDomain
 Imports OpenTokFs.RequestTypes
 Imports OpenTokFs.ResponseTypes
 
@@ -57,10 +58,12 @@ Public Class Form1
         BtnStart.Enabled = False
 
         Try
-            Dim req = New OpenTokBroadcastStartRequest(TxtNewBroadcastSessionId.Text) With {
-                .Resolution = If(RadioHD.Checked, "1280x720", "640x480"),
-                .Hls = True
-            }
+            Dim req = New BroadcastStartRequest(
+                sessionId:=TxtNewBroadcastSessionId.Text,
+                layout:=RequestDomain.Layout.NewStandard(StandardLayout.BestFit),
+                maxDuration:=TimeSpan.FromHours(4),
+                outputs:=BroadcastTargets.HlsOnly,
+                resolution:=If(RadioHD.Checked, Resolution.HD, Resolution.SD))
             Dim newBroadcast = Await Api.Broadcast.StartAsync(Me, req)
             ListBox1.Items.Insert(0, newBroadcast)
         Catch ex As Exception

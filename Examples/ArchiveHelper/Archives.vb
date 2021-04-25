@@ -1,6 +1,6 @@
 ﻿Imports OpenTokFs
 Imports OpenTokFs.Credentials
-Imports OpenTokFs.RequestTypes
+Imports OpenTokFs.RequestDomain
 Imports OpenTokFs.ResponseTypes
 
 Public Class Archives
@@ -57,15 +57,30 @@ Public Class Archives
         End If
     End Sub
 
+    Private Function GetOutputType() As ArchiveOutputType
+        Dim layout = RequestDomain.Layout.NewStandard(StandardLayout.BestFit)
+
+        If RadioIndividual.Checked Then
+            Return ArchiveOutputType.Individual
+        ElseIf RadioHD.Checked Then
+            Return ArchiveOutputType.NewComposed(Resolution.HD, layout)
+        Else
+            Return ArchiveOutputType.NewComposed(Resolution.SD, layout)
+        End If
+    End Function
+
     Private Async Sub BtnStart_Click(sender As Object, e As EventArgs) Handles BtnStart.Click
         BtnStart.Enabled = False
 
         Try
-            Dim req = New OpenTokArchiveStartRequest(TxtNewArchiveSessionId.Text) With {
-                .Name = If(TxtName.Text <> "", TxtName.Text, Nothing),
-                .OutputMode = If(RadioIndividual.Checked, "individual", "composed"),
-                .Resolution = If(RadioHD.Checked, "1280x720", "640x480")
-            }
+            Dim req = New ArchiveStartRequest(
+                sessionId:=TxtNewArchiveSessionId.Text,
+                hasAudio:=True,
+                hasVideo:=True,
+                name:=If(TxtName.Text <> "",
+                    ArchiveName.NewCustomArchiveName(TxtName.Text),
+                    ArchiveName.NoArchiveName),
+                outputType:=GetOutputType())
             Dim newArchive = Await Api.Archive.StartAsync(Me, req)
             ListBox1.Items.Insert(0, newArchive)
         Catch ex As Exception

@@ -1,30 +1,28 @@
 ﻿namespace OpenTokFs.RequestDomain
 
-type LayoutType =
+type StandardLayout =
 | BestFit
 | HorizontalPresentation
 | VerticalPresentation
-| PIP
+| Pip
 with
-    static member Default = BestFit
     member this.Name =
         match this with
         | BestFit -> "bestFit"
         | HorizontalPresentation -> "horizontalPresentation"
         | VerticalPresentation -> "verticalPresentation"
-        | PIP -> "pip"
+        | Pip -> "pip"
 
-type ScreenshareType = ScreenshareType of LayoutType
+type ScreenshareType = ScreenshareType of StandardLayout
 
 type Layout =
-| BuiltIn of LayoutType
+| Standard of StandardLayout
 | BestFitOr of ScreenshareType
 | CustomCss of string
 with
-    static member Default = BuiltIn LayoutType.Default
-    member this.JsonObject = Map.ofSeq (seq {
+    member this.JsonObject = Map.ofList [
         match this with
-        | BuiltIn t ->
+        | Standard t ->
             ("type", t.Name)
         | BestFitOr (ScreenshareType s) ->
             ("type", BestFit.Name)
@@ -32,4 +30,4 @@ with
         | CustomCss str ->
             ("type", "custom")
             ("stylesheet", str)
-    })
+    ]

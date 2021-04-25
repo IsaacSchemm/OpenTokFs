@@ -21,8 +21,9 @@
 
   <ItemGroup>
     <Compile Include="RequestDomain\Layout.fs" />
-    <Compile Include="RequestDomain\OutputType.fs" />
+    <Compile Include="RequestDomain\Resolution.fs" />
     <Compile Include="RequestDomain\ArchiveStartRequest.fs" />
+    <Compile Include="RequestDomain\BroadcastStartRequest.fs" />
     <Compile Include="OpenTokProjectCredentials.fs" />
     <Compile Include="OpenTokAccountCredentials.fs" />
     <Compile Include="OpenTokPagingParameters.fs" />

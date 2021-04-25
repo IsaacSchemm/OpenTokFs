@@ -56,11 +56,11 @@ module Broadcast =
     /// Start a broadcast.
     /// A WebException might be thrown if there is an error in the request or if a broadcast is already running for the given session.
     /// (Even if an error is thrown, a broadcast may have been started; use one of the List functions to check.)
-    let AsyncStart (credentials: IProjectCredentials) (body: OpenTokBroadcastStartRequest) = async {
+    let AsyncStart (credentials: IProjectCredentials) (body: RequestDomain.BroadcastStartRequest) = async {
         let req = OpenTokAuthentication.BuildProjectLevelRequest credentials "broadcast" Seq.empty
         req.Method <- "POST"
 
-        do! OpenTokAuthentication.AsyncWriteJson req body
+        do! OpenTokAuthentication.AsyncWriteJson req body.JsonObject
         return! OpenTokAuthentication.AsyncReadJson<OpenTokBroadcast> req
     }
 
