@@ -1,12 +1,17 @@
 ﻿namespace OpenTokFs.RequestDomain
 
-type ArchiveOutputType = Composed of Resolution * Layout | Individual
+type ArchiveOutputType = ComposedArchive of Resolution * Layout | IndividualArchive
+
+type ArchiveNameSetting = ArchiveName of string | NoArchiveName
+with
+    static member IfNotNullOrEmpty x = if System.String.IsNullOrEmpty x then ArchiveName x else NoArchiveName
+    static member IfNotNullOrWhiteSpace x = if System.String.IsNullOrWhiteSpace x then ArchiveName x else NoArchiveName
 
 type ArchiveStartRequest = {
     sessionId: string
     hasAudio: bool
     hasVideo: bool
-    name: string option
+    name: ArchiveNameSetting
     outputType: ArchiveOutputType
 } with
     member this.JsonObject = Map.ofList [
@@ -14,12 +19,12 @@ type ArchiveStartRequest = {
         ("hasAudio", this.hasAudio :> obj)
         ("hasVideo", this.hasVideo :> obj)
         match this.name with
-        | Some str -> ("name", str :> obj)
-        | None -> ()
+        | ArchiveName str -> ("name", str :> obj)
+        | NoArchiveName -> ()
         match this.outputType with
-        | Individual ->
+        | IndividualArchive ->
             ("outputMode", "individual" :> obj)
-        | Composed (resolution, layout) ->
+        | ComposedArchive (resolution, layout) ->
             ("outputMode", "composed" :> obj)
             ("resolution", resolution.Dimensions :> obj)
             ("layout", layout.JsonObject :> obj)

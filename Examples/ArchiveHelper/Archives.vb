@@ -25,7 +25,7 @@ Public Class Archives
         Try
             ListBox1.Items.Clear()
 
-            Dim list = Await Api.Archive.ListAllAsync(Me, 100, OpenTokSessionId.Any)
+            Dim list = Await Api.Archive.ListAllAsync(Me, 100, SessionIdFilter.AnySessionId)
             If list.Length >= 100 Then
                 MsgBox("There are 100 or more items in the list. Only showing the top 100 items.")
             End If
@@ -59,14 +59,14 @@ Public Class Archives
     End Sub
 
     Private Function GetOutputType() As ArchiveOutputType
-        Dim layout = RequestDomain.Layout.NewStandard(StandardLayout.BestFit)
+        Dim layout = RequestDomain.Layout.NewLayoutType(LayoutType.BestFit)
 
         If RadioIndividual.Checked Then
-            Return ArchiveOutputType.Individual
+            Return ArchiveOutputType.IndividualArchive
         ElseIf RadioHD.Checked Then
-            Return ArchiveOutputType.NewComposed(Resolution.HD, layout)
+            Return ArchiveOutputType.NewComposedArchive(Resolution.HighDefinition, layout)
         Else
-            Return ArchiveOutputType.NewComposed(Resolution.SD, layout)
+            Return ArchiveOutputType.NewComposedArchive(Resolution.StandardDefinition, layout)
         End If
     End Function
 
@@ -78,7 +78,7 @@ Public Class Archives
                 sessionId:=TxtNewArchiveSessionId.Text,
                 hasAudio:=True,
                 hasVideo:=True,
-                name:=[Option].IfNotNullOrWhitespace(TxtName.Text),
+                name:=ArchiveNameSetting.IfNotNullOrWhiteSpace(TxtName.Text),
                 outputType:=GetOutputType())
             Dim newArchive = Await Api.Archive.StartAsync(Me, req)
             ListBox1.Items.Insert(0, newArchive)

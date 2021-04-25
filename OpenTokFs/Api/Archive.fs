@@ -10,18 +10,14 @@ open FSharp.Control
 
 module Archive =
     /// Get details on both completed and in-progress archives.
-    let AsyncList (credentials: IProjectCredentials) (paging: OpenTokPagingParameters) (sessionId: OpenTokSessionId) = async {
+    let AsyncList (credentials: IProjectCredentials) (paging: OpenTokPagingParameters) (filter: SessionIdFilter) = async {
         let query = seq {
             yield sprintf "offset=%d" paging.offset
+            yield sprintf "count=%d" paging.count
 
-            match paging.count with
-            | OpenTokPageSize.Count c -> yield sprintf "count=%d" c
-            | OpenTokPageSize.Default -> ()
-
-            match sessionId with
-            | OpenTokSessionId.Id null -> failwithf "A null session ID was provided. To list all archives, pass OpenTokSessionId.Any instead."
-            | OpenTokSessionId.Id s -> yield sprintf "sessionId=%s" (Uri.EscapeDataString s)
-            | OpenTokSessionId.Any -> ()
+            match filter with
+            | SingleSessionId s -> yield sprintf "sessionId=%s" (Uri.EscapeDataString s)
+            | AnySessionId -> ()
         }
 
         let req = OpenTokAuthentication.BuildProjectLevelRequest credentials "archive" query
@@ -29,13 +25,13 @@ module Archive =
     }
 
     /// Get details on both completed and in-progress archives.
-    let ListAsync credentials paging (sessionId: OpenTokSessionId) =
-        AsyncList credentials paging sessionId
+    let ListAsync credentials paging filter =
+        AsyncList credentials paging filter
         |> Async.StartAsTask
 
-    /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
-    let AsyncListAll credentials pageSize sessionId = asyncSeq {
-        let mutable paging = { offset = 0; count = pageSize }
+    /// Get details on both completed and in-progress archives, starting with the given page and continuing as needed.
+    let ListAsAsyncSeq credentials initial_paging sessionId = asyncSeq {
+        let mutable paging = initial_paging
         let mutable finished = false
         while not finished do
             let! list = AsyncList credentials paging sessionId
@@ -47,18 +43,26 @@ module Archive =
                 paging <- { offset = paging.offset + Seq.length list.Items; count = paging.count }
     }
 
-    /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
-    let ListAllAsync credentials max sessionId =
-        AsyncListAll credentials (OpenTokPageSize.Count 1000) sessionId
+    /// Get details on both completed and in-progress archives, asking for 1000 results per page and making as many requests to the server as necessary.
+    let AsyncListAll credentials max sessionId =
+        ListAsAsyncSeq credentials { offset = 0; count = 1000 } sessionId
         |> AsyncSeq.take max
         |> AsyncSeq.toListAsync
+
+    /// Get details on both completed and in-progress archives, asking for 1000 results per page and making as many requests to the server as necessary.
+    let ListAllAsync credentials max sessionId =
+        AsyncListAll credentials max sessionId
         |> Async.StartAsTask
 
-    /// Get details on both completed and in-progress archives that were started after the given date and time, making as many requests to the server as necessary.
-    let ListAllAfterAsync credentials datetime sessionId =
-        AsyncListAll credentials OpenTokPageSize.Default sessionId
+    /// Get details on both completed and in-progress archives that were started after the given date and time, asking for 50 results per page and making as many requests to the server as necessary.
+    let AsyncListAllAfter credentials datetime sessionId =
+        ListAsAsyncSeq credentials { offset = 0; count = 50 } sessionId
         |> AsyncSeq.takeWhile (fun a -> a.GetCreationTime() > datetime)
         |> AsyncSeq.toListAsync
+
+    /// Get details on both completed and in-progress archives that were started after the given date and time, asking for 50 results per page and making as many requests to the server as necessary.
+    let ListAllAfterAsync credentials datetime sessionId =
+        AsyncListAllAfter credentials datetime sessionId
         |> Async.StartAsTask
 
     /// Start an archive.

@@ -25,7 +25,7 @@ Public Class Form1
         Try
             ListBox1.Items.Clear()
 
-            Dim list = Await Api.Broadcast.ListAllAsync(Me, 100, OpenTokSessionId.Any)
+            Dim list = Await Api.Broadcast.ListAllAsync(Me, 100, SessionIdFilter.AnySessionId)
             If list.Length >= 100 Then
                 MsgBox("There are 100 or more items in the list. Only showing the top 100 items.")
             End If
@@ -60,10 +60,10 @@ Public Class Form1
         Try
             Dim req = New BroadcastStartRequest(
                 sessionId:=TxtNewBroadcastSessionId.Text,
-                layout:=RequestDomain.Layout.NewStandard(StandardLayout.BestFit),
+                layout:=RequestDomain.Layout.NewLayoutType(LayoutType.BestFit),
                 maxDuration:=TimeSpan.FromHours(4),
                 outputs:=BroadcastTargets.HlsOnly,
-                resolution:=If(RadioHD.Checked, Resolution.HD, Resolution.SD))
+                resolution:=If(RadioHD.Checked, Resolution.HighDefinition, Resolution.StandardDefinition))
             Dim newBroadcast = Await Api.Broadcast.StartAsync(Me, req)
             ListBox1.Items.Insert(0, newBroadcast)
         Catch ex As Exception

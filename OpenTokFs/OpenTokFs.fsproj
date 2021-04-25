@@ -20,8 +20,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="OptionUtilities\Option.fs" />
-    <Compile Include="RequestDomain\SessionCreationParameters.fs" />
+    <Compile Include="OpenTokProjectCredentials.fs" />
+    <Compile Include="OpenTokAccountCredentials.fs" />
+    <Compile Include="RequestDomain\NewProject.fs" />
+    <Compile Include="RequestDomain\NewSession.fs" />
+    <Compile Include="RequestDomain\SessionIdFilter.fs" />
     <Compile Include="RequestDomain\Layout.fs" />
     <Compile Include="RequestDomain\LayoutClassChangeRequest.fs" />
     <Compile Include="RequestDomain\Resolution.fs" />
@@ -29,10 +32,7 @@
     <Compile Include="RequestDomain\BroadcastStartRequest.fs" />
     <Compile Include="RequestDomain\DialRequest.fs" />
     <Compile Include="RequestDomain\Signal.fs" />
-    <Compile Include="OpenTokProjectCredentials.fs" />
-    <Compile Include="OpenTokAccountCredentials.fs" />
     <Compile Include="OpenTokPagingParameters.fs" />
-    <Compile Include="OpenTokSessionId.fs" />
     <Compile Include="OpenTokAuthentication.fs" />
     <Compile Include="OpenTokSessionTokens.fs" />
     <Compile Include="Api\Archive.fs" />

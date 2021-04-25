@@ -2,11 +2,12 @@
 
 open OpenTokFs
 open OpenTokFs.Credentials
+open OpenTokFs.RequestDomain
 open OpenTokFs.ResponseTypes
 open System.Runtime.InteropServices
 
 module Project =
-    let AsyncCreate (credentials: IAccountCredentials) (name: string option) = async {
+    let AsyncCreate (credentials: IAccountCredentials) (name: ProjectNameSetting) = async {
         let req =
             "https://api.opentok.com/v2/project"
             |> OpenTokAuthentication.BuildAccountLevelRequest credentials
@@ -14,20 +15,17 @@ module Project =
         req.Accept <- "application/json"
 
         match name with
-        | Some n ->
+        | ProjectName n ->
             let map = Map.ofList [("name", n :> obj)]
             do! OpenTokAuthentication.AsyncWriteJson req map
-        | None -> ()
+        | NoProjectName -> ()
 
         return! OpenTokAuthentication.AsyncReadJson<OpenTokProjectDetails> req
     }
 
-    let CreateAsync credentials ([<Optional; DefaultParameterValue(null)>] name) =
-        AsyncCreate credentials (Option.ofObj name)
+    let CreateAsync credentials name =
+        AsyncCreate credentials name
         |> Async.StartAsTask
-
-    [<RequireQualifiedAccess>]
-    type ProjectStatus = Active | Suspended
 
     let AsyncChangeStatus (credentials: IAccountCredentials) (projectId: int) (status: ProjectStatus) = async {
         let req =
@@ -38,8 +36,8 @@ module Project =
 
         let map = Map.ofList [
             match status with
-            | ProjectStatus.Active -> ("status", "ACTIVE" :> obj)
-            | ProjectStatus.Suspended -> ("status", "SUSPENDED" :> obj)
+            | ActiveProjectStatus -> ("status", "ACTIVE" :> obj)
+            | SuspendedProjectStatus -> ("status", "SUSPENDED" :> obj)
         ]
         do! OpenTokAuthentication.AsyncWriteJson req map
 

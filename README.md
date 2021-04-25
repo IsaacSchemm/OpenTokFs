@@ -28,38 +28,39 @@ Example code (C#):
 
     var credentials = new OpenTokProjectCredentials(12345, "secret_here");
 
-    var session = await Session.CreateAsync(credentials, new SessionCreationParameters(
-        archiveMode: ArchiveMode.Manual,
-        location: Option.Some(System.Net.IPAddress.Parse("104.18.18.242")),
-        p2p_preference: P2PPreference.Enabled));
+    var session = await Session.CreateAsync(credentials, new NewSession(
+        archiveMode: ArchiveMode.ManuallyArchive,
+        location: SessionLocation.FirstClientConnectionLocation,
+        p2p_preference: MediaMode.RoutedSession));
 
     await Task.Delay(15000);
 
-    var current_archives = await Archive.ListAllAsync(
+    var previous_archives = await Archive.ListAllAsync(
         credentials,
-        1,
-        OpenTokSessionId.NewId(session.Session_id));
-    if (current_archives.IsEmpty) {
-        var archive = await Archive.StartAsync(
-            credentials,
-            new ArchiveStartRequest(
-                sessionId: session.Session_id,
-                hasAudio: true,
-                hasVideo: true,
-                name: Option.Some("My Name Here"),
-                outputType: ArchiveOutputType.NewComposed(
-                    Resolution.SD,
-                    Layout.NewStandard(StandardLayout.BestFit))));
+        5,
+        SessionIdFilter.NewSingleSessionId(session.Session_id));
+    Console.WriteLine(previous_archives);
 
-        await Task.Delay(10000);
+    var archive = await Archive.StartAsync(
+        credentials,
+        new ArchiveStartRequest(
+            sessionId: session.Session_id,
+            hasAudio: true,
+            hasVideo: true,
+            name: ArchiveNameSetting.NewArchiveName("My Name Here"),
+            outputType: ArchiveOutputType.NewComposedArchive(
+                Resolution.StandardDefinition,
+                Layout.NewLayoutType(LayoutType.VerticalPresentation))));
 
-        await Archive.SetLayoutAsync(credentials,
-            archive.Id,
-            Layout.NewBestFitOr(ScreenshareType.NewScreenshareType(StandardLayout.Pip)));
+    await Task.Delay(10000);
 
-        await Task.Delay(10000);
+    await Archive.SetLayoutAsync(credentials,
+        archive.Id,
+        Layout.NewBestFitOr(ScreenshareType.NewScreenshareType(LayoutType.Pip)));
 
-        await Archive.StopAsync(credentials, archive.Id);
+    await Task.Delay(10000);
+
+    await Archive.StopAsync(credentials, archive.Id);
 
 Example (F#):
 
@@ -67,35 +68,35 @@ Example (F#):
 
     let! session =
         {
-            archiveMode = ArchiveMode.Manual
-            location = Some (System.Net.IPAddress.Parse "104.18.18.242")
-            p2p_preference = P2PPreference.Enabled
+            archiveMode = ManuallyArchive
+            location = FirstClientConnectionLocation
+            p2p_preference = RoutedSession
         }
         |> Session.AsyncCreate credentials
 
     do! Async.Sleep 15000
 
-    let! current_archives =
-        Archive.AsyncListAll credentials (OpenTokPageSize.Count 1) (OpenTokSessionId.Id session.Session_id)
-        |> AsyncSeq.take 1
-        |> AsyncSeq.toListAsync
-    if List.isEmpty current_archives then
-        let! archive =
-            {
-                sessionId = session.Session_id
-                hasAudio = true
-                hasVideo = true
-                name = Some "My Name Here"
-                outputType = Composed (SD, Standard BestFit)
-            }
-            |> Archive.AsyncStart credentials
+    let! previous_archives = Archive.AsyncListAll credentials 5 (SingleSessionId session.Session_id)
+    printfn "%A" previous_archives
 
-        do! Async.Sleep 10000
+    let! archive =
+        {
+            sessionId = session.Session_id
+            hasAudio = true
+            hasVideo = true
+            name = ArchiveName "My Name Here"
+            outputType = ComposedArchive (StandardDefinition, LayoutType VerticalPresentation)
+        }
+        |> Archive.AsyncStart credentials
 
-        let! updated = Archive.AsyncSetLayout credentials archive.Id (BestFitOr (ScreenshareType Pip))
-        ignore updated
+    do! Async.Sleep 10000
 
-        do! Async.Sleep 10000
+    let! updated = Archive.AsyncSetLayout credentials archive.Id (BestFitOr (ScreenshareType Pip))
+    ignore updated
 
-        let! stopped = Archive.AsyncStop credentials archive.Id
-        ignore stopped
+    do! Async.Sleep 10000
+
+    let! stopped = Archive.AsyncStop credentials archive.Id
+    ignore stopped
+
+See the ArchiveHelper and BroadcastHelper projects for example usage in VB.NET.

@@ -1,8 +1,8 @@
 ﻿namespace OpenTokFs.RequestDomain
 
-type Resolution = SD | HD
+type Resolution = StandardDefinition | HighDefinition
 with
     member this.Dimensions =
         match this with
-        | SD -> "640x480"
-        | HD -> "1280x720"
+        | StandardDefinition -> "640x480"
+        | HighDefinition -> "1280x720"

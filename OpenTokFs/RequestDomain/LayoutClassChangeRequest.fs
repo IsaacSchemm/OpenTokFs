@@ -1,6 +1,6 @@
 ﻿namespace OpenTokFs.RequestDomain
 
-type LayoutClassChange = {
+type LayoutClassChangeItem = {
     id: string
     layoutClassList: string seq
 } with
@@ -10,7 +10,7 @@ type LayoutClassChange = {
     ]
 
 type LayoutClassChangeRequest = {
-    items: LayoutClassChange seq
+    items: LayoutClassChangeItem seq
 } with
    member this.JsonObject = Map.ofList [
        ("items", [for i in this.items do yield i.JsonObject] :> obj)

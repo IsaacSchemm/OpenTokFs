@@ -11,7 +11,7 @@ open OpenTokFs.ResponseTypes
 
 module Session =
     /// Create a session.
-    let AsyncCreate (credentials: IProjectCredentials) (session: SessionCreationParameters) = async {
+    let AsyncCreate (credentials: IProjectCredentials) (session: NewSession) = async {
         let req = WebRequest.CreateHttp "https://api.opentok.com/session/create"
         req.Headers.Add("X-OPENTOK-AUTH", OpenTokAuthentication.CreateProjectToken credentials)
         req.Accept <- "application/json"

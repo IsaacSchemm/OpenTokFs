@@ -2,20 +2,24 @@
 
 open System.Collections.Generic
 
-type SipHeaders = CustomSipHeaders of IReadOnlyDictionary<string, string> | NoSipHeaders
+type SipCaller = SipCallerString of string | NoSipCaller
+
+type SipHeaders = CustomSipHeaders of IEnumerable<KeyValuePair<string, string>> | NoSipHeaders
 
 type SipAuth = UsernamePasswordSipAuth of string * string | NoSipAuth
 
 type SipParameters = {
     uri: string
-    from: string option
+    from: SipCaller
     headers: SipHeaders
     auth: SipAuth
     secure: bool
 } with
     member this.JsonObject = Map.ofList [
         ("uri", this.uri :> obj)
-        ("from", this.from :> obj)
+        match this.from with
+        | SipCallerString str -> ("from", str :> obj)
+        | NoSipCaller -> ()
         match this.headers with
         | CustomSipHeaders dict ->
             ("headers", dict :> obj)

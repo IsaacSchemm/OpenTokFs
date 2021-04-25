@@ -9,18 +9,14 @@ open FSharp.Control
 
 module Broadcast =
     /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
-    let AsyncList (credentials: IProjectCredentials) (paging: OpenTokPagingParameters) (sessionId: OpenTokSessionId) = async {
+    let AsyncList (credentials: IProjectCredentials) (paging: OpenTokPagingParameters) (filter: SessionIdFilter) = async {
         let query = seq {
             yield sprintf "offset=%d" paging.offset
+            yield sprintf "count=%d" paging.count
 
-            match paging.count with
-            | OpenTokPageSize.Count c -> yield sprintf "count=%d" c
-            | OpenTokPageSize.Default -> ()
-
-            match sessionId with
-            | OpenTokSessionId.Id null -> failwithf "A null session ID was provided. To list all archives, pass OpenTokSessionId.Any instead."
-            | OpenTokSessionId.Id s -> yield sprintf "sessionId=%s" (Uri.EscapeDataString s)
-            | OpenTokSessionId.Any -> ()
+            match filter with
+            | SingleSessionId s -> yield sprintf "sessionId=%s" (Uri.EscapeDataString s)
+            | AnySessionId -> ()
         }
 
         let req = OpenTokAuthentication.BuildProjectLevelRequest credentials "broadcast" query
@@ -33,8 +29,8 @@ module Broadcast =
         |> Async.StartAsTask
 
     /// Get details on broadcasts that are currently in progress, making as many requests to the server as necessary.
-    let AsyncListAll credentials pageSize sessionId = asyncSeq {
-        let mutable paging = { offset = 0; count = pageSize }
+    let ListAsAsyncSeq credentials initial_paging sessionId = asyncSeq {
+        let mutable paging = initial_paging
         let mutable finished = false
         while not finished do
             let! list = AsyncList credentials paging sessionId
@@ -46,11 +42,15 @@ module Broadcast =
                 paging <- { offset = paging.offset + Seq.length list.Items; count = paging.count }
     }
 
-    /// Get details on broadcasts that are currently in progress, making as many requests to the server as necessary.
-    let ListAllAsync credentials max sessionId =
-        AsyncListAll credentials (OpenTokPageSize.Count 1000) sessionId
+    /// Get details on broadcasts that are currently in progress, asking for 1000 results per page and making as many requests to the server as necessary.
+    let AsyncListAll credentials max sessionId =
+        ListAsAsyncSeq credentials { offset = 0; count = 1000 } sessionId
         |> AsyncSeq.take max
         |> AsyncSeq.toListAsync
+
+    /// Get details on broadcasts that are currently in progress, asking for 1000 results per page and making as many requests to the server as necessary.
+    let ListAllAsync credentials max sessionId =
+        AsyncListAll credentials max sessionId
         |> Async.StartAsTask
 
     /// Start a broadcast.

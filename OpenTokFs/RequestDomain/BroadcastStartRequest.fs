@@ -2,15 +2,17 @@
 
 open System
 
+type DestinationIdSetting = DestinationId of string | NoDestinationId
+
 type RtmpDestination = {
-    id: string option
+    id: DestinationIdSetting
     serverUrl: string
     streamName: string
 } with
     member this.JsonObject = Map.ofList [
         match this.id with
-        | Some id -> ("id", id :> obj)
-        | None -> ()
+        | DestinationId id -> ("id", id :> obj)
+        | NoDestinationId -> ()
 
         ("serverUrl", this.serverUrl :> obj)
         ("streamName", this.streamName :> obj)
@@ -20,7 +22,20 @@ type BroadcastTargets = {
     hls: bool
     rtmp: RtmpDestination seq
 } with
-    static member HlsOnly = { hls = true; rtmp = Seq.empty }
+    static member HlsOnly = {
+        hls = true
+        rtmp = Seq.empty
+    }
+    static member RtmpOnly serverUrl streamName = {
+        hls = false
+        rtmp = seq {
+            {
+                id = NoDestinationId
+                serverUrl = serverUrl
+                streamName = streamName
+            }
+        }
+    }
     member this.JsonObject = Map.ofList [
         if this.hls then
             ("hls", Map.empty :> obj)
