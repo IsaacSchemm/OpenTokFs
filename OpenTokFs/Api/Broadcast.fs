@@ -9,14 +9,10 @@ open FSharp.Control
 
 module Broadcast =
     /// Get details on broadcasts that are currently in progress. Completed broadcasts are not included.
-    let AsyncList (credentials: IProjectCredentials) (paging: OpenTokPagingParameters) (filter: SessionIdFilter) = async {
+    let AsyncList (credentials: IProjectCredentials) (paging: Paging) (filter: SessionIdFilter) = async {
         let query = seq {
-            yield sprintf "offset=%d" paging.offset
-            yield sprintf "count=%d" paging.count
-
-            match filter with
-            | SingleSessionId s -> yield sprintf "sessionId=%s" (Uri.EscapeDataString s)
-            | AnySessionId -> ()
+            yield! paging.QueryString
+            yield! filter.QueryString
         }
 
         let req = OpenTokAuthentication.BuildProjectLevelRequest credentials "broadcast" query
@@ -44,7 +40,7 @@ module Broadcast =
 
     /// Get details on broadcasts that are currently in progress, asking for 1000 results per page and making as many requests to the server as necessary.
     let AsyncListAll credentials max sessionId =
-        ListAsAsyncSeq credentials { offset = 0; count = 1000 } sessionId
+        ListAsAsyncSeq credentials { offset = 0; count = ExplicitMaximum 1000 } sessionId
         |> AsyncSeq.take max
         |> AsyncSeq.toListAsync
 

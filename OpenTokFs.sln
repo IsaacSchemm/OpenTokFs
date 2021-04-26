@@ -20,6 +20,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTokFs.ResponseTypes", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTokFs.Credentials", "OpenTokFs.Credentials\OpenTokFs.Credentials.csproj", "{5614E811-8DE5-44DD-AC12-9380756C4127}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsExample", "CsExample\CsExample.csproj", "{3D051184-152B-4DBB-B577-BA83AE5352BD}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FsExample", "FsExample\FsExample.fsproj", "{1216B1CB-4B5E-47E6-8205-229BE2EA6FC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +48,14 @@ Global
 		{5614E811-8DE5-44DD-AC12-9380756C4127}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5614E811-8DE5-44DD-AC12-9380756C4127}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5614E811-8DE5-44DD-AC12-9380756C4127}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D051184-152B-4DBB-B577-BA83AE5352BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D051184-152B-4DBB-B577-BA83AE5352BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D051184-152B-4DBB-B577-BA83AE5352BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D051184-152B-4DBB-B577-BA83AE5352BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1216B1CB-4B5E-47E6-8205-229BE2EA6FC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1216B1CB-4B5E-47E6-8205-229BE2EA6FC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1216B1CB-4B5E-47E6-8205-229BE2EA6FC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1216B1CB-4B5E-47E6-8205-229BE2EA6FC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

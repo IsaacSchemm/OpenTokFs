@@ -7,6 +7,7 @@ open System.IO
 open System.Text
 open Newtonsoft.Json
 open OpenTokFs.Credentials
+open System.Collections.Generic
 
 // http://www.fssnip.net/7RK/title/Creating-and-validating-JWTs-in-just-35-lines-of-F-code
 module internal JsonWebToken =
@@ -81,9 +82,11 @@ module OpenTokAuthentication =
     let CreateProjectToken credentials = JwtCredentialSource.Project credentials |> CreateToken
     let CreateAccountToken credentials = JwtCredentialSource.Account credentials |> CreateToken
 
-    let BuildProjectLevelRequest (credentials: IProjectCredentials) (path: string) (query: seq<string>) =
+    let BuildProjectLevelRequest (credentials: IProjectCredentials) (path: string) (query: seq<string * string>) =
         let req =
-            String.concat "&" query
+            query
+            |> Seq.map (fun (k, v) -> sprintf "%s=%s" (Uri.EscapeDataString k) (Uri.EscapeDataString v))
+            |> String.concat "&"
             |> sprintf "https://api.opentok.com/v2/project/%d/%s?%s" credentials.ApiKey path
             |> WebRequest.CreateHttp
         req.Headers.Add("X-OPENTOK-AUTH", CreateProjectToken credentials)
@@ -98,7 +101,7 @@ module OpenTokAuthentication =
     let SerializeObject = JsonConvert.SerializeObject
     let DeserializeObject<'a> = JsonConvert.DeserializeObject<'a>
 
-    let AsyncWriteJson<'a> (req: WebRequest) (map: Map<string, obj>) = async {
+    let AsyncWriteJson<'a> (req: WebRequest) (map: IReadOnlyDictionary<string, obj>) = async {
         req.ContentType <- "application/json"
         use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
         use sw = new StreamWriter(rs)

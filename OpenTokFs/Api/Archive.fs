@@ -10,14 +10,10 @@ open FSharp.Control
 
 module Archive =
     /// Get details on both completed and in-progress archives.
-    let AsyncList (credentials: IProjectCredentials) (paging: OpenTokPagingParameters) (filter: SessionIdFilter) = async {
+    let AsyncList (credentials: IProjectCredentials) (paging: Paging) (filter: SessionIdFilter) = async {
         let query = seq {
-            yield sprintf "offset=%d" paging.offset
-            yield sprintf "count=%d" paging.count
-
-            match filter with
-            | SingleSessionId s -> yield sprintf "sessionId=%s" (Uri.EscapeDataString s)
-            | AnySessionId -> ()
+            yield! paging.QueryString
+            yield! filter.QueryString
         }
 
         let req = OpenTokAuthentication.BuildProjectLevelRequest credentials "archive" query
@@ -45,7 +41,7 @@ module Archive =
 
     /// Get details on both completed and in-progress archives, asking for 1000 results per page and making as many requests to the server as necessary.
     let AsyncListAll credentials max sessionId =
-        ListAsAsyncSeq credentials { offset = 0; count = 1000 } sessionId
+        ListAsAsyncSeq credentials { offset = 0; count = ExplicitMaximum 1000 } sessionId
         |> AsyncSeq.take max
         |> AsyncSeq.toListAsync
 
@@ -54,13 +50,13 @@ module Archive =
         AsyncListAll credentials max sessionId
         |> Async.StartAsTask
 
-    /// Get details on both completed and in-progress archives that were started after the given date and time, asking for 50 results per page and making as many requests to the server as necessary.
+    /// Get details on both completed and in-progress archives that were started after the given date and time, making as many requests to the server as necessary.
     let AsyncListAllAfter credentials datetime sessionId =
-        ListAsAsyncSeq credentials { offset = 0; count = 50 } sessionId
+        ListAsAsyncSeq credentials { offset = 0; count = DefaultPagingCount } sessionId
         |> AsyncSeq.takeWhile (fun a -> a.GetCreationTime() > datetime)
         |> AsyncSeq.toListAsync
 
-    /// Get details on both completed and in-progress archives that were started after the given date and time, asking for 50 results per page and making as many requests to the server as necessary.
+    /// Get details on both completed and in-progress archives that were started after the given date and time, making as many requests to the server as necessary.
     let ListAllAfterAsync credentials datetime sessionId =
         AsyncListAllAfter credentials datetime sessionId
         |> Async.StartAsTask
