@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>5.0.1-beta1</Version>
+    <Version>5.0.1-beta2</Version>
     <Authors>Isaac Schemm</Authors>
     <Description>An unofficial .NET wrapper for Vonage Video API's REST API (written in F#)</Description>
     <Copyright>(C) 2020-2021 Isaac Schemm</Copyright>
