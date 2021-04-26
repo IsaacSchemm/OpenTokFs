@@ -33,6 +33,7 @@
     <Compile Include="RequestDomain\BroadcastStartRequest.fs" />
     <Compile Include="RequestDomain\DialRequest.fs" />
     <Compile Include="RequestDomain\Signal.fs" />
+    <Compile Include="RequestDomain\ArchiveTarget.fs" />
     <Compile Include="OpenTokAuthentication.fs" />
     <Compile Include="OpenTokSessionTokens.fs" />
     <Compile Include="Api\Archive.fs" />

@@ -105,6 +105,7 @@ module OpenTokAuthentication =
         req.ContentType <- "application/json"
         use! rs = req.GetRequestStreamAsync() |> Async.AwaitTask
         use sw = new StreamWriter(rs)
+        let json = map |> SerializeObject
         do! map |> SerializeObject |> sw.WriteLineAsync |> Async.AwaitTask
     }
 
