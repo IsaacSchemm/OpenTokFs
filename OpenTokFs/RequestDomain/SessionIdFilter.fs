@@ -1,8 +1,8 @@
 ﻿namespace OpenTokFs.RequestDomain
 
 type SessionIdFilter =
-| AnySessionId
 | SingleSessionId of string
+| AnySessionId
 with
     member this.QueryString = [
         match this with

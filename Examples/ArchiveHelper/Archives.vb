@@ -25,9 +25,9 @@ Public Class Archives
         Try
             ListBox1.Items.Clear()
 
-            Dim paging = New PagingParameters(
+            Dim paging = New ListParameters(
                 first_page:=New PageBoundaries(0, 100),
-                limit:=PageLimit.NewStopAtItemCount(100))
+                limit:=ListLimit.NewStopAtItemCount(100))
             Dim list = Await Api.Archive.ListAllAsync(Me, paging, SessionIdFilter.AnySessionId)
             If list.Length >= 100 Then
                 MsgBox("There are 100 or more items in the list. Only showing the top 100 items.")
@@ -62,7 +62,7 @@ Public Class Archives
     End Sub
 
     Private Function GetOutputType() As ArchiveOutputType
-        Dim layout = RequestDomain.Layout.NewLayoutType(LayoutType.BestFit)
+        Dim layout = RequestDomain.Layout.NewStandard(StandardLayout.BestFit)
 
         If RadioIndividual.Checked Then
             Return ArchiveOutputType.IndividualArchive
@@ -81,7 +81,7 @@ Public Class Archives
                 sessionId:=TxtNewArchiveSessionId.Text,
                 hasAudio:=True,
                 hasVideo:=True,
-                name:=ArchiveNameSetting.IfNotNullOrWhiteSpace(TxtName.Text),
+                name:=ArchiveName.IfNotNullOrWhiteSpace(TxtName.Text),
                 outputType:=GetOutputType())
             Dim newArchive = Await Api.Archive.StartAsync(Me, req)
             ListBox1.Items.Insert(0, newArchive)

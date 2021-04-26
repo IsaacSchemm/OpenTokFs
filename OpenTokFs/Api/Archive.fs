@@ -44,12 +44,13 @@ module Archive =
         match paging.limit with
         | StopAtItemCount max ->
             AsyncBeginList credentials paging.first_page filter
-            |> Paging.AsyncToList paging.limit
+            |> AsyncSeq.take max
+            |> AsyncSeq.toListAsync
         | StopAtCreationDate datetime ->
             AsyncBeginList credentials paging.first_page filter
             |> AsyncSeq.takeWhile (fun a -> a.GetCreationTime() > datetime)
             |> AsyncSeq.toListAsync
-        | NoPageLimit ->
+        | NoListLimit ->
             AsyncBeginList credentials paging.first_page filter
             |> AsyncSeq.toListAsync
 

@@ -21,8 +21,9 @@
 
   <ItemGroup>
     <Compile Include="RequestDomain\PageBoundaries.fs" />
-    <Compile Include="RequestDomain\PagingParameters.fs" />
-    <Compile Include="RequestDomain\NewProject.fs" />
+    <Compile Include="RequestDomain\ListParameters.fs" />
+    <Compile Include="RequestDomain\ProjectName.fs" />
+    <Compile Include="RequestDomain\ProjectStatus.fs" />
     <Compile Include="RequestDomain\NewSession.fs" />
     <Compile Include="RequestDomain\SessionIdFilter.fs" />
     <Compile Include="RequestDomain\Layout.fs" />

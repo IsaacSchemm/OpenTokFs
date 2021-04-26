@@ -2,16 +2,16 @@
 
 type ArchiveOutputType = ComposedArchive of Resolution * Layout | IndividualArchive
 
-type ArchiveNameSetting = ArchiveName of string | NoArchiveName
+type ArchiveName = CustomArchiveName of string | NoArchiveName
 with
-    static member IfNotNullOrEmpty x = if System.String.IsNullOrEmpty x then ArchiveName x else NoArchiveName
-    static member IfNotNullOrWhiteSpace x = if System.String.IsNullOrWhiteSpace x then ArchiveName x else NoArchiveName
+    static member IfNotNullOrEmpty x = if System.String.IsNullOrEmpty x then CustomArchiveName x else NoArchiveName
+    static member IfNotNullOrWhiteSpace x = if System.String.IsNullOrWhiteSpace x then CustomArchiveName x else NoArchiveName
 
 type ArchiveStartRequest = {
     sessionId: string
     hasAudio: bool
     hasVideo: bool
-    name: ArchiveNameSetting
+    name: ArchiveName
     outputType: ArchiveOutputType
 } with
     member this.JsonObject = Map.ofList [
@@ -19,7 +19,7 @@ type ArchiveStartRequest = {
         ("hasAudio", this.hasAudio :> obj)
         ("hasVideo", this.hasVideo :> obj)
         match this.name with
-        | ArchiveName str -> ("name", str :> obj)
+        | CustomArchiveName str -> ("name", str :> obj)
         | NoArchiveName -> ()
         match this.outputType with
         | IndividualArchive ->

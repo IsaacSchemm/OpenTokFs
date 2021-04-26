@@ -49,7 +49,7 @@ module Broadcast =
             AsyncBeginList credentials paging.first_page filter
             |> AsyncSeq.takeWhile (fun a -> a.GetCreationTime() > datetime)
             |> AsyncSeq.toListAsync
-        | NoPageLimit ->
+        | NoListLimit ->
             AsyncBeginList credentials paging.first_page filter
             |> AsyncSeq.toListAsync
 

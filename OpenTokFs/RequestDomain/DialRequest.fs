@@ -22,7 +22,7 @@ type SipParameters = {
         | NoSipCaller -> ()
         match this.headers with
         | CustomSipHeaders dict ->
-            ("headers", dict :> obj)
+            ("headers", Map.ofList [for pair in dict do (pair.Key, pair.Value)] :> obj)
         | NoSipHeaders -> ()
         match this.auth with
         | UsernamePasswordSipAuth (username, password) ->

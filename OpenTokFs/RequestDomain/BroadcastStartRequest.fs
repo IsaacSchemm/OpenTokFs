@@ -2,16 +2,16 @@
 
 open System
 
-type DestinationIdSetting = DestinationId of string | NoDestinationId
+type DestinationId = CustomDestinationId of string | NoDestinationId
 
 type RtmpDestination = {
-    id: DestinationIdSetting
+    id: DestinationId
     serverUrl: string
     streamName: string
 } with
     member this.JsonObject = Map.ofList [
         match this.id with
-        | DestinationId id -> ("id", id :> obj)
+        | CustomDestinationId id -> ("id", id :> obj)
         | NoDestinationId -> ()
 
         ("serverUrl", this.serverUrl :> obj)

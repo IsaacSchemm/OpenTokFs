@@ -32,8 +32,8 @@ let workflow = async {
             sessionId = session.Session_id
             hasAudio = true
             hasVideo = true
-            name = ArchiveName "My Name Here"
-            outputType = ComposedArchive (StandardDefinition, LayoutType VerticalPresentation)
+            name = CustomArchiveName "My Name Here"
+            outputType = ComposedArchive (StandardDefinition, Standard VerticalPresentation)
         }
         |> Archive.AsyncStart credentials
 

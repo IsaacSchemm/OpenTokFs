@@ -18,9 +18,9 @@ namespace CsExample {
 
             var previous_archives = await Archive.ListAllAsync(
                 credentials,
-                new PagingParameters(
+                new ListParameters(
                     first_page: new PageBoundaries(0, 5),
-                    limit: PageLimit.NewStopAtItemCount(10)),
+                    limit: ListLimit.NewStopAtItemCount(10)),
                 SessionIdFilter.NewSingleSessionId(session.Session_id));
             Console.WriteLine(previous_archives);
 
@@ -30,16 +30,16 @@ namespace CsExample {
                     sessionId: session.Session_id,
                     hasAudio: true,
                     hasVideo: true,
-                    name: ArchiveNameSetting.NewArchiveName("My Name Here"),
+                    name: ArchiveName.NewCustomArchiveName("My Name Here"),
                     outputType: ArchiveOutputType.NewComposedArchive(
                         Resolution.StandardDefinition,
-                        Layout.NewLayoutType(LayoutType.VerticalPresentation))));
+                        Layout.NewStandard(StandardLayout.VerticalPresentation))));
 
             await Task.Delay(10000);
 
             await Archive.SetLayoutAsync(credentials,
                 archive.Id,
-                Layout.NewBestFitOr(ScreenshareType.NewScreenshareType(LayoutType.Pip)));
+                Layout.NewBestFitOr(ScreenshareType.NewScreenshareType(StandardLayout.Pip)));
 
             await Task.Delay(10000);
 

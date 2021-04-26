@@ -1,6 +1,6 @@
 ﻿namespace OpenTokFs.RequestDomain
 
-type LayoutType =
+type StandardLayout =
 | BestFit
 | HorizontalPresentation
 | VerticalPresentation
@@ -13,16 +13,16 @@ with
         | VerticalPresentation -> "verticalPresentation"
         | Pip -> "pip"
 
-type ScreenshareType = ScreenshareType of LayoutType
+type ScreenshareType = ScreenshareType of StandardLayout
 
 type Layout =
-| LayoutType of LayoutType
+| Standard of StandardLayout
 | BestFitOr of ScreenshareType
 | CustomCss of string
 with
     member this.JsonObject = Map.ofList [
         match this with
-        | LayoutType t ->
+        | Standard t ->
             ("type", t.Name :> obj)
         | BestFitOr (ScreenshareType s) ->
             ("type", BestFit.Name :> obj)

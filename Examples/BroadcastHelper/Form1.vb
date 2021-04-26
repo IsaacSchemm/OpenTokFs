@@ -25,9 +25,9 @@ Public Class Form1
         Try
             ListBox1.Items.Clear()
 
-            Dim paging = New PagingParameters(
+            Dim paging = New ListParameters(
                 first_page:=New PageBoundaries(0, 100),
-                limit:=PageLimit.NewStopAtItemCount(100))
+                limit:=ListLimit.NewStopAtItemCount(100))
             Dim list = Await Api.Broadcast.ListAllAsync(Me, paging, SessionIdFilter.AnySessionId)
             If list.Length >= 100 Then
                 MsgBox("There are 100 or more items in the list. Only showing the top 100 items.")
@@ -63,7 +63,7 @@ Public Class Form1
         Try
             Dim req = New BroadcastStartRequest(
                 sessionId:=TxtNewBroadcastSessionId.Text,
-                layout:=RequestDomain.Layout.NewLayoutType(LayoutType.BestFit),
+                layout:=RequestDomain.Layout.NewStandard(StandardLayout.BestFit),
                 maxDuration:=TimeSpan.FromHours(4),
                 outputs:=BroadcastTargets.HlsOnly,
                 resolution:=If(RadioHD.Checked, Resolution.HighDefinition, Resolution.StandardDefinition))

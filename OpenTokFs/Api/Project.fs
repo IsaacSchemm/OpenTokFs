@@ -7,7 +7,7 @@ open OpenTokFs.ResponseTypes
 open System.Runtime.InteropServices
 
 module Project =
-    let AsyncCreate (credentials: IAccountCredentials) (name: ProjectNameSetting) = async {
+    let AsyncCreate (credentials: IAccountCredentials) (name: ProjectName) = async {
         let req =
             "https://api.opentok.com/v2/project"
             |> OpenTokAuthentication.BuildAccountLevelRequest credentials
@@ -15,7 +15,7 @@ module Project =
         req.Accept <- "application/json"
 
         match name with
-        | ProjectName n ->
+        | CustomProjectName n ->
             let map = Map.ofList [("name", n :> obj)]
             do! OpenTokAuthentication.AsyncWriteJson req map
         | NoProjectName -> ()
