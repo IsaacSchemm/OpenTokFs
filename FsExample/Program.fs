@@ -20,7 +20,11 @@ let workflow = async {
 
     do! Async.Sleep 15000
 
-    let! previous_archives = Archive.AsyncListAll credentials 5 (SingleSessionId session.Session_id)
+    let paging = {
+        first_page = { offset = 0; count = 5 }
+        limit = StopAtItemCount 10
+    }
+    let! previous_archives = Archive.AsyncListAll credentials paging (SingleSessionId session.Session_id)
     printfn "%A" previous_archives
 
     let! archive =

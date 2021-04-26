@@ -10,9 +10,9 @@ open FSharp.Control
 
 module Archive =
     /// Get details on both completed and in-progress archives.
-    let AsyncList (credentials: IProjectCredentials) (paging: Paging) (filter: SessionIdFilter) = async {
+    let AsyncList (credentials: IProjectCredentials) (boundaries: PageBoundaries) (filter: SessionIdFilter) = async {
         let query = seq {
-            yield! paging.QueryString
+            yield! boundaries.QueryString
             yield! filter.QueryString
         }
 
@@ -21,44 +21,41 @@ module Archive =
     }
 
     /// Get details on both completed and in-progress archives.
-    let ListAsync credentials paging filter =
-        AsyncList credentials paging filter
+    let ListAsync credentials boundaries filter =
+        AsyncList credentials boundaries filter
         |> Async.StartAsTask
 
     /// Get details on both completed and in-progress archives, starting with the given page and continuing as needed.
-    let ListAsAsyncSeq credentials initial_paging sessionId = asyncSeq {
-        let mutable paging = initial_paging
+    let AsyncBeginList credentials first_page filter = asyncSeq {
+        let mutable boundaries = first_page
         let mutable finished = false
         while not finished do
-            let! list = AsyncList credentials paging sessionId
+            let! list = AsyncList credentials boundaries filter
             for item in list.Items do
                 yield item
-            if paging.offset + Seq.length list.Items >= list.Count then
+            if boundaries.offset + Seq.length list.Items >= list.Count then
                 finished <- true
             else
-                paging <- { offset = paging.offset + Seq.length list.Items; count = paging.count }
+                boundaries <- { boundaries with offset = boundaries.offset + Seq.length list.Items }
     }
 
-    /// Get details on both completed and in-progress archives, asking for 1000 results per page and making as many requests to the server as necessary.
-    let AsyncListAll credentials max sessionId =
-        ListAsAsyncSeq credentials { offset = 0; count = ExplicitMaximum 1000 } sessionId
-        |> AsyncSeq.take max
-        |> AsyncSeq.toListAsync
+    /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
+    let AsyncListAll credentials paging filter =
+        match paging.limit with
+        | StopAtItemCount max ->
+            AsyncBeginList credentials paging.first_page filter
+            |> Paging.AsyncToList paging.limit
+        | StopAtCreationDate datetime ->
+            AsyncBeginList credentials paging.first_page filter
+            |> AsyncSeq.takeWhile (fun a -> a.GetCreationTime() > datetime)
+            |> AsyncSeq.toListAsync
+        | NoPageLimit ->
+            AsyncBeginList credentials paging.first_page filter
+            |> AsyncSeq.toListAsync
 
-    /// Get details on both completed and in-progress archives, asking for 1000 results per page and making as many requests to the server as necessary.
-    let ListAllAsync credentials max sessionId =
-        AsyncListAll credentials max sessionId
-        |> Async.StartAsTask
-
-    /// Get details on both completed and in-progress archives that were started after the given date and time, making as many requests to the server as necessary.
-    let AsyncListAllAfter credentials datetime sessionId =
-        ListAsAsyncSeq credentials { offset = 0; count = DefaultPagingCount } sessionId
-        |> AsyncSeq.takeWhile (fun a -> a.GetCreationTime() > datetime)
-        |> AsyncSeq.toListAsync
-
-    /// Get details on both completed and in-progress archives that were started after the given date and time, making as many requests to the server as necessary.
-    let ListAllAfterAsync credentials datetime sessionId =
-        AsyncListAllAfter credentials datetime sessionId
+    /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.
+    let ListAllAsync credentials paging filter =
+        AsyncListAll credentials paging filter
         |> Async.StartAsTask
 
     /// Start an archive.

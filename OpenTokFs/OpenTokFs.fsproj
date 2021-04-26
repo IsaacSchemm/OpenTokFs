@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>5.0.0</Version>
+    <Version>5.0.1-beta1</Version>
     <Authors>Isaac Schemm</Authors>
     <Description>An unofficial .NET wrapper for Vonage Video API's REST API (written in F#)</Description>
     <Copyright>(C) 2020-2021 Isaac Schemm</Copyright>
@@ -20,7 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="RequestDomain\Paging.fs" />
+    <Compile Include="RequestDomain\PageBoundaries.fs" />
+    <Compile Include="RequestDomain\PagingParameters.fs" />
     <Compile Include="RequestDomain\NewProject.fs" />
     <Compile Include="RequestDomain\NewSession.fs" />
     <Compile Include="RequestDomain\SessionIdFilter.fs" />

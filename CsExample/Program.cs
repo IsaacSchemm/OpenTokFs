@@ -18,7 +18,9 @@ namespace CsExample {
 
             var previous_archives = await Archive.ListAllAsync(
                 credentials,
-                5,
+                new PagingParameters(
+                    first_page: new PageBoundaries(0, 5),
+                    limit: PageLimit.NewStopAtItemCount(10)),
                 SessionIdFilter.NewSingleSessionId(session.Session_id));
             Console.WriteLine(previous_archives);
 

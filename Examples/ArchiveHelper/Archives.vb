@@ -25,7 +25,10 @@ Public Class Archives
         Try
             ListBox1.Items.Clear()
 
-            Dim list = Await Api.Archive.ListAllAsync(Me, 100, SessionIdFilter.AnySessionId)
+            Dim paging = New PagingParameters(
+                first_page:=New PageBoundaries(0, 100),
+                limit:=PageLimit.NewStopAtItemCount(100))
+            Dim list = Await Api.Archive.ListAllAsync(Me, paging, SessionIdFilter.AnySessionId)
             If list.Length >= 100 Then
                 MsgBox("There are 100 or more items in the list. Only showing the top 100 items.")
             End If

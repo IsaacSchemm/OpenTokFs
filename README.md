@@ -42,7 +42,9 @@ Example code (C#):
 
     var previous_archives = await Archive.ListAllAsync(
         credentials,
-        5,
+        new PagingParameters(
+            first_page: new PageBoundaries(0, 5),
+            limit: PageLimit.NewStopAtItemCount(10)),
         SessionIdFilter.NewSingleSessionId(session.Session_id));
     Console.WriteLine(previous_archives);
 
@@ -85,7 +87,11 @@ Example (F#):
 
     do! Async.Sleep 15000
 
-    let! previous_archives = Archive.AsyncListAll credentials 5 (SingleSessionId session.Session_id)
+    let paging = {
+        first_page = { offset = 0; count = 5 }
+        limit = StopAtItemCount 10
+    }
+    let! previous_archives = Archive.AsyncListAll credentials paging (SingleSessionId session.Session_id)
     printfn "%A" previous_archives
 
     let! archive =
