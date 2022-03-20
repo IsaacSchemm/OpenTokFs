@@ -8,7 +8,7 @@ type OpenTokBroadcastStartRequest(sessionId: string) =
     member __.sessionId = sessionId
 
     member val layout: OpenTokVideoLayout = OpenTokVideoLayout.BestFit with get, set
-    member val duration: TimeSpan = TimeSpan.FromHours 2
+    member val duration: TimeSpan = TimeSpan.FromHours 2 with get, set
     member val Hls: bool = false with get, set
     member val Rtmp: OpenTokRtmpDestination seq = Seq.empty with get, set
     member val resolution: string = "640x480" with get, set
