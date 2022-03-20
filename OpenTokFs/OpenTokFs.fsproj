@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>5.0.2</Version>
+    <Version>6.0.0-beta1</Version>
     <Authors>Isaac Schemm</Authors>
     <Description>An unofficial .NET wrapper for Vonage Video API's REST API (written in F#)</Description>
     <Copyright>(C) 2020-2022 Isaac Schemm</Copyright>
@@ -20,6 +20,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Credentials\IAccountCredentials.fs" />
+    <Compile Include="Credentials\IProjectCredentials.fs" />
+    <Compile Include="RequestTypes\OpenTokVideoLayout.fs" />
+    <Compile Include="RequestTypes\OpenTokArchiveStartRequest.fs" />
+    <Compile Include="RequestTypes\OpenTokRtmpDestination.fs" />
+    <Compile Include="RequestTypes\OpenTokBroadcastStartRequest.fs" />
+    <Compile Include="RequestTypes\OpenTokDialRequest.fs" />
+    <Compile Include="RequestTypes\OpenTokLayoutClassChangeRequest.fs" />
+    <Compile Include="RequestTypes\OpenTokSignal.fs" />
+    <Compile Include="ResponseTypes\OpenTokArchive.fs" />
+    <Compile Include="ResponseTypes\OpenTokBroadcast.fs" />
+    <Compile Include="ResponseTypes\OpenTokList.fs" />
+    <Compile Include="ResponseTypes\OpenTokProjectDetails.fs" />
+    <Compile Include="ResponseTypes\OpenTokSession.fs" />
+    <Compile Include="ResponseTypes\OpenTokSipConnection.fs" />
+    <Compile Include="ResponseTypes\OpenTokStream.fs" />
     <Compile Include="OpenTokProjectCredentials.fs" />
     <Compile Include="OpenTokAccountCredentials.fs" />
     <Compile Include="OpenTokPagingParameters.fs" />
@@ -37,12 +53,6 @@
   <ItemGroup>
     <PackageReference Include="FSharp.Control.AsyncSeq" Version="2.0.21" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\OpenTokFs.Credentials\OpenTokFs.Credentials.csproj" />
-    <ProjectReference Include="..\OpenTokFs.RequestTypes\OpenTokFs.RequestTypes.csproj" />
-    <ProjectReference Include="..\OpenTokFs.ResponseTypes\OpenTokFs.ResponseTypes.csproj" />
   </ItemGroup>
 
 </Project>

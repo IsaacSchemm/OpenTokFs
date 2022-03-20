@@ -39,12 +39,12 @@ module Archive =
         let mutable finished = false
         while not finished do
             let! list = AsyncList credentials paging sessionId
-            for item in list.Items do
+            for item in list.items do
                 yield item
-            if paging.offset + Seq.length list.Items >= list.Count then
+            if paging.offset + Seq.length list.items >= list.count then
                 finished <- true
             else
-                paging <- { offset = paging.offset + Seq.length list.Items; count = paging.count }
+                paging <- { offset = paging.offset + Seq.length list.items; count = paging.count }
     }
 
     /// Get details on both completed and in-progress archives, making as many requests to the server as necessary.

@@ -14,8 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OpenTokFs.RequestTypes\OpenTokFs.RequestTypes.csproj" />
-    <ProjectReference Include="..\OpenTokFs.ResponseTypes\OpenTokFs.ResponseTypes.csproj" />
     <ProjectReference Include="..\OpenTokFs\OpenTokFs.fsproj" />
   </ItemGroup>
 
